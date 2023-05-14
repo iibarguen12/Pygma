@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 import {
   Alert,
   Box,
@@ -40,17 +41,26 @@ const Page = () => {
         .max(255)
         .required('Password is required')
     }),
+    
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signIn(values.email, values.password);
+        const response = await axios.post('/auth/login', {
+          email: 'test',
+          password: 'test'
+        });
+
+        await auth.signIn(response.data.token); // Assuming the backend returns a token upon successful authentication
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
+        setAuthError('Invalid email or password');
       }
     }
   });
+
+  const [authError, setAuthError] = useState(null);
 
   const handleMethodChange = useCallback(
     (event, value) => {
@@ -168,6 +178,15 @@ const Page = () => {
                     variant="body2"
                   >
                     {formik.errors.submit}
+                  </Typography>
+                )}
+                {authError && (
+                  <Typography
+                    color="error"
+                    sx={{ mt: 3 }}
+                    variant="body2"
+                  >
+                    {authError}
                   </Typography>
                 )}
                 <Button
