@@ -128,14 +128,32 @@ export const AuthProvider = (props) => {
   };
 
   const signIn = async (email, password) => {
-    if (email !== 'demo@pygma.com' || password !== '123') {
-      throw new Error('Please check your email and password');
-    }
+  try {
+      const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
+      });
 
-    try {
-      window.sessionStorage.setItem('authenticated', 'true');
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token;
+
+        // TODO Save the token or perform further actions with it For example, you can store it in localStorage or pass it to an authentication context
+        console.log('JWT token:', token);
+        window.sessionStorage.setItem('authenticated', 'true');
+      } else {
+        const data = await response.json();
+        return data.message;
+      }
     } catch (err) {
       console.error(err);
+      return 'An error occurred during sign-in';
     }
 
     const user = {

@@ -82,10 +82,10 @@ export const Layout = (props) => {
               Welcome to{' '}
               <Box
                 component="a"
-                sx={{ color: '#15B79E' }}
+                sx={{ color: '#CCE700' }}
                 target="_blank"
               >
-                Devias Kit
+                Pygma
               </Box>
             </Typography>
             <Typography
@@ -93,11 +93,11 @@ export const Layout = (props) => {
               sx={{ mb: 3 }}
               variant="subtitle1"
             >
-              A professional kit that comes with ready-to-use MUI components.
+               The explosive launchpad to skyrocket your tech company!
             </Typography>
             <img
               alt=""
-              src="/assets/auth-illustration.svg"
+              src="/assets/logos/logo-pygma.png"
             />
           </Box>
         </Grid>

@@ -42,28 +42,11 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        const response = await fetch('http://localhost:8080/api/v1/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: values.email,
-            password: values.password,
-          }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const token = data.token;
-
-          // TODO Save the token or perform further actions with it For example, you can store it in localStorage or pass it to an authentication context
-          console.log('JWT token:', token);
-
+        let errorMessage = await auth.signIn(values.email, values.password);
+        if (errorMessage !== null){
+          throw new Error(errorMessage);
+        }else{
           router.push('/');
-        } else {
-          const data = await response.json();
-          throw new Error(data.message);
         }
       } catch (err) {
         helpers.setStatus({ success: false });
