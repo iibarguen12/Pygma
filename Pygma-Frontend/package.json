@@ -1,9 +1,6 @@
 {
-  "name": "material-kit-react",
-  "version": "3.0.0",
-  "author": "Devias",
-  "licence": "MIT",
-  "homepage": "https://devias.io",
+  "name": "pygma-react",
+  "version": "1.0.0",
   "private": false,
   "scripts": {
     "dev": "next",

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import NextLink from 'next/link';
 import { Box, Typography, Unstable_Grid2 as Grid } from '@mui/material';
-import { BlackLogo } from 'src/components/logo';
 
 // TODO: Change subtitle text
 
@@ -40,17 +39,6 @@ export const Layout = (props) => {
               width: '100%'
             }}
           >
-            <Box
-              component={NextLink}
-              href="/"
-              sx={{
-                display: 'inline-flex',
-                height: 32,
-                width: 32
-              }}
-            >
-              <BlackLogo />
-            </Box>
           </Box>
           {children}
         </Grid>
