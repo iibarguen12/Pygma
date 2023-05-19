@@ -1,6 +1,5 @@
 package com.pygma.authservice.resource;
 
-import com.pygma.authservice.exception.NotFoundException;
 import com.pygma.authservice.model.LoginRequest;
 import com.pygma.authservice.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1")
-public class UserResource {
+public class AuthResource {
     @Autowired
     private AuthService authService;
 

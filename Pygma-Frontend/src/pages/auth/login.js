@@ -4,7 +4,6 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import {
   Alert,
   Box,
@@ -33,7 +32,7 @@ const Page = () => {
     validationSchema: Yup.object({
       email: Yup
         .string()
-        .email('Must be a valid email')
+        //.email('Must be a valid email')
         .max(255)
         .required('Email is required'),
       password: Yup
@@ -41,26 +40,38 @@ const Page = () => {
         .max(255)
         .required('Password is required')
     }),
-    
     onSubmit: async (values, helpers) => {
       try {
-        const response = await axios.post('/auth/login', {
-          email: 'test',
-          password: 'test'
+        const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: values.email,
+            password: values.password,
+          }),
         });
 
-        await auth.signIn(response.data.token); // Assuming the backend returns a token upon successful authentication
-        router.push('/');
+        if (response.ok) {
+          const data = await response.json();
+          const token = data.token;
+
+          // TODO Save the token or perform further actions with it For example, you can store it in localStorage or pass it to an authentication context
+          console.log('JWT token:', token);
+
+          router.push('/');
+        } else {
+          const data = await response.json();
+          throw new Error(data.message);
+        }
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
-        setAuthError('Invalid email or password');
       }
     }
   });
-
-  const [authError, setAuthError] = useState(null);
 
   const handleMethodChange = useCallback(
     (event, value) => {
@@ -149,7 +160,7 @@ const Page = () => {
                     error={!!(formik.touched.email && formik.errors.email)}
                     fullWidth
                     helperText={formik.touched.email && formik.errors.email}
-                    label="Email Address"
+                    label="Email Address or Username"
                     name="email"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -180,15 +191,6 @@ const Page = () => {
                     {formik.errors.submit}
                   </Typography>
                 )}
-                {authError && (
-                  <Typography
-                    color="error"
-                    sx={{ mt: 3 }}
-                    variant="body2"
-                  >
-                    {authError}
-                  </Typography>
-                )}
                 <Button
                   fullWidth
                   size="large"
@@ -198,23 +200,6 @@ const Page = () => {
                 >
                   Continue
                 </Button>
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  onClick={handleSkip}
-                >
-                  Skip authentication
-                </Button>
-                <Alert
-                  color="primary"
-                  severity="info"
-                  sx={{ mt: 3 }}
-                >
-                  <div>
-                    You can use <b>demo@pygma.com</b> and password <b>123</b>
-                  </div>
-                </Alert>
               </form>
             )}
             {method === 'phoneNumber' && (
