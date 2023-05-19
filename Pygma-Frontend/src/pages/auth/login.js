@@ -26,7 +26,7 @@ const Page = () => {
   const formik = useFormik({
     initialValues: {
       email: 'demo@pygma.com',
-      password: '123',
+      password: 'pygma',
       submit: null
     },
     validationSchema: Yup.object({
@@ -75,7 +75,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Login | Devias Kit
+          Login | Pygma
         </title>
       </Head>
       <Box
