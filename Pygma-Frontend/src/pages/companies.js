@@ -122,6 +122,12 @@ const Page = () => (
             </Stack>
             <div>
               <Button
+                sx={{
+                    backgroundColor: '#000000',
+                    '&:hover': {
+                      backgroundColor: '#c7e200', // TODO move this style to a global Button component
+                    },
+                  }}
                 startIcon={(
                   <SvgIcon fontSize="small">
                     <PlusIcon />

@@ -94,7 +94,14 @@ export const SettingsNotifications = () => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant="contained">
+          <Button
+          sx={{
+                backgroundColor: '#000000',
+                '&:hover': {
+                  backgroundColor: '#c7e200', // TODO move this style to a global Button component
+                },
+              }}
+          variant="contained">
             Save
           </Button>
         </CardActions>
