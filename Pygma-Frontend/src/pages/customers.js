@@ -64,7 +64,7 @@ const data = [
       name: 'Pygma Lion',
       street: '4158  Hedge Street'
     },
-    avatar: '/assets/avatars/avatar-anika-visser.png',
+    avatar: '/assets/avatars/avatar-pygma.png',
     createdAt: subDays(subHours(now, 11), 2).getTime(),
     email: 'lion@pygma.co',
     name: 'Pygma Lion',

@@ -43,11 +43,13 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         let errorMessage = await auth.signIn(values.email, values.password);
+        console.log('errorMessage:',errorMessage);
         if (errorMessage !== null){
           throw new Error(errorMessage);
-        }else{
-          router.push('/');
         }
+        console.log('Re routeing');
+        router.replace('/');
+        console.log('Re routed');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -177,7 +179,13 @@ const Page = () => {
                 <Button
                   fullWidth
                   size="large"
-                  sx={{ mt: 3 }}
+                  sx={{
+                    mt: 3,
+                    backgroundColor: '#000000',
+                    '&:hover': {
+                      backgroundColor: '#c7e200',
+                    },
+                  }}
                   type="submit"
                   variant="contained"
                 >

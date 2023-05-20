@@ -18,6 +18,13 @@ export const AccountPopover = (props) => {
     [onClose, auth, router]
   );
 
+  const handleAccount = useCallback(
+      () => {
+        router.push('/account');
+      },
+      [router]
+    );
+
   return (
     <Popover
       anchorEl={anchorEl}
@@ -27,35 +34,26 @@ export const AccountPopover = (props) => {
       }}
       onClose={onClose}
       open={open}
-      PaperProps={{ sx: { width: 200 } }}
     >
-      <Box
-        sx={{
-          py: 1.5,
-          px: 2
-        }}
-      >
-        <Typography variant="overline">
-          Account
-        </Typography>
+    <MenuList
+            disablePadding
+            dense
+            sx={{
+              p: '8px',
+              '& > *': {
+                borderRadius: 1
+              }
+            }}
+          >
+       <MenuItem onClick={handleAccount}>
         <Typography
           color="text.secondary"
           variant="body2"
         >
           Pygma Lion
         </Typography>
-      </Box>
+        </MenuItem>
       <Divider />
-      <MenuList
-        disablePadding
-        dense
-        sx={{
-          p: '8px',
-          '& > *': {
-            borderRadius: 1
-          }
-        }}
-      >
         <MenuItem onClick={handleSignOut}>
           Sign out
         </MenuItem>

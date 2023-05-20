@@ -83,7 +83,7 @@ export const AuthProvider = (props) => {
     if (isAuthenticated) {
       const user = {
         id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
+        avatar: '/assets/avatars/avatar-pygma.png',
         name: 'Pygma Lion',
         email: 'lion@pygma.co'
       };
@@ -107,26 +107,6 @@ export const AuthProvider = (props) => {
     []
   );
 
-  const skip = () => {
-    try {
-      window.sessionStorage.setItem('authenticated', 'true');
-    } catch (err) {
-      console.error(err);
-    }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Pygma Lion',
-      email: 'lion@pygma.co'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
-  };
-
   const signIn = async (email, password) => {
   try {
       const response = await fetch('http://localhost:8080/api/v1/auth/login', {
@@ -147,6 +127,20 @@ export const AuthProvider = (props) => {
         // TODO Save the token or perform further actions with it For example, you can store it in localStorage or pass it to an authentication context
         console.log('JWT token:', token);
         window.sessionStorage.setItem('authenticated', 'true');
+
+        const user = {
+          id: '5e86809283e28b96d2d38537',
+          avatar: '/assets/avatars/avatar-pygma.png',
+          name: 'Pygma Lion',
+          email: 'lion@pygma.co'
+        };
+
+        dispatch({
+          type: HANDLERS.SIGN_IN,
+          payload: user
+        });
+
+        return null;
       } else {
         const data = await response.json();
         return data.message;
@@ -155,18 +149,6 @@ export const AuthProvider = (props) => {
       console.error(err);
       return 'An error occurred during sign-in';
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Pygma Lion',
-      email: 'lion@pygma.co'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
 
   const signUp = async (email, name, password) => {
@@ -174,6 +156,13 @@ export const AuthProvider = (props) => {
   };
 
   const signOut = () => {
+    // Clear cookies
+    document.cookie = 'cookieName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+    // Clear session storage
+    sessionStorage.clear();
+
+    // Dispatch an action to update the authentication state
     dispatch({
       type: HANDLERS.SIGN_OUT
     });
@@ -183,7 +172,6 @@ export const AuthProvider = (props) => {
     <AuthContext.Provider
       value={{
         ...state,
-        skip,
         signIn,
         signUp,
         signOut

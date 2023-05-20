@@ -22,6 +22,7 @@ export const AuthGuard = (props) => {
 
       // Prevent from calling twice in development mode with React.StrictMode enabled
       if (ignore.current) {
+        ignore.current = false;
         return;
       }
 
@@ -29,25 +30,17 @@ export const AuthGuard = (props) => {
 
       if (!isAuthenticated) {
         console.log('Not authenticated, redirecting');
-        router
-          .replace({
-            pathname: '/auth/login',
-            query: router.asPath !== '/' ? { continueUrl: router.asPath } : undefined
-          })
-          .catch(console.error);
+        router.replace('/auth/login');
       } else {
         setChecked(true);
       }
     },
-    [router.isReady]
+    [router.isReady, isAuthenticated]
   );
 
   if (!checked) {
     return null;
   }
-
-  // If got here, it means that the redirect did not occur, and that tells us that the user is
-  // authenticated / authorized.
 
   return children;
 };
