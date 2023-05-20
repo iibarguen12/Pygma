@@ -20,7 +20,7 @@ export const items = [
   },
   {
     title: 'Co-Founders',
-    path: '/customers',
+    path: '/co-founders',
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />

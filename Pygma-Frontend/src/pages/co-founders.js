@@ -7,8 +7,8 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomersTable } from 'src/sections/customer/customers-table';
-import { CustomersSearch } from 'src/sections/customer/customers-search';
+import { CoFoundersTable } from 'src/sections/co-founders/co-founders-table';
+import { CoFoundersSearch } from 'src/sections/co-founders/co-founders-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 
 const now = new Date();
@@ -156,7 +156,7 @@ const data = [
   }
 ];
 
-const useCustomers = (page, rowsPerPage) => {
+const useCoFounders = (page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -165,21 +165,21 @@ const useCustomers = (page, rowsPerPage) => {
   );
 };
 
-const useCustomerIds = (customers) => {
+const useCoFounderIds = (coFounders) => {
   return useMemo(
     () => {
-      return customers.map((customer) => customer.id);
+      return coFounders.map((coFounder) => coFounder.id);
     },
-    [customers]
+    [coFounders]
   );
 };
 
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
-  const customersIds = useCustomerIds(customers);
-  const customersSelection = useSelection(customersIds);
+  const coFounders = useCoFounders(page, rowsPerPage);
+  const coFoundersIds = useCoFounderIds(coFounders);
+  const coFoundersSelection = useSelection(coFoundersIds);
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -260,19 +260,19 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch />
-            <CustomersTable
+            <CoFoundersSearch />
+            <CoFoundersTable
               count={data.length}
-              items={customers}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
+              items={coFounders}
+              onDeselectAll={coFoundersSelection.handleDeselectAll}
+              onDeselectOne={coFoundersSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
+              onSelectAll={coFoundersSelection.handleSelectAll}
+              onSelectOne={coFoundersSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={customersSelection.selected}
+              selected={coFoundersSelection.selected}
             />
           </Stack>
         </Container>

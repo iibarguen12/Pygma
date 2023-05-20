@@ -41,7 +41,7 @@ pygma/front/end
 		├── _document.js
 		├── account.js
 		├── companies.js
-		├── customers.js
+		├── co-founders.js
 		├── index.js
 		├── products.js
 		└── settings.js
