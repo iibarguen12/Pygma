@@ -11,6 +11,7 @@ import { CoFoundersTable } from 'src/sections/co-founders/co-founders-table';
 import { CoFoundersSearch } from 'src/sections/co-founders/co-founders-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 
+const PADDING_TOP = 1; // TODO move to a global variable
 const now = new Date();
 
 const data = [
@@ -206,7 +207,7 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: PADDING_TOP
         }}
       >
         <Container maxWidth="xl">

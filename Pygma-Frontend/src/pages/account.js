@@ -4,6 +4,8 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { AccountProfile } from 'src/sections/account/account-profile';
 import { AccountProfileDetails } from 'src/sections/account/account-profile-details';
 
+const PADDING_TOP = 1; // TODO move to a global variable
+
 const Page = () => (
   <>
     <Head>
@@ -15,7 +17,7 @@ const Page = () => (
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: PADDING_TOP
       }}
     >
       <Container maxWidth="lg">

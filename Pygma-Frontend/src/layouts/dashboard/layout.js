@@ -5,14 +5,16 @@ import { withAuthGuard } from 'src/hocs/with-auth-guard';
 import { SideNav } from './side-nav';
 import { TopNav } from './top-nav';
 
-const SIDE_NAV_WIDTH = 280;
+const SIDE_NAV_WIDTH = 0;
+const TOP_NAV_HEIGHT = 0;
 
 const LayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',
   flex: '1 1 auto',
   maxWidth: '100%',
   [theme.breakpoints.up('lg')]: {
-    paddingLeft: SIDE_NAV_WIDTH
+    paddingLeft: SIDE_NAV_WIDTH,
+    paddingTop: TOP_NAV_HEIGHT
   }
 }));
 

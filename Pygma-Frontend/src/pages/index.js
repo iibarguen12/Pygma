@@ -11,6 +11,7 @@ import { OverviewTotalCoFounders } from 'src/sections/overview/overview-total-co
 import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 
+const PADDING_TOP = 1; // TODO move to a global variable
 const now = new Date();
 
 const Page = () => (
@@ -24,7 +25,7 @@ const Page = () => (
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: PADDING_TOP
       }}
     >
       <Container maxWidth="xl">

@@ -4,6 +4,7 @@ import { SettingsNotifications } from 'src/sections/settings/settings-notificati
 import { SettingsPassword } from 'src/sections/settings/settings-password';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
+const PADDING_TOP = 1; // TODO move to a global variable
 const Page = () => (
   <>
     <Head>
@@ -15,7 +16,7 @@ const Page = () => (
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: PADDING_TOP
       }}
     >
       <Container maxWidth="lg">

@@ -16,8 +16,9 @@ import {
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
+import { BlackLogo } from 'src/components/logo';
 
-const SIDE_NAV_WIDTH = 280;
+const SIDE_NAV_WIDTH = 0;
 const TOP_NAV_HEIGHT = 64;
 
 export const TopNav = (props) => {
@@ -58,20 +59,19 @@ export const TopNav = (props) => {
             direction="row"
             spacing={2}
           >
-            {!lgUp && (
+            {lgUp && (
               <IconButton onClick={onNavOpen}>
-                <SvgIcon fontSize="small">
-                  <Bars3Icon />
-                </SvgIcon>
+                <Box
+                  sx={{
+                    display: 'inline-flex',
+                    height: 32,
+                    width: 32
+                  }}
+                >
+                  <BlackLogo />
+                </Box>
               </IconButton>
             )}
-            <Tooltip title="Search">
-              <IconButton>
-                <SvgIcon fontSize="small">
-                  <MagnifyingGlassIcon />
-                </SvgIcon>
-              </IconButton>
-            </Tooltip>
           </Stack>
           <Stack
             alignItems="center"

@@ -95,7 +95,7 @@ export const SideNav = (props) => {
     </Scrollbar>
   );
 
-  if (lgUp) {
+  if (!lgUp) {
     return (
       <Drawer
         anchor="left"
@@ -104,7 +104,7 @@ export const SideNav = (props) => {
           sx: {
             backgroundColor: 'neutral.800',
             color: 'common.white',
-            width: 280
+            width: 0
           }
         }}
         variant="permanent"
@@ -112,26 +112,27 @@ export const SideNav = (props) => {
         {content}
       </Drawer>
     );
+  }else{
+    return (
+      <Drawer
+        anchor="left"
+        onClose={onClose}
+        open={open}
+        PaperProps={{
+          sx: {
+            backgroundColor: 'neutral.800',
+            color: 'common.white',
+            width: 200
+          }
+        }}
+        sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
+        variant="temporary"
+      >
+        {content}
+      </Drawer>
+    );
   }
 
-  return (
-    <Drawer
-      anchor="left"
-      onClose={onClose}
-      open={open}
-      PaperProps={{
-        sx: {
-          backgroundColor: 'neutral.800',
-          color: 'common.white',
-          width: 280
-        }
-      }}
-      sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
-      variant="temporary"
-    >
-      {content}
-    </Drawer>
-  );
 };
 
 SideNav.propTypes = {
