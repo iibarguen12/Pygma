@@ -164,9 +164,6 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
-                  Optionally you can skip.
-                </FormHelperText>
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -199,10 +196,10 @@ const Page = () => {
                   sx={{ mb: 1 }}
                   variant="h6"
                 >
-                  Not available in the demo
+                  Not available at the moment
                 </Typography>
                 <Typography color="text.secondary">
-                  To prevent unnecessary costs we disabled this feature in the demo.
+                  We temporarily disabled this feature.
                 </Typography>
               </div>
             )}
