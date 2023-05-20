@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +29,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByUsername(String username) {
-        return userRepo.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
+        return userRepo.findUserByUsernameIgnoreCase(username).orElseThrow(() -> new NotFoundException("User not found"));
     }
+
+    @Override
+    public User findUserByUsernameOrEmail(String input) {
+        return userRepo.findUserByUsernameIgnoreCase(input)
+                .or(() -> userRepo.findUserByEmailIgnoreCase(input))
+                .orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
+
     @Override
     public List<User> getUsers() {
         log.info("Fetching all users");
@@ -54,7 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addRoleToUser(String username, String roleName) {
         log.info("Adding role {} to user {}", roleName, username);
-        User user = userRepo.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
+        User user = userRepo.findUserByUsernameIgnoreCase(username).orElseThrow(() -> new NotFoundException("User not found"));
         Role role = roleRepo.findByName(roleName).orElseThrow(() -> new NotFoundException("Role not found"));
         if (user.getRoles() == null) {
             user.setRoles(Collections.singletonList(role));

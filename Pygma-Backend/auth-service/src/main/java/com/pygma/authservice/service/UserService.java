@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserService {
     User findUserByUsername(String username);
+    User findUserByUsernameOrEmail(String input);
     List<User> getUsers();
     User saveUser(User user);
     List<Role> getRoles();

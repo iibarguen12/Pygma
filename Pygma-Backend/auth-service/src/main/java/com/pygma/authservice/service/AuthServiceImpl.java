@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService{
     private JwtGenerator jwtGenerator;
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        User user = userService.findUserByUsername(loginRequest.getUsername());
+        User user = userService.findUserByUsernameOrEmail(loginRequest.getUsername());
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
             throw new NotFoundException("User not found");
         }
