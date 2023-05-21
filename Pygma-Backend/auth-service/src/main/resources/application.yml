@@ -6,6 +6,8 @@ server:
 spring:
   application:
     name: auth-service
+  jpa:
+    show-sql: true
   h2:
     console:
       enabled: true
@@ -16,16 +18,27 @@ spring:
     name: auth
     username: h2
     password: h2
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: iries.ibarguen@gmail.com
+    password: krqnibovqbdfrvzr
+    port: '587'
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
     instance:
-      leaseRenewalIntervalInSeconds: 5
-      lease-expiration-duration-in-seconds: 5
+      leaseRenewalIntervalInSeconds: 60
+      lease-expiration-duration-in-seconds: 60
     preferIpAddress: true
-    registryFetchIntervalSeconds: 5
+    registryFetchIntervalSeconds: 60
     fetchRegistry: true
 
 jwt:

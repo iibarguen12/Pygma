@@ -107,7 +107,7 @@ export const AuthProvider = (props) => {
     []
   );
 
-  const signIn = async (email, password) => {
+  const signIn = async (emailOrUsername, password) => {
   try {
       const response = await fetch('http://localhost:8080/api/v1/auth/login', {
         method: 'POST',
@@ -115,7 +115,7 @@ export const AuthProvider = (props) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: email,
+          username: emailOrUsername,
           password: password,
         }),
       });
@@ -151,8 +151,31 @@ export const AuthProvider = (props) => {
     }
   };
 
-  const signUp = async (email, name, password) => {
-    throw new Error('Sign up is not implemented');
+  const signUp = async (username, name, lastname, email) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          name: name,
+          lastname: lastname,
+          email: email,
+        }),
+      });
+
+      if (response.ok) {
+        return null;
+      } else {
+        const data = await response.json();
+        return data.message;
+      }
+    } catch (err) {
+      console.error(err);
+      return 'An error occurred during sign-up';
+    }
   };
 
   const signOut = () => {

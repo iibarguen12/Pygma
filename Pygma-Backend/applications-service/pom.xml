@@ -14,7 +14,7 @@
 	<name>applications-service</name>
 	<description>This service is responsible for managing applications and their attributes, it is responsible for CRUD operations of applications</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>

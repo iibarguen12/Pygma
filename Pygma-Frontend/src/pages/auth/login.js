@@ -34,7 +34,7 @@ const Page = () => {
         .string()
         //.email('Must be a valid email')
         .max(255)
-        .required('Email is required'),
+        .required('Email or Username is required'),
       password: Yup
         .string()
         .max(255)
@@ -43,13 +43,10 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         let errorMessage = await auth.signIn(values.email, values.password);
-        console.log('errorMessage:',errorMessage);
         if (errorMessage !== null){
           throw new Error(errorMessage);
         }
-        console.log('Re routeing');
         router.replace('/');
-        console.log('Re routed');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -63,14 +60,6 @@ const Page = () => {
       setMethod(value);
     },
     []
-  );
-
-  const handleSkip = useCallback(
-    () => {
-      auth.skip();
-      router.push('/');
-    },
-    [auth, router]
   );
 
   return (

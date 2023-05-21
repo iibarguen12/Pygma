@@ -14,7 +14,7 @@
 	<name>eureka-server</name>
 	<description>This is the Client-side service discovery allowing the other services to find and communicate with each other without hard-coding the hostname and port using Spring Cloud Netflix Eureka which also provides a simple round-robin load balancing solution.</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>

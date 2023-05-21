@@ -1,6 +1,7 @@
 package com.pygma.authservice.resource;
 
 import com.pygma.authservice.model.LoginRequest;
+import com.pygma.authservice.model.SignupRequest;
 import com.pygma.authservice.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,5 +17,10 @@ public class AuthResource {
     @PostMapping("/auth/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         return new ResponseEntity<>(authService.login(loginRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/auth/signup")
+    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
+        return new ResponseEntity<>(authService.signup(signupRequest), HttpStatus.OK);
     }
 }

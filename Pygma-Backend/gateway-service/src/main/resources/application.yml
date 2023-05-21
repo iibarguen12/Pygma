@@ -16,6 +16,8 @@ spring:
             allowedOrigins: "http://localhost:3000/"
             allowedHeaders: "*"
             allowedMethods: "*"
+      httpclient:
+        response-timeout: 60s
       routes:
         - id: authService
           uri: lb://auth-service
@@ -41,8 +43,22 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
     instance:
-      leaseRenewalIntervalInSeconds: 5
-      lease-expiration-duration-in-seconds: 5
+      leaseRenewalIntervalInSeconds: 60
+      lease-expiration-duration-in-seconds: 60
     preferIpAddress: true
-    registryFetchIntervalSeconds: 5
+    registryFetchIntervalSeconds: 60
     fetchRegistry: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60s
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 60s

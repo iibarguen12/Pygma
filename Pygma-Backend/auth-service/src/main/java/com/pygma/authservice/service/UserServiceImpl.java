@@ -33,11 +33,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByUsernameOrEmail(String input) {
-        return userRepo.findUserByUsernameIgnoreCase(input)
-                .or(() -> userRepo.findUserByEmailIgnoreCase(input))
-                .orElseThrow(() -> new NotFoundException("User not found"));
+    public User findUserByUsernameOrEmail(String username, String email) {
+        Optional<User> userByUsername = userRepo.findUserByUsernameIgnoreCase(username);
+        if (userByUsername.isPresent()) {
+            return userByUsername.get();
+        } else {
+            Optional<User> userByEmail = userRepo.findUserByEmailIgnoreCase(email);
+            if (userByEmail.isPresent()) {
+                return userByEmail.get();
+            } else {
+                throw new NotFoundException("User not found");
+            }
+        }
     }
+
 
 
     @Override
@@ -45,6 +54,7 @@ public class UserServiceImpl implements UserService {
         log.info("Fetching all users");
         return userRepo.findAll();
     }
+    @Transactional
     @Override
     public User saveUser(User user) {
         log.info("Saving new user {} to the database", user.getName());
@@ -56,11 +66,13 @@ public class UserServiceImpl implements UserService {
         return roleRepo.findAll();
     }
 
+    @Transactional
     @Override
     public Role saveRole(Role role) {
         return roleRepo.save(role);
     }
 
+    @Transactional
     @Override
     public User addRoleToUser(String username, String roleName) {
         log.info("Adding role {} to user {}", roleName, username);
