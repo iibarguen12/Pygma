@@ -10,6 +10,6 @@ public class UserUtils {
 
     public static String generateRandomPassword() {
         UUID uuid = UUID.randomUUID();
-        return uuid.toString().replaceAll("-", "").substring(0, 8);
+        return uuid.toString().replaceAll("-", "").substring(0, 12);
     }
 }
