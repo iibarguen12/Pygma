@@ -8,7 +8,7 @@ import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Builder
 public class LoginResponse {
     @NonNull
