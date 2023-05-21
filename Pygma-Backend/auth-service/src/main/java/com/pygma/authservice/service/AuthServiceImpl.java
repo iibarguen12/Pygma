@@ -1,6 +1,5 @@
 package com.pygma.authservice.service;
 
-import com.pygma.authservice.config.JwtGenerator;
 import com.pygma.authservice.entity.User;
 import com.pygma.authservice.exception.InvalidDataException;
 import com.pygma.authservice.exception.NotFoundException;
@@ -23,7 +22,7 @@ public class AuthServiceImpl implements AuthService{
     @Autowired
     private UserService userService;
     @Autowired
-    private JwtGenerator jwtGenerator;
+    private JwtGeneratorService jwtGeneratorService;
     @Autowired
     private EmailService emailService;
     @Override
@@ -32,7 +31,7 @@ public class AuthServiceImpl implements AuthService{
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
             throw new NotFoundException("User not found");
         }
-        return jwtGenerator.generateToken(user);
+        return jwtGeneratorService.generateToken(user);
     }
 
     @Override

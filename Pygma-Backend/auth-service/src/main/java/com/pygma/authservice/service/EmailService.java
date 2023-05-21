@@ -1,7 +1,6 @@
 package com.pygma.authservice.service;
 
 import com.pygma.authservice.entity.User;
-import com.pygma.authservice.model.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,6 +22,7 @@ public class EmailService {
         javaMailSender.send(email);
     }
 
+    @Async
     public void composeAndSendEmail(User newUser, String temporalPassword) {
         String emailText = """
         Welcome aboard %s!

@@ -1,4 +1,4 @@
-package com.pygma.authservice.config;
+package com.pygma.authservice.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Service
-public class JwtGeneratorImpl implements JwtGenerator {
+public class JwtGeneratorServiceImpl implements JwtGeneratorService {
 
     @Value("${jwt.secret}")
     private String secret;
