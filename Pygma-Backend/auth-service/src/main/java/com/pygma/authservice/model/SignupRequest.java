@@ -8,7 +8,7 @@ import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Builder
 public class SignupRequest {
     @NonNull
@@ -19,4 +19,6 @@ public class SignupRequest {
     private String lastname;
     @NonNull
     private String email;
+    @NonNull
+    private String password;
 }

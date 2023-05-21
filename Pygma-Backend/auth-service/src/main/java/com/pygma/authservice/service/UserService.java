@@ -4,6 +4,7 @@ import com.pygma.authservice.entity.Role;
 import com.pygma.authservice.entity.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
     User findUserByUsername(String username);
@@ -13,6 +14,6 @@ public interface UserService {
     List<Role> getRoles();
     Role saveRole(Role role);
     User addRoleToUser(String username, String roleName);
-    void deleteUserById(Long id);
+    void deleteUserById(UUID id);
 
 }
