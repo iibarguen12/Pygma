@@ -1,8 +1,10 @@
-package com.pygma.authservice.controller;
+package com.pygma.authservice.resource;
 
 import com.pygma.authservice.entity.User;
 import com.pygma.authservice.service.UserService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class UserResourceTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -28,25 +31,30 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    private final User mockUser = new User();
+
+    @BeforeAll
+    public void setUp(){
+        mockUser.setUsername("pygma");
+        mockUser.setName("Pygma");
+        mockUser.setEmail("demo@pygma.com");
+        mockUser.setLastname("Admin");
+        mockUser.setPhone("123456789");
+    }
+
     @Test
-    void getAllUsersEndpoint() throws Exception {
+    public void getAllUsersEndpoint() throws Exception {
+        when(userService.getUsers()).thenReturn(List.of(mockUser));
 
-        User user= new User();
-        user.setName("David");
-        user.setEmail("david.ibarguen@gmail.com");
-        user.setLastname("Ibarguen");
-        user.setPhone("6145058934");
-        when(userService.getUsers()).thenReturn(List.of(user));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].name").value("David"))
-                .andExpect(jsonPath("$[0].email").value("david.ibarguen@gmail.com"))
-                .andExpect(jsonPath("$[0].lastname").value("Ibarguen"))
-                .andExpect(jsonPath("$[0].phone").value("6145058934"));
+                .andExpect(jsonPath("$[0].name").value(mockUser.getName()))
+                .andExpect(jsonPath("$[0].email").value(mockUser.getEmail()))
+                .andExpect(jsonPath("$[0].lastname").value(mockUser.getLastname()))
+                .andExpect(jsonPath("$[0].phone").value(mockUser.getPhone()));
 
     }
 }

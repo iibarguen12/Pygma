@@ -1,4 +1,4 @@
-package com.pygma.applicationsservice.filter;
+package com.pygma.authservice.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -7,7 +7,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pygma.applicationsservice.model.ErrorResponse;
+import com.pygma.authservice.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -27,6 +27,13 @@ public class JwtFilter extends GenericFilterBean {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
         final String authHeader = request.getHeader("authorization");
+
+        String requestURI = request.getRequestURI();
+        if (requestURI.endsWith("/api/v1/auth/login") || requestURI.endsWith("/api/v1/auth/signup")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if ("OPTIONS".equals(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request, response);

@@ -1,18 +1,19 @@
 package com.pygma.authservice.service;
 
+import com.pygma.authservice.entity.Role;
 import com.pygma.authservice.entity.User;
 import com.pygma.authservice.exception.InvalidDataException;
 import com.pygma.authservice.exception.NotFoundException;
 import com.pygma.authservice.mapper.UserMapper;
-import com.pygma.authservice.model.LoginRequest;
-import com.pygma.authservice.model.LoginResponse;
-import com.pygma.authservice.model.SignupRequest;
-import com.pygma.authservice.model.SimpleResponse;
+import com.pygma.authservice.model.*;
 import com.pygma.authservice.util.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -44,6 +45,11 @@ public class AuthServiceImpl implements AuthService{
             User newUser = UserMapper.mapSignupRequestToUser(signupRequest);
             String temporalPassword = UserUtils.generateRandomPassword();
             newUser.setPassword(temporalPassword);
+            Set<Role> userRole = userService.getRoles()
+                    .stream()
+                    .filter(role -> role.getName().equals(Roles.ROLE_USER.name()))
+                    .collect(Collectors.toSet());
+            newUser.setRoles(userRole);
             userService.saveUser(newUser);
             emailService.composeAndSendEmail(newUser, temporalPassword);
             return SimpleResponse.builder()
