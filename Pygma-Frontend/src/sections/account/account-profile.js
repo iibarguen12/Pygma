@@ -9,12 +9,14 @@ import {
   Typography
 } from '@mui/material';
 
+const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
+
 const user = {
   avatar: '/assets/avatars/avatar-pygma.png',
   city: 'Los Angeles',
   country: 'USA',
   jobTitle: 'Senior Developer',
-  name: 'Pygma Lion',
+  name: authenticatedUser.name,
   timezone: 'GTM-7'
 };
 

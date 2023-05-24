@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
+import { sendRequest } from 'src/utils/send-request';
+import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
+import jwt_decode from "jwt-decode";
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -81,11 +84,13 @@ export const AuthProvider = (props) => {
     }
 
     if (isAuthenticated) {
+      const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
+      console.log(authenticatedUser);
       const user = {
-        id: '5e86809283e28b96d2d38537',
+        id: authenticatedUser.id,
         avatar: '/assets/avatars/avatar-pygma.png',
-        name: 'Pygma Lion',
-        email: 'lion@pygma.co'
+        name: authenticatedUser.name,
+        email: authenticatedUser.email
       };
 
       dispatch({
@@ -109,30 +114,35 @@ export const AuthProvider = (props) => {
 
   const signIn = async (emailOrUsername, password) => {
   try {
-      const response = await fetch('http://localhost:8080/api/v1/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const loginResponse =
+      await sendRequest('http://localhost:8080/api/v1/auth/login','POST',
+        JSON.stringify({
           username: emailOrUsername,
           password: password,
         }),
-      });
+        false,
+      );
 
-      if (response.ok) {
-        const data = await response.json();
-        const token = data.token;
+      if (loginResponse.ok) {
+        const loginResponseData = await loginResponse.json();
+        const token = loginResponseData.token;
 
-        // TODO Save the token or perform further actions with it For example, you can store it in localStorage or pass it to an authentication context
-        console.log('JWT token:', token);
+        const decodedToken = jwt_decode(token);
+        const username = decodedToken.sub;
+
+        Cookies.set('jwt', token);
         window.sessionStorage.setItem('authenticated', 'true');
 
+        const userResponse =
+        await sendRequest(`http://localhost:8080/api/v1/users/${username}`,'GET', null);
+        const userResponseData = await userResponse.json();
+        window.sessionStorage.setItem('user', JSON.stringify(userResponseData));
+
         const user = {
-          id: '5e86809283e28b96d2d38537',
+          id: userResponseData.id,
           avatar: '/assets/avatars/avatar-pygma.png',
-          name: 'Pygma Lion',
-          email: 'lion@pygma.co'
+          name: userResponseData.name,
+          email: userResponseData.email
         };
 
         dispatch({
@@ -142,8 +152,8 @@ export const AuthProvider = (props) => {
 
         return null;
       } else {
-        const data = await response.json();
-        return data.message;
+        const loginResponseError = await loginResponse.json();
+        return loginResponseError.message;
       }
     } catch (err) {
       console.error(err);
@@ -153,24 +163,22 @@ export const AuthProvider = (props) => {
 
   const signUp = async (username, name, lastname, email) => {
     try {
-      const response = await fetch('http://localhost:8080/api/v1/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const signupResponse =
+      await sendRequest('http://localhost:8080/api/v1/auth/signup','POST',
+          JSON.stringify({
           username: username,
           name: name,
           lastname: lastname,
           email: email,
         }),
-      });
+        false,
+      );
 
-      if (response.ok) {
+      if (signupResponse.ok) {
         return null;
       } else {
-        const data = await response.json();
-        return data.message;
+        const signupResponseError = await signupResponse.json();
+        return signupResponseError.message;
       }
     } catch (err) {
       console.error(err);

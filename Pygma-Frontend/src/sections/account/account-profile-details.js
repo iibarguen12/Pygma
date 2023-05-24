@@ -11,6 +11,8 @@ import {
   Unstable_Grid2 as Grid
 } from '@mui/material';
 
+const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
+
 const states = [
   {
     value: 'alabama',
@@ -32,10 +34,10 @@ const states = [
 
 export const AccountProfileDetails = () => {
   const [values, setValues] = useState({
-    firstName: 'Pygma',
-    lastName: 'Lion',
-    email: 'demo@pygma.co',
-    phone: '',
+    firstName: authenticatedUser.name,
+    lastName: authenticatedUser.lastname,
+    email: authenticatedUser.email,
+    phone: authenticatedUser.phone,
     state: 'los-angeles',
     country: 'USA'
   });
@@ -52,6 +54,16 @@ export const AccountProfileDetails = () => {
 
   const handleSubmit = useCallback(
     (event) => {
+      const requestBody = {
+        username: authenticatedUser.username,
+        name: values.firstName,
+        lastname: values.lastName,
+        email: values.email,
+        phone: values.phone
+      };
+
+      console.log(requestBody);
+      //TODO continue implementation of update user
       event.preventDefault();
     },
     []
@@ -64,15 +76,11 @@ export const AccountProfileDetails = () => {
       onSubmit={handleSubmit}
     >
       <Card>
-        <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
-        />
-        <CardContent sx={{ pt: 0 }}>
+        <CardContent sx={{ pt: 2.5 }}>
           <Box sx={{ m: -1.5 }}>
             <Grid
               container
-              spacing={3}
+              spacing={1}
             >
               <Grid
                 xs={12}
@@ -80,7 +88,6 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  helperText="Please specify the first name"
                   label="First name"
                   name="firstName"
                   onChange={handleChange}
@@ -176,6 +183,7 @@ export const AccountProfileDetails = () => {
                   backgroundColor: '#c7e200', // TODO move this style to a global Button component
                 },
               }}
+          type="submit"
           variant="contained">
             Save details
           </Button>

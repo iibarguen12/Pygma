@@ -37,7 +37,6 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public SimpleResponse signup(SignupRequest signupRequest) {
-        // TODO check why any user different from pygma is being saved and automatically deleted
         User user;
         try {
             user = userService.findUserByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail());

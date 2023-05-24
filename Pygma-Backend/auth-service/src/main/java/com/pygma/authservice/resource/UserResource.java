@@ -2,8 +2,6 @@ package com.pygma.authservice.resource;
 
 
 import com.pygma.authservice.entity.User;
-import com.pygma.authservice.mapper.UserMapper;
-import com.pygma.authservice.model.SignupRequest;
 import com.pygma.authservice.model.SimpleResponse;
 import com.pygma.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController

@@ -32,7 +32,6 @@ const Page = () => {
     validationSchema: Yup.object({
       email: Yup
         .string()
-        //.email('Must be a valid email')
         .max(255)
         .required('Email or Username is required'),
       password: Yup

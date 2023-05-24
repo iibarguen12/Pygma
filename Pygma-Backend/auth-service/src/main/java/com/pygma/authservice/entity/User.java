@@ -29,7 +29,6 @@ public class User {
     @Id
     @Column(nullable = false)
     @Type(type = "uuid-char")
-    @JsonIgnore
     private UUID id = UUID.randomUUID();
     @Column(nullable = false)
     private String username;

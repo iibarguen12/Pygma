@@ -25,6 +25,7 @@ public class JwtGeneratorServiceImpl implements JwtGeneratorService {
 
         final String token = JWT.create()
                 .withSubject(user.getUsername())
+                .withClaim("username", user.getUsername())
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(expiration)
                 .sign(Algorithm.HMAC256(secret));
