@@ -1,4 +1,6 @@
 import { useCallback, useState } from 'react';
+import { sendRequest } from 'src/utils/send-request';
+import { SuccessModal } from 'src/components/success-modal';
 import {
   Box,
   Button,
@@ -42,6 +44,13 @@ export const AccountProfileDetails = () => {
     country: 'USA'
   });
 
+  const [successMessage, setSuccessMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  const handleSuccess = (message) => {
+        setSuccessMessage(message);
+        setOpen(true);
+      };
+
   const handleChange = useCallback(
     (event) => {
       setValues((prevState) => ({
@@ -64,6 +73,7 @@ export const AccountProfileDetails = () => {
 
       console.log(requestBody);
       //TODO continue implementation of update user
+      handleSuccess('Your account details have been saved.');
       event.preventDefault();
     },
     []
@@ -189,6 +199,11 @@ export const AccountProfileDetails = () => {
           </Button>
         </CardActions>
       </Card>
+      <SuccessModal
+            open={open}
+            message={successMessage}
+            onClose={() => setOpen(false)}
+          />
     </form>
   );
 };

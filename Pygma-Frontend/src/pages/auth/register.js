@@ -7,9 +7,15 @@ import * as Yup from 'yup';
 import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import { SuccessModal } from 'src/components/success-modal';
 
 const Page = () => {
   const [successMessage, setSuccessMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  const handleSuccess = (message) => {
+        setSuccessMessage(message);
+        setOpen(true);
+      };
   const router = useRouter();
   const auth = useAuth();
   const formik = useFormik({
@@ -46,7 +52,7 @@ const Page = () => {
         if (errorMessage !== null){
           throw new Error(errorMessage);
         }
-        setSuccessMessage('Registration successful, please check your email account.');
+        handleSuccess('Registration successful, please check your email account.');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -158,14 +164,6 @@ const Page = () => {
                   {formik.errors.submit}
                 </Typography>
               )}
-              {successMessage && (
-                <Typography
-                  sx={{ mt: 3, color: 'green' }}
-                  variant="body2"
-                >
-                  {successMessage}
-                </Typography>
-              )}
               <Button
                 fullWidth
                 size="large"
@@ -181,6 +179,11 @@ const Page = () => {
               >
                 Continue
               </Button>
+              <SuccessModal
+                open={open}
+                message={successMessage}
+                onClose={() => setOpen(false)}
+              />
             </form>
           </div>
         </Box>
