@@ -46,6 +46,7 @@ export const AccountPopover = (props) => {
               }
             }}
           >
+       {authenticatedUser && (
        <MenuItem onClick={handleAccount}>
         <Typography
           color="text.secondary"
@@ -54,6 +55,7 @@ export const AccountPopover = (props) => {
           {authenticatedUser.name} {authenticatedUser.lastname}
         </Typography>
         </MenuItem>
+         )}
       <Divider />
         <MenuItem onClick={handleSignOut}>
           Sign out

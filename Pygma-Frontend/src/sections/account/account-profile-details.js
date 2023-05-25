@@ -91,7 +91,7 @@ export const AccountProfileDetails = () => {
         handleSuccess('An error occurred while updating account details.', false);
       }
     },
-    []
+    [authenticatedUser.username, values.firstName, values.lastName, values.email, values.phone]
   );
 
   return (
