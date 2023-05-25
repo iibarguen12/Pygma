@@ -10,11 +10,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginResponse {
-    @NonNull
-    private String message;
-    @NonNull
-    private String token;
+public class RefreshTokenRequest {
     @NonNull
     private String refreshToken;
 }

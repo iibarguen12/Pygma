@@ -44,3 +44,4 @@ eureka:
 
 jwt:
   secret: secret
+  refreshSecret: anotherSecret

@@ -1,6 +1,7 @@
 package com.pygma.authservice.resource;
 
 import com.pygma.authservice.model.LoginRequest;
+import com.pygma.authservice.model.RefreshTokenRequest;
 import com.pygma.authservice.model.SignupRequest;
 import com.pygma.authservice.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class AuthResource {
     @PostMapping("/auth/signup")
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
         return new ResponseEntity<>(authService.signup(signupRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/auth/refreshToken")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return new ResponseEntity<>(authService.refreshToken(refreshTokenRequest), HttpStatus.OK);
     }
 }

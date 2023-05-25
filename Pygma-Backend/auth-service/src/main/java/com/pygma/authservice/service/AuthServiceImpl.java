@@ -63,4 +63,9 @@ public class AuthServiceImpl implements AuthService{
         }
         return null;
     }
+
+    @Override
+    public LoginResponse refreshToken(RefreshTokenRequest token) {
+        return jwtGeneratorService.refreshToken(token.getRefreshToken());
+    }
 }

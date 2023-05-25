@@ -6,4 +6,5 @@ import com.pygma.authservice.model.LoginResponse;
 public interface JwtGeneratorService {
 
     LoginResponse generateToken(User user);
+    LoginResponse refreshToken(String refreshToken);
 }
