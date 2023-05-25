@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import { SuccessModal } from 'src/components/success-modal';
+import { ModalMessage } from 'src/components/modal-message';
 
 const Page = () => {
   const [successMessage, setSuccessMessage] = useState('');
@@ -52,7 +52,7 @@ const Page = () => {
         if (errorMessage !== null){
           throw new Error(errorMessage);
         }
-        handleSuccess('Registration successful, please check your email account.');
+        handleSuccess('Registration successful, please check your email account.', true);
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -179,10 +179,11 @@ const Page = () => {
               >
                 Continue
               </Button>
-              <SuccessModal
+              <ModalMessage
                 open={open}
                 message={successMessage}
                 onClose={() => setOpen(false)}
+                success={true}
               />
             </form>
           </div>

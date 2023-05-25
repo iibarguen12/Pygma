@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { sendRequest } from 'src/utils/send-request';
-import { SuccessModal } from 'src/components/success-modal';
+import { ModalMessage } from 'src/components/modal-message';
 import {
   Box,
   Button,
@@ -45,10 +45,12 @@ export const AccountProfileDetails = () => {
   });
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [requestWasSuccess, setRequestWasSuccess] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleSuccess = (message) => {
+  const handleSuccess = (message, status) => {
         setSuccessMessage(message);
         setOpen(true);
+        setRequestWasSuccess(status);
       };
 
   const handleChange = useCallback(
@@ -62,19 +64,32 @@ export const AccountProfileDetails = () => {
   );
 
   const handleSubmit = useCallback(
-    (event) => {
-      const requestBody = {
-        username: authenticatedUser.username,
-        name: values.firstName,
-        lastname: values.lastName,
-        email: values.email,
-        phone: values.phone
-      };
-
-      console.log(requestBody);
-      //TODO continue implementation of update user
-      handleSuccess('Your account details have been saved.');
+    async (event) => {
       event.preventDefault();
+
+      try {
+        const updateUserResponse = await sendRequest(
+          `http://localhost:8080/api/v1/users/${authenticatedUser.username}`,
+          'PUT',
+          JSON.stringify({
+            username: authenticatedUser.username,
+            name: values.firstName,
+            lastname: values.lastName,
+            email: values.email,
+            phone: values.phone,
+          }),
+          true
+        );
+
+        if (updateUserResponse.ok) {
+          handleSuccess('Your account details have been saved.', true);
+        } else {
+          const updateUserResponseError = await updateUserResponse.json();
+          handleSuccess(`Failed to update account details:\n${updateUserResponseError.message}`, false);
+        }
+      } catch (error) {
+        handleSuccess('An error occurred while updating account details.', false);
+      }
     },
     []
   );
@@ -199,10 +214,11 @@ export const AccountProfileDetails = () => {
           </Button>
         </CardActions>
       </Card>
-      <SuccessModal
+      <ModalMessage
             open={open}
             message={successMessage}
             onClose={() => setOpen(false)}
+            success={requestWasSuccess}
           />
     </form>
   );

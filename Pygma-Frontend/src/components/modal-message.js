@@ -26,15 +26,26 @@ const SuccessMessage = styled(Typography)`
   font-weight: bold;
   text-align: center;
   margin-bottom: 16px;
+  white-space: pre-line;
 `;
 
-export function SuccessModal ({ open, message, onClose }) {
+const FailedMessage = styled(Typography)`
+  color: #b20000;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+  white-space: pre-line;
+`;
+
+export function ModalMessage ({ open, message, onClose, success  }) {
   return (
     <StyledModal open={open} onClose={onClose}>
       <ModalContainer>
-        <SuccessMessage variant="body1">
-          {message}
-        </SuccessMessage>
+        {success ? (
+          <SuccessMessage variant="body1">{message}</SuccessMessage>
+        ) : (
+          <FailedMessage variant="body1">{message}</FailedMessage>
+        )}
         <Button
         sx={{
               backgroundColor: '#000000',
@@ -50,4 +61,4 @@ export function SuccessModal ({ open, message, onClose }) {
   );
 };
 
-export default SuccessModal;
+export default ModalMessage;
