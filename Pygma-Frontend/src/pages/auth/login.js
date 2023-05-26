@@ -9,8 +9,11 @@ import {
   Box,
   Button,
   FormHelperText,
+  IconButton,
+  InputAdornment,
   Link,
   Stack,
+  SvgIcon,
   Tab,
   Tabs,
   TextField,
@@ -18,11 +21,17 @@ import {
 } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import { EyeIcon, EyeSlashIcon   } from '@heroicons/react/24/solid';
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState('email');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+     setShowPassword((showPassword) => !showPassword);
+  };
   const formik = useFormik({
     initialValues: {
       email: 'demo@pygma.com',
@@ -148,8 +157,23 @@ const Page = () => {
                     name="password"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={formik.values.password}
+                    InputProps={{
+                      endAdornment:
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => toggleShowPassword()}
+                            edge="end"
+                          >
+                          <SvgIcon fontSize="small">
+                            <EyeIcon />
+                            {showPassword ? <EyeIcon />: <EyeSlashIcon />}
+                          </SvgIcon>
+                          </IconButton>
+                        </InputAdornment>
+                      ,
+                    }}
                   />
                 </Stack>
                 {formik.errors.submit && (

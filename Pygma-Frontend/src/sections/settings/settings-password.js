@@ -15,7 +15,6 @@ import {
   Typography
 } from '@mui/material';
 import { EyeIcon, EyeSlashIcon   } from '@heroicons/react/24/solid';
-import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { sendRequest } from 'src/utils/send-request';
