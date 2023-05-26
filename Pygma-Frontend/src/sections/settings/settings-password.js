@@ -7,10 +7,15 @@ import {
   CardHeader,
   Divider,
   Grid,
+  IconButton,
+  InputAdornment,
   Stack,
+  SvgIcon,
   TextField,
   Typography
 } from '@mui/material';
+import { EyeIcon, EyeSlashIcon   } from '@heroicons/react/24/solid';
+import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { sendRequest } from 'src/utils/send-request';
@@ -41,6 +46,9 @@ export const SettingsPassword = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [requestWasSuccess, setRequestWasSuccess] = useState(false);
   const [open, setOpen] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -81,6 +89,16 @@ export const SettingsPassword = () => {
     setRequestWasSuccess(status);
   }, []);
 
+  const toggleShowPassword = (field) => {
+    if (field === 'currentPassword') {
+      setShowCurrentPassword((showCurrentPassword) => !showCurrentPassword);
+    } else if (field === 'newPassword') {
+      setShowNewPassword((showNewPassword) => !showNewPassword);
+    } else if (field === 'confirmPassword') {
+      setShowConfirmPassword((showConfirmPassword) => !showConfirmPassword);
+    }
+  };
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Card>
@@ -90,16 +108,31 @@ export const SettingsPassword = () => {
           <Grid container spacing={3}>
           	<Grid item xs={12}>
           	  <TextField
-          		fullWidth
-          		label="Current Password"
-          		name="currentPassword"
-          		onChange={formik.handleChange}
-				onBlur={formik.handleBlur}
-          		type="password"
-          		value={formik.values.currentPassword}
-          		error={formik.touched.currentPassword && formik.errors.currentPassword}
-          		helperText={formik.touched.currentPassword && formik.errors.currentPassword}
-          	  />
+                fullWidth
+                label="Current Password"
+                name="currentPassword"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                type={showCurrentPassword ? 'text' : 'password'}
+                value={formik.values.currentPassword}
+                error={formik.touched.currentPassword && formik.errors.currentPassword}
+                helperText={formik.touched.currentPassword && formik.errors.currentPassword}
+                InputProps={{
+                  endAdornment:
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => toggleShowPassword('currentPassword')}
+                        edge="end"
+                      >
+                      <SvgIcon fontSize="small">
+                        <EyeIcon />
+                        {showCurrentPassword ? <EyeIcon />: <EyeSlashIcon />}
+                      </SvgIcon>
+                      </IconButton>
+                    </InputAdornment>
+                  ,
+                }}
+              />
           	</Grid>
           	<Grid item xs={6}>
           	  <TextField
@@ -108,10 +141,25 @@ export const SettingsPassword = () => {
           		name="newPassword"
           		onChange={formik.handleChange}
 				onBlur={formik.handleBlur}
-          		type="password"
+          		type={showNewPassword ? 'text' : 'password'}
           		value={formik.values.newPassword}
           		error={formik.touched.newPassword && formik.errors.newPassword}
           		helperText={formik.touched.newPassword && formik.errors.newPassword}
+          		InputProps={{
+                endAdornment:
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => toggleShowPassword('newPassword')}
+                      edge="end"
+                    >
+                    <SvgIcon fontSize="small">
+                      <EyeIcon />
+                      {showNewPassword ? <EyeIcon />: <EyeSlashIcon />}
+                    </SvgIcon>
+                    </IconButton>
+                  </InputAdornment>
+                ,
+              }}
           	  />
           	</Grid>
           	<Grid item xs={6}>
@@ -121,10 +169,25 @@ export const SettingsPassword = () => {
           		name="confirmPassword"
           		onChange={formik.handleChange}
 				onBlur={formik.handleBlur}
-          		type="password"
+          		type={showConfirmPassword ? 'text' : 'password'}
           		value={formik.values.confirmPassword}
           		error={formik.touched.confirmPassword && formik.errors.confirmPassword}
           		helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+          		InputProps={{
+                endAdornment:
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => toggleShowPassword('confirmPassword')}
+                      edge="end"
+                    >
+                    <SvgIcon fontSize="small">
+                      <EyeIcon />
+                      {showConfirmPassword ? <EyeIcon />: <EyeSlashIcon />}
+                    </SvgIcon>
+                    </IconButton>
+                  </InputAdornment>
+                ,
+              }}
           	  />
           	</Grid>
           </Grid>
