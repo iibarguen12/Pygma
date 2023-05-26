@@ -29,7 +29,7 @@ public class JwtFilter extends GenericFilterBean {
         final String authHeader = request.getHeader("authorization");
 
         String requestURI = request.getRequestURI();
-        if (requestURI.endsWith("/api/v1/auth/login") || requestURI.endsWith("/api/v1/auth/signup")|| requestURI.endsWith("/api/v1/auth/refreshToken")) {
+        if (requestURI.endsWith("/api/v1/auth/login") || requestURI.endsWith("/api/v1/auth/signup")|| requestURI.endsWith("/api/v1/auth/token")) {
             filterChain.doFilter(request, response);
             return;
         }

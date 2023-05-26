@@ -126,11 +126,13 @@ export const AuthProvider = (props) => {
       if (loginResponse.ok) {
         const loginResponseData = await loginResponse.json();
         const token = loginResponseData.token;
+        const refreshToken = loginResponseData.refreshToken;
 
         const decodedToken = jwt_decode(token);
         const username = decodedToken.sub;
 
         Cookies.set('jwt', token);
+        Cookies.set('refreshToken', refreshToken);
         window.sessionStorage.setItem('authenticated', 'true');
 
         const userResponse =
