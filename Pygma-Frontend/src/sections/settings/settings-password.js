@@ -37,6 +37,7 @@ const validationSchema = Yup.object().shape({
 
 
 export const SettingsPassword = () => {
+  const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
   const [successMessage, setSuccessMessage] = useState('');
   const [requestWasSuccess, setRequestWasSuccess] = useState(false);
   const [open, setOpen] = useState(false);
@@ -56,7 +57,7 @@ export const SettingsPassword = () => {
         };
 
         const updatePasswordResponse = await sendRequest(
-          'http://localhost:8080/api/v1/auth/password',
+          `http://localhost:8080/api/v1/users/${authenticatedUser.username}/password`,
           'PUT',
           JSON.stringify(requestBody),
           true

@@ -4,8 +4,10 @@ import com.pygma.authservice.entity.User;
 import com.pygma.authservice.entity.Role;
 import com.pygma.authservice.exception.InvalidDataException;
 import com.pygma.authservice.exception.NotFoundException;
+import com.pygma.authservice.model.UpdatePasswordRequest;
 import com.pygma.authservice.repository.RoleRepository;
 import com.pygma.authservice.repository.UserRepository;
+import com.pygma.authservice.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,6 +74,24 @@ public class UserServiceImpl implements UserService {
         currentUser.setEmail(updatedUser.getEmail());
         currentUser.setPhone(updatedUser.getPhone());
         return userRepo.save(currentUser);
+    }
+
+    @Override
+    public User updateUserPassword(String username, UpdatePasswordRequest updatePasswordRequest) {
+        User user = findUserByUsername(username);
+        if (!passwordEncoder.matches(updatePasswordRequest.getCurrentPassword(), user.getPassword())){
+            throw new NotFoundException("Incorrect user password");
+        }
+        if (passwordEncoder.matches(updatePasswordRequest.getNewPassword(), user.getPassword())){
+            throw new NotFoundException("New password cannot be the same as your old password");
+        }
+        if(!UserUtils.isValidPassword(updatePasswordRequest.getNewPassword())){
+            throw new InvalidDataException("Invalid password format. " +
+                    "The password must be at least 8 characters long and contain at least one uppercase letter, " +
+                    "one lowercase letter, one number, and one special character.");
+        }
+        user.setPassword(updatePasswordRequest.getNewPassword());
+        return saveUser(user);
     }
 
     @Override

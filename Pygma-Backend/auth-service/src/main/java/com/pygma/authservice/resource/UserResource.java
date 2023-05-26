@@ -3,6 +3,7 @@ package com.pygma.authservice.resource;
 
 import com.pygma.authservice.entity.User;
 import com.pygma.authservice.model.SimpleResponse;
+import com.pygma.authservice.model.UpdatePasswordRequest;
 import com.pygma.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,14 @@ public class UserResource {
     public ResponseEntity<User> updateUser(@PathVariable("username") String username,
                                            @Valid @RequestBody User user) {
         return new ResponseEntity<>(userService.updateUser(user, username), HttpStatus.OK);
+    }
+
+    @PutMapping("/users/{username}/password")
+    public ResponseEntity<User> updatePassword(@PathVariable("username") String username,
+                                           @Valid @RequestBody UpdatePasswordRequest updatePasswordRequest) {
+        return new ResponseEntity<>(
+                userService.updateUserPassword(username, updatePasswordRequest),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{username}")
