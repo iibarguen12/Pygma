@@ -91,6 +91,13 @@ export const AccountProfileDetails = () => {
     }));
   }, [values.country]);
 
+  const handleModalClose = useCallback(() => {
+    setOpen(false);
+    if (requestWasSuccess) {
+      window.location.reload(true);
+    }
+  }, [requestWasSuccess]);
+
   return (
     <form autoComplete="off" noValidate onSubmit={handleSubmit}>
       <Card>
@@ -195,7 +202,7 @@ export const AccountProfileDetails = () => {
       <ModalMessage
         open={open}
         message={successMessage}
-        onClose={() => setOpen(false)}
+        onClose={handleModalClose}
         success={requestWasSuccess}
       />
     </form>

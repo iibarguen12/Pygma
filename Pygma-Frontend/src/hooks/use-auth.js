@@ -5,10 +5,10 @@ import Cookies from 'js-cookie';
 export const useAuth = () => {
   const { isAuthenticated, signIn, signUp, signOut } = useContext(AuthContext);
 
-  // Refresh the token every 25 minutes
+  // Refresh the token every 15 minutes
   useEffect(() => {
     if (isAuthenticated) {
-      const refreshTimeout = 25 * 60 * 1000; // 25 minutes
+      const refreshTimeout = 15 * 60 * 1000; // 15 minutes
       let refreshTokenTimeoutId;
       const refreshToken = async () => {
         try {
