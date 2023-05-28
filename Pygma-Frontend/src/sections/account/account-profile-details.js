@@ -83,6 +83,9 @@ export const AccountProfileDetails = () => {
 
         if (updateUserResponse.ok) {
           handleSuccess('Your account details have been saved.', true);
+          const userResponseData = await updateUserResponse.json();
+          window.sessionStorage.setItem('user', JSON.stringify(userResponseData));
+          //TODO check why the user info is not being actualized in the Account view when refreshing
         } else {
           const updateUserResponseError = await updateUserResponse.json();
           handleSuccess(`Failed to update account details:\n${updateUserResponseError.message}`, false);

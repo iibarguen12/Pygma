@@ -1,9 +1,9 @@
 {
-  "short_name": "Devias Kit",
-  "name": "Devias Kit",
+  "short_name": "Pygma",
+  "name": "Pygma",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "/icon/logo-pygma-p-white.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }
