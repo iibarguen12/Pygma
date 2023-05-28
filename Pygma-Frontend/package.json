@@ -20,7 +20,9 @@
     "@mui/material": "5.11.10",
     "@mui/system": "5.11.9",
     "@mui/x-date-pickers": "5.0.19",
+    "@types/react-select": "^5.0.1",
     "apexcharts": "3.37.0",
+    "country-cities": "^1.0.7",
     "date-fns": "2.29.3",
     "formik": "2.2.9",
     "js-cookie": "^3.0.5",
@@ -32,6 +34,8 @@
     "react": "18.2.0",
     "react-apexcharts": "1.4.0",
     "react-dom": "18.2.0",
+    "react-select": "^5.7.3",
+    "react-select-country-list": "^2.2.3",
     "simplebar-react": "^3.2.1",
     "yup": "1.0.0"
   },

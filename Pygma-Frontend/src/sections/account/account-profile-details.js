@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { sendRequest } from 'src/utils/send-request';
 import { ModalMessage } from 'src/components/modal-message';
 import {
@@ -12,45 +12,33 @@ import {
   TextField,
   Unstable_Grid2 as Grid
 } from '@mui/material';
-
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  },
-  {
-    value: 'los-angeles',
-    label: 'Los Angeles'
-  }
-];
+import Select from 'react-select';
+import { cities, countries } from 'country-cities';
 
 export const AccountProfileDetails = () => {
   const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
   const [values, setValues] = useState({
-    firstName: authenticatedUser.name,
-    lastName: authenticatedUser.lastname,
-    email: authenticatedUser.email,
-    phone: authenticatedUser.phone,
-    state: 'los-angeles',
-    country: 'USA'
+    firstName: authenticatedUser?.name || '',
+    lastName: authenticatedUser?.lastname || '',
+    email: authenticatedUser?.email || '',
+    phone: authenticatedUser?.phone || '',
+    country: 'US',
+    city: 'los-angeles'
   });
+  const countryOptions = countries.all();
+  const cityOptions = useMemo(() => {
+    const citySet = new Set(cities.getByCountry(values.country).map(city => city.name));
+    return Array.from(citySet);
+  }, [values.country]);
 
   const [successMessage, setSuccessMessage] = useState('');
   const [requestWasSuccess, setRequestWasSuccess] = useState(false);
   const [open, setOpen] = useState(false);
   const handleSuccess = (message, status) => {
-        setSuccessMessage(message);
-        setOpen(true);
-        setRequestWasSuccess(status);
-      };
+    setSuccessMessage(message);
+    setOpen(true);
+    setRequestWasSuccess(status);
+  };
 
   const handleChange = useCallback(
     (event) => {
@@ -92,26 +80,24 @@ export const AccountProfileDetails = () => {
         handleSuccess('An error occurred while updating account details.', false);
       }
     },
-    [authenticatedUser.username, values.firstName, values.lastName, values.email, values.phone]
+    [authenticatedUser?.name || '', values.firstName, values.lastName, values.email, values.phone, values.country, values.city]
   );
 
+  useEffect(() => {
+    const newCityOptions = cities.getByCountry(values.country).map(city => city.name);
+    setValues((prevState) => ({
+      ...prevState,
+      city: newCityOptions.includes(values.city) ? values.city : newCityOptions[0]
+    }));
+  }, [values.country]);
+
   return (
-    <form
-      autoComplete="off"
-      noValidate
-      onSubmit={handleSubmit}
-    >
+    <form autoComplete="off" noValidate onSubmit={handleSubmit}>
       <Card>
         <CardContent sx={{ pt: 2.5 }}>
           <Box sx={{ m: -1.5 }}>
-            <Grid
-              container
-              spacing={1}
-            >
-              <Grid
-                xs={12}
-                md={6}
-              >
+            <Grid container spacing={1}>
+              <Grid xs={12} md={6}>
                 <TextField
                   fullWidth
                   label="First name"
@@ -121,10 +107,7 @@ export const AccountProfileDetails = () => {
                   value={values.firstName}
                 />
               </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
+              <Grid xs={12} md={6}>
                 <TextField
                   fullWidth
                   label="Last name"
@@ -134,10 +117,7 @@ export const AccountProfileDetails = () => {
                   value={values.lastName}
                 />
               </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
+              <Grid xs={12} md={6}>
                 <TextField
                   fullWidth
                   label="Email Address"
@@ -147,10 +127,7 @@ export const AccountProfileDetails = () => {
                   value={values.email}
                 />
               </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
+              <Grid xs={12} md={6}>
                 <TextField
                   fullWidth
                   label="Phone Number"
@@ -160,39 +137,38 @@ export const AccountProfileDetails = () => {
                   value={values.phone}
                 />
               </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
+              <Grid xs={12} md={6}>
                 <TextField
                   fullWidth
                   label="Country"
                   name="country"
                   onChange={handleChange}
                   required
+                  select
+                  SelectProps={{ native: true }}
                   value={values.country}
-                />
+                >
+                  {countryOptions.map((option) => (
+                    <option key={option.isoCode} value={option.isoCode}>
+                      {option.name}
+                    </option>
+                  ))}
+                </TextField>
               </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
+              <Grid xs={12} md={6}>
                 <TextField
                   fullWidth
-                  label="Select State"
-                  name="state"
+                  label="Select City"
+                  name="city"
                   onChange={handleChange}
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={values.state}
+                  value={values.city}
                 >
-                  {states.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                    >
-                      {option.label}
+                  {cityOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
                     </option>
                   ))}
                 </TextField>
@@ -203,24 +179,25 @@ export const AccountProfileDetails = () => {
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
-          sx={{
-                backgroundColor: '#000000',
-                '&:hover': {
-                  backgroundColor: '#c7e200', // TODO move this style to a global Button component
-                },
-              }}
-          type="submit"
-          variant="contained">
+            sx={{
+              backgroundColor: '#000000',
+              '&:hover': {
+                backgroundColor: '#c7e200', // TODO move this style to a global Button component
+              },
+            }}
+            type="submit"
+            variant="contained"
+          >
             Save details
           </Button>
         </CardActions>
       </Card>
       <ModalMessage
-            open={open}
-            message={successMessage}
-            onClose={() => setOpen(false)}
-            success={requestWasSuccess}
-          />
+        open={open}
+        message={successMessage}
+        onClose={() => setOpen(false)}
+        success={requestWasSuccess}
+      />
     </form>
   );
 };
