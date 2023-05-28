@@ -21,9 +21,6 @@ const Page = () => (
     >
       <Container maxWidth="lg">
         <Stack spacing={3}>
-          <Typography variant="h4">
-            Settings
-          </Typography>
           <SettingsNotifications />
           <SettingsPassword />
         </Stack>

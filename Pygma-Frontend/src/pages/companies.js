@@ -90,9 +90,6 @@ const Page = () => (
             spacing={4}
           >
             <Stack spacing={1}>
-              <Typography variant="h4">
-                Companies
-              </Typography>
               <Stack
                 alignItems="center"
                 direction="row"

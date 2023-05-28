@@ -23,11 +23,6 @@ const Page = () => (
       <Container maxWidth="lg">
         <Stack spacing={3}>
           <div>
-            <Typography variant="h4">
-              Account
-            </Typography>
-          </div>
-          <div>
             <Grid
               container
               spacing={3}
