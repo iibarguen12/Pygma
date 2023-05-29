@@ -12,7 +12,7 @@ import { SvgIcon } from '@mui/material';
 export const items = [
   {
     title: 'About Us',
-    path: '/about-us',
+    path: '/about',
     icon: (
       <SvgIcon fontSize="small">
         <HandThumbUpIcon />
