@@ -8,11 +8,21 @@ spring:
     name: gateway-service
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000/"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+      httpclient:
+        response-timeout: 60s
       routes:
         - id: authService
           uri: lb://auth-service
           predicates:
-            - Path=/api/v1/auth/**
+            - Path=/api/v1/auth/**, /api/v1/users/**
           filters:
             - name: CircuitBreaker
               args:
@@ -38,3 +48,17 @@ eureka:
     preferIpAddress: true
     registryFetchIntervalSeconds: 5
     fetchRegistry: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60s
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 60s

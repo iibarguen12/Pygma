@@ -1,32 +1,34 @@
 import { common } from '@mui/material/colors';
 import { alpha } from '@mui/material/styles';
-import { error, indigo, info, neutral, success, warning } from './colors';
+import { error, indigo, indigoDark, info, neutral, neutralDark, success, warning } from './colors';
 
-export function createPalette() {
+export function createPalette(mode) {
+  const isLightMode = mode === 'light';
+
   return {
     action: {
-      active: neutral[500],
-      disabled: alpha(neutral[900], 0.38),
-      disabledBackground: alpha(neutral[900], 0.12),
-      focus: alpha(neutral[900], 0.16),
-      hover: alpha(neutral[900], 0.04),
-      selected: alpha(neutral[900], 0.12)
+      active: isLightMode ? neutral[500] : neutralDark[500],
+      disabled: alpha(isLightMode ? neutral[900] : neutralDark[900], 0.38),
+      disabledBackground: alpha(isLightMode ? neutral[900] : neutralDark[900], 0.12),
+      focus: alpha(isLightMode ? neutral[900] : neutralDark[900], 0.16),
+      hover: alpha(isLightMode ? neutral[900] : neutralDark[900], 0.04),
+      selected: alpha(isLightMode ? neutral[900] : neutralDark[900], 0.12)
     },
     background: {
-      default: common.white,
-      paper: common.white
+      default: isLightMode ? common.white : '#090909',
+      paper: isLightMode ? common.white : '#000000'
     },
     divider: '#F2F4F7',
     error,
     info,
-    mode: 'light',
-    neutral,
-    primary: indigo,
+    mode,
+    neutral: isLightMode ? neutral : neutralDark,
+    primary: isLightMode ? indigo : indigoDark,
     success,
     text: {
-      primary: neutral[900],
-      secondary: neutral[500],
-      disabled: alpha(neutral[900], 0.38)
+      primary: isLightMode ? neutral[900] : neutralDark[900],
+      secondary: isLightMode ? neutral[500] : neutralDark[500],
+      disabled: alpha(isLightMode ? neutral[900] : neutralDark[900], 0.38)
     },
     warning
   };

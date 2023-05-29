@@ -17,7 +17,6 @@ export const CompaniesSearch = () => (
           </SvgIcon>
         </InputAdornment>
       )}
-      sx={{ maxWidth: 500 }}
     />
   </Card>
 );

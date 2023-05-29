@@ -14,7 +14,7 @@
 	<name>gateway-service</name>
 	<description>This service act as the point of entry for the system. This will route the requests to the corresponding microservices using Spring Cloud Gateway.</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>

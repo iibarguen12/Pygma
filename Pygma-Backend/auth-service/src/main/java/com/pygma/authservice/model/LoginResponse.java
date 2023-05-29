@@ -15,4 +15,6 @@ public class LoginResponse {
     private String message;
     @NonNull
     private String token;
+    @NonNull
+    private String refreshToken;
 }

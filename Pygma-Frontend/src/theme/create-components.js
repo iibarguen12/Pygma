@@ -151,8 +151,8 @@ export function createComponents(config) {
         root: {
           backgroundColor: 'transparent',
           borderRadius: 8,
-          borderStyle: 'solid',
-          borderWidth: 1,
+          borderStyle: 'none',
+          margin: 1,
           overflow: 'hidden',
           borderColor: palette.neutral[200],
           transition: muiTheme.transitions.create([

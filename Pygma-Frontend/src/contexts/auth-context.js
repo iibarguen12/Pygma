@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
+import { sendRequest } from 'src/utils/send-request';
+import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
+import jwt_decode from "jwt-decode";
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -81,11 +84,16 @@ export const AuthProvider = (props) => {
     }
 
     if (isAuthenticated) {
+      const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
+      console.log(authenticatedUser);
       const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io'
+        id: authenticatedUser.id,
+        avatar: '/assets/avatars/avatar-pygma.png',
+        name: authenticatedUser.name,
+        email: authenticatedUser.email,
+        phone: authenticatedUser.phone,
+        city: authenticatedUser.city,
+        country: authenticatedUser.country,
       };
 
       dispatch({
@@ -107,55 +115,90 @@ export const AuthProvider = (props) => {
     []
   );
 
-  const skip = () => {
-    try {
-      window.sessionStorage.setItem('authenticated', 'true');
+  const signIn = async (emailOrUsername, password) => {
+  try {
+      const loginResponse =
+      await sendRequest('http://localhost:8080/api/v1/auth/login','POST',
+        JSON.stringify({
+          username: emailOrUsername,
+          password: password,
+        }),
+        false,
+      );
+
+      if (loginResponse.ok) {
+        const loginResponseData = await loginResponse.json();
+        const token = loginResponseData.token;
+        const refreshToken = loginResponseData.refreshToken;
+
+        const decodedToken = jwt_decode(token);
+        const username = decodedToken.sub;
+
+        Cookies.set('jwt', token);
+        Cookies.set('refreshToken', refreshToken);
+        window.sessionStorage.setItem('authenticated', 'true');
+
+        const userResponse =
+        await sendRequest(`http://localhost:8080/api/v1/users/${username}`,'GET', null);
+        const userResponseData = await userResponse.json();
+        window.sessionStorage.setItem('user', JSON.stringify(userResponseData));
+
+        const user = {
+          id: userResponseData.id,
+          avatar: '/assets/avatars/avatar-pygma.png',
+          name: userResponseData.name,
+          email: userResponseData.email
+        };
+
+        dispatch({
+          type: HANDLERS.SIGN_IN,
+          payload: user
+        });
+
+        return null;
+      } else {
+        const loginResponseError = await loginResponse.json();
+        return loginResponseError.message;
+      }
     } catch (err) {
       console.error(err);
+      return 'An error occurred during sign-in';
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
 
-  const signIn = async (email, password) => {
-    if (email !== 'demo@pygma.com' || password !== '123') {
-      throw new Error('Please check your email and password');
-    }
-
+  const signUp = async (username, name, lastname, email) => {
     try {
-      window.sessionStorage.setItem('authenticated', 'true');
+      const signupResponse =
+      await sendRequest('http://localhost:8080/api/v1/auth/signup','POST',
+          JSON.stringify({
+          username: username,
+          name: name,
+          lastname: lastname,
+          email: email,
+        }),
+        false,
+      );
+
+      if (signupResponse.ok) {
+        return null;
+      } else {
+        const signupResponseError = await signupResponse.json();
+        return signupResponseError.message;
+      }
     } catch (err) {
       console.error(err);
+      return 'An error occurred during sign-up';
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
-  };
-
-  const signUp = async (email, name, password) => {
-    throw new Error('Sign up is not implemented');
   };
 
   const signOut = () => {
+    // Clear cookies
+    document.cookie = 'cookieName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+    // Clear session storage
+    sessionStorage.clear();
+
+    // Dispatch an action to update the authentication state
     dispatch({
       type: HANDLERS.SIGN_OUT
     });
@@ -165,7 +208,6 @@ export const AuthProvider = (props) => {
     <AuthContext.Provider
       value={{
         ...state,
-        skip,
         signIn,
         signUp,
         signOut

@@ -32,7 +32,7 @@ public class JwtFilter extends GenericFilterBean {
             filterChain.doFilter(request, response);
         } else {
             if(authHeader == null || !authHeader.startsWith("Bearer ")){
-                handleJwtException(response, HttpStatus.UNAUTHORIZED, "Empty JWT");
+                handleJwtException(response, HttpStatus.UNAUTHORIZED, "Empty Token");
                 return;
             }
         }

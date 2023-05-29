@@ -1,5 +1,6 @@
 package com.pygma.authservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ import static javax.persistence.GenerationType.AUTO;
 public class Role {
     @Id
     @GeneratedValue(strategy = AUTO)
+    @JsonIgnore
     private Long id;
     private String name;
 }

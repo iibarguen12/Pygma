@@ -17,7 +17,7 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 
-export const CustomersTable = (props) => {
+export const CoFoundersTable = (props) => {
   const {
     count = 0,
     items = [],
@@ -73,14 +73,14 @@ export const CustomersTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
-                const isSelected = selected.includes(customer.id);
-                const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
+              {items.map((coFounder) => {
+                const isSelected = selected.includes(coFounder.id);
+                const createdAt = format(coFounder.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <TableRow
                     hover
-                    key={customer.id}
+                    key={coFounder.id}
                     selected={isSelected}
                   >
                     <TableCell padding="checkbox">
@@ -88,9 +88,9 @@ export const CustomersTable = (props) => {
                         checked={isSelected}
                         onChange={(event) => {
                           if (event.target.checked) {
-                            onSelectOne?.(customer.id);
+                            onSelectOne?.(coFounder.id);
                           } else {
-                            onDeselectOne?.(customer.id);
+                            onDeselectOne?.(coFounder.id);
                           }
                         }}
                       />
@@ -101,22 +101,22 @@ export const CustomersTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={customer.avatar}>
-                          {getInitials(customer.name)}
+                        <Avatar src={coFounder.avatar}>
+                          {getInitials(coFounder.name)}
                         </Avatar>
                         <Typography variant="subtitle2">
-                          {customer.name}
+                          {coFounder.name}
                         </Typography>
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {customer.email}
+                      {coFounder.email}
                     </TableCell>
                     <TableCell>
-                      {customer.address.city}, {customer.address.state}, {customer.address.country}
+                      {coFounder.address.city}, {coFounder.address.state}, {coFounder.address.country}
                     </TableCell>
                     <TableCell>
-                      {customer.phone}
+                      {coFounder.phone}
                     </TableCell>
                     <TableCell>
                       {createdAt}
@@ -141,7 +141,7 @@ export const CustomersTable = (props) => {
   );
 };
 
-CustomersTable.propTypes = {
+CoFoundersTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

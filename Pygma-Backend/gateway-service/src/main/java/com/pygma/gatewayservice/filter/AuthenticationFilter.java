@@ -20,8 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Date;
 
 @Component
@@ -33,6 +31,7 @@ public class AuthenticationFilter implements GatewayFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        ServerHttpResponse response = exchange.getResponse();
 
         if (routerValidator.isSecured.test(request)) {
             if (this.isAuthMissing(request))
@@ -54,7 +53,7 @@ public class AuthenticationFilter implements GatewayFilter {
             } catch (JWTVerificationException ex) {
                 return onError(exchange, "Authorization header is invalid", HttpStatus.UNAUTHORIZED);
             }  catch (Exception ex) {
-                onError(exchange,"Something went wrong while verifying the JWT: " + ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                return onError(exchange,"Something went wrong while verifying the JWT: " + ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         return chain.filter(exchange);

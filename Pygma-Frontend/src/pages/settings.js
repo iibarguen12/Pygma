@@ -1,29 +1,27 @@
 import Head from 'next/head';
 import { Box, Container, Stack, Typography } from '@mui/material';
-import { SettingsNotifications } from 'src/sections/settings/settings-notifications';
+import { SettingsGeneral } from 'src/sections/settings/settings-general';
 import { SettingsPassword } from 'src/sections/settings/settings-password';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
+const PADDING_TOP = 1;
 const Page = () => (
   <>
     <Head>
       <title>
-        Settings | Devias Kit
+        Settings | Pygma
       </title>
     </Head>
     <Box
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: PADDING_TOP
       }}
     >
       <Container maxWidth="lg">
         <Stack spacing={3}>
-          <Typography variant="h4">
-            Settings
-          </Typography>
-          <SettingsNotifications />
+          <SettingsGeneral />
           <SettingsPassword />
         </Stack>
       </Container>

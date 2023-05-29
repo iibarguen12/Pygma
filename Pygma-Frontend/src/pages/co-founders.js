@@ -7,10 +7,11 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomersTable } from 'src/sections/customer/customers-table';
-import { CustomersSearch } from 'src/sections/customer/customers-search';
+import { CoFoundersTable } from 'src/sections/co-founders/co-founders-table';
+import { CoFoundersSearch } from 'src/sections/co-founders/co-founders-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 
+const PADDING_TOP = 1;
 const now = new Date();
 
 const data = [
@@ -24,7 +25,7 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-carson-darrin.png',
     createdAt: subDays(subHours(now, 7), 1).getTime(),
-    email: 'carson.darrin@devias.io',
+    email: 'carson.darrin@pygma.co',
     name: 'Carson Darrin',
     phone: '304-428-3097'
   },
@@ -38,7 +39,7 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-fran-perez.png',
     createdAt: subDays(subHours(now, 1), 2).getTime(),
-    email: 'fran.perez@devias.io',
+    email: 'fran.perez@pygma.co',
     name: 'Fran Perez',
     phone: '712-351-5711'
   },
@@ -52,7 +53,7 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-jie-yan-song.png',
     createdAt: subDays(subHours(now, 4), 2).getTime(),
-    email: 'jie.yan.song@devias.io',
+    email: 'jie.yan.song@pygma.co',
     name: 'Jie Yan Song',
     phone: '770-635-2682'
   },
@@ -61,13 +62,13 @@ const data = [
     address: {
       city: 'Madrid',
       country: 'Spain',
-      name: 'Anika Visser',
+      name: 'Pygma Lion',
       street: '4158  Hedge Street'
     },
-    avatar: '/assets/avatars/avatar-anika-visser.png',
+    avatar: '/assets/avatars/avatar-pygma.png',
     createdAt: subDays(subHours(now, 11), 2).getTime(),
-    email: 'anika.visser@devias.io',
-    name: 'Anika Visser',
+    email: 'lion@pygma.co',
+    name: 'Pygma Lion',
     phone: '908-691-3242'
   },
   {
@@ -80,7 +81,7 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-miron-vitold.png',
     createdAt: subDays(subHours(now, 7), 3).getTime(),
-    email: 'miron.vitold@devias.io',
+    email: 'miron.vitold@pygma.co',
     name: 'Miron Vitold',
     phone: '972-333-4106'
   },
@@ -94,7 +95,7 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-penjani-inyene.png',
     createdAt: subDays(subHours(now, 5), 4).getTime(),
-    email: 'penjani.inyene@devias.io',
+    email: 'penjani.inyene@pygma.co',
     name: 'Penjani Inyene',
     phone: '858-602-3409'
   },
@@ -108,7 +109,7 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-omar-darboe.png',
     createdAt: subDays(subHours(now, 15), 4).getTime(),
-    email: 'omar.darobe@devias.io',
+    email: 'omar.darobe@pygma.co',
     name: 'Omar Darobe',
     phone: '415-907-2647'
   },
@@ -122,7 +123,7 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-siegbert-gottfried.png',
     createdAt: subDays(subHours(now, 2), 5).getTime(),
-    email: 'siegbert.gottfried@devias.io',
+    email: 'siegbert.gottfried@pygma.co',
     name: 'Siegbert Gottfried',
     phone: '702-661-1654'
   },
@@ -136,7 +137,7 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-iulia-albu.png',
     createdAt: subDays(subHours(now, 8), 6).getTime(),
-    email: 'iulia.albu@devias.io',
+    email: 'iulia.albu@pygma.co',
     name: 'Iulia Albu',
     phone: '313-812-8947'
   },
@@ -150,13 +151,13 @@ const data = [
     },
     avatar: '/assets/avatars/avatar-nasimiyu-danai.png',
     createdAt: subDays(subHours(now, 1), 9).getTime(),
-    email: 'nasimiyu.danai@devias.io',
+    email: 'nasimiyu.danai@pygma.co',
     name: 'Nasimiyu Danai',
     phone: '801-301-7894'
   }
 ];
 
-const useCustomers = (page, rowsPerPage) => {
+const useCoFounders = (page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -165,21 +166,21 @@ const useCustomers = (page, rowsPerPage) => {
   );
 };
 
-const useCustomerIds = (customers) => {
+const useCoFounderIds = (coFounders) => {
   return useMemo(
     () => {
-      return customers.map((customer) => customer.id);
+      return coFounders.map((coFounder) => coFounder.id);
     },
-    [customers]
+    [coFounders]
   );
 };
 
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
-  const customersIds = useCustomerIds(customers);
-  const customersSelection = useSelection(customersIds);
+  const coFounders = useCoFounders(page, rowsPerPage);
+  const coFoundersIds = useCoFounderIds(coFounders);
+  const coFoundersSelection = useSelection(coFoundersIds);
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -199,14 +200,14 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Customers | Devias Kit
+          Co-Founders | Pygma
         </title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: PADDING_TOP
         }}
       >
         <Container maxWidth="xl">
@@ -217,9 +218,6 @@ const Page = () => {
               spacing={4}
             >
               <Stack spacing={1}>
-                <Typography variant="h4">
-                  Customers
-                </Typography>
                 <Stack
                   alignItems="center"
                   direction="row"
@@ -254,25 +252,25 @@ const Page = () => {
                       <PlusIcon />
                     </SvgIcon>
                   )}
-                  variant="contained"
+                  variant="text"
                 >
                   Add
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch />
-            <CustomersTable
+            <CoFoundersSearch />
+            <CoFoundersTable
               count={data.length}
-              items={customers}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
+              items={coFounders}
+              onDeselectAll={coFoundersSelection.handleDeselectAll}
+              onDeselectOne={coFoundersSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
+              onSelectAll={coFoundersSelection.handleSelectAll}
+              onSelectOne={coFoundersSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={customersSelection.selected}
+              selected={coFoundersSelection.selected}
             />
           </Stack>
         </Container>

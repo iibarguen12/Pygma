@@ -16,14 +16,18 @@ import {
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
+import { BlackLogo, WhiteLogo } from 'src/components/logo';
+import { useTheme } from '@mui/material/styles';
 
-const SIDE_NAV_WIDTH = 280;
+const SIDE_NAV_WIDTH = 0;
 const TOP_NAV_HEIGHT = 64;
 
 export const TopNav = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
+  const theme = useTheme();
+  const isLightMode = theme.palette.mode === 'light';
 
   return (
     <>
@@ -58,20 +62,19 @@ export const TopNav = (props) => {
             direction="row"
             spacing={2}
           >
-            {!lgUp && (
+            {lgUp && (
               <IconButton onClick={onNavOpen}>
-                <SvgIcon fontSize="small">
-                  <Bars3Icon />
-                </SvgIcon>
+                <Box
+                  sx={{
+                    display: 'inline-flex',
+                    height: 32,
+                    width: 32
+                  }}
+                >
+                  {isLightMode ? <BlackLogo /> : <WhiteLogo />}
+                </Box>
               </IconButton>
             )}
-            <Tooltip title="Search">
-              <IconButton>
-                <SvgIcon fontSize="small">
-                  <MagnifyingGlassIcon />
-                </SvgIcon>
-              </IconButton>
-            </Tooltip>
           </Stack>
           <Stack
             alignItems="center"
@@ -106,7 +109,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src="/assets/avatars/avatar-anika-visser.png"
+              src="/assets/avatars/avatar-pygma.png"
             />
           </Stack>
         </Stack>

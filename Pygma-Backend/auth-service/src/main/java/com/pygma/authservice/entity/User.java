@@ -1,19 +1,21 @@
 package com.pygma.authservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
 
 import static javax.persistence.FetchType.EAGER;
 
@@ -26,11 +28,12 @@ import static javax.persistence.FetchType.EAGER;
 public class User {
     @Id
     @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Type(type = "uuid-char")
+    private UUID id = UUID.randomUUID();
     @Column(nullable = false)
     private String username;
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
     @Column(nullable = false)
     private String name;
@@ -38,7 +41,11 @@ public class User {
     @Column(nullable = false)
     private String email;
     private String phone;
+    private String country;
+    private String city;
     @ManyToMany(fetch = EAGER)
-    private Collection<Role> roles = new ArrayList<>();
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
 
 }

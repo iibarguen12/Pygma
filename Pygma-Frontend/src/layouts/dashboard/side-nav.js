@@ -13,7 +13,7 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
-import { Logo } from 'src/components/logo';
+import { WhiteLogo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
@@ -52,40 +52,7 @@ export const SideNav = (props) => {
               width: 32
             }}
           >
-            <Logo />
-          </Box>
-          <Box
-            sx={{
-              alignItems: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.04)',
-              borderRadius: 1,
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              mt: 2,
-              p: '12px'
-            }}
-          >
-            <div>
-              <Typography
-                color="inherit"
-                variant="subtitle1"
-              >
-                Devias
-              </Typography>
-              <Typography
-                color="neutral.400"
-                variant="body2"
-              >
-                Production
-              </Typography>
-            </div>
-            <SvgIcon
-              fontSize="small"
-              sx={{ color: 'neutral.500' }}
-            >
-              <ChevronUpDownIcon />
-            </SvgIcon>
+            <WhiteLogo />
           </Box>
         </Box>
         <Divider sx={{ borderColor: 'neutral.700' }} />
@@ -124,61 +91,11 @@ export const SideNav = (props) => {
           </Stack>
         </Box>
         <Divider sx={{ borderColor: 'neutral.700' }} />
-        <Box
-          sx={{
-            px: 2,
-            py: 3
-          }}
-        >
-          <Typography
-            color="neutral.100"
-            variant="subtitle2"
-          >
-            Need more features?
-          </Typography>
-          <Typography
-            color="neutral.500"
-            variant="body2"
-          >
-            Check out our Pro solution template.
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              mt: 2,
-              mx: 'auto',
-              width: '160px',
-              '& img': {
-                width: '100%'
-              }
-            }}
-          >
-            <img
-              alt="Go to pro"
-              src="/assets/devias-kit-pro.png"
-            />
-          </Box>
-          <Button
-            component="a"
-            endIcon={(
-              <SvgIcon fontSize="small">
-                <ArrowTopRightOnSquareIcon />
-              </SvgIcon>
-            )}
-            fullWidth
-            href="https://material-kit-pro-react.devias.io/"
-            sx={{ mt: 2 }}
-            target="_blank"
-            variant="contained"
-          >
-            Pro Live Preview
-          </Button>
-        </Box>
       </Box>
     </Scrollbar>
   );
 
-  if (lgUp) {
+  if (!lgUp) {
     return (
       <Drawer
         anchor="left"
@@ -187,7 +104,7 @@ export const SideNav = (props) => {
           sx: {
             backgroundColor: 'neutral.800',
             color: 'common.white',
-            width: 280
+            width: 0
           }
         }}
         variant="permanent"
@@ -195,26 +112,27 @@ export const SideNav = (props) => {
         {content}
       </Drawer>
     );
+  }else{
+    return (
+      <Drawer
+        anchor="left"
+        onClose={onClose}
+        open={open}
+        PaperProps={{
+          sx: {
+            backgroundColor: 'neutral.800',
+            color: 'common.white',
+            width: 200
+          }
+        }}
+        sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
+        variant="temporary"
+      >
+        {content}
+      </Drawer>
+    );
   }
 
-  return (
-    <Drawer
-      anchor="left"
-      onClose={onClose}
-      open={open}
-      PaperProps={{
-        sx: {
-          backgroundColor: 'neutral.800',
-          color: 'common.white',
-          width: 280
-        }
-      }}
-      sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
-      variant="temporary"
-    >
-      {content}
-    </Drawer>
-  );
 };
 
 SideNav.propTypes = {

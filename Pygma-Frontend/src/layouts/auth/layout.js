@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import NextLink from 'next/link';
 import { Box, Typography, Unstable_Grid2 as Grid } from '@mui/material';
-import { Logo } from 'src/components/logo';
-
-// TODO: Change subtitle text
 
 export const Layout = (props) => {
   const { children } = props;
@@ -40,17 +37,6 @@ export const Layout = (props) => {
               width: '100%'
             }}
           >
-            <Box
-              component={NextLink}
-              href="/"
-              sx={{
-                display: 'inline-flex',
-                height: 32,
-                width: 32
-              }}
-            >
-              <Logo />
-            </Box>
           </Box>
           {children}
         </Grid>
@@ -59,7 +45,7 @@ export const Layout = (props) => {
           lg={6}
           sx={{
             alignItems: 'center',
-            background: 'radial-gradient(50% 50% at 50% 50%, #122647 0%, #090E23 100%)',
+            background: 'radial-gradient(50% 50% at 50% 50%, #383E1F 0%, #000000 100%)',
             color: 'white',
             display: 'flex',
             justifyContent: 'center',
@@ -82,10 +68,10 @@ export const Layout = (props) => {
               Welcome to{' '}
               <Box
                 component="a"
-                sx={{ color: '#15B79E' }}
+                sx={{ color: '#CCE700' }}
                 target="_blank"
               >
-                Devias Kit
+                Pygma
               </Box>
             </Typography>
             <Typography
@@ -93,11 +79,11 @@ export const Layout = (props) => {
               sx={{ mb: 3 }}
               variant="subtitle1"
             >
-              A professional kit that comes with ready-to-use MUI components.
+               The explosive launchpad to skyrocket your tech company!
             </Typography>
             <img
               alt=""
-              src="/assets/auth-illustration.svg"
+              src="/assets/logos/logo-pygma.png"
             />
           </Box>
         </Grid>

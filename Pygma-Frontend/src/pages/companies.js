@@ -16,6 +16,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CompanyCard } from 'src/sections/companies/company-card';
 import { CompaniesSearch } from 'src/sections/companies/companies-search';
 
+const PADDING_TOP = 1;
 const companies = [
   {
     id: '2569ce0d517a7f06d3ea1f24',
@@ -71,14 +72,14 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Companies | Devias Kit
+        Companies | Pygma
       </title>
     </Head>
     <Box
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8
+        py: PADDING_TOP
       }}
     >
       <Container maxWidth="xl">
@@ -89,9 +90,6 @@ const Page = () => (
             spacing={4}
           >
             <Stack spacing={1}>
-              <Typography variant="h4">
-                Companies
-              </Typography>
               <Stack
                 alignItems="center"
                 direction="row"
@@ -126,7 +124,7 @@ const Page = () => (
                     <PlusIcon />
                   </SvgIcon>
                 )}
-                variant="contained"
+                variant="text"
               >
                 Add
               </Button>

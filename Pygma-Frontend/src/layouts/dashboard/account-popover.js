@@ -5,6 +5,7 @@ import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/mate
 import { useAuth } from 'src/hooks/use-auth';
 
 export const AccountPopover = (props) => {
+  const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
   const { anchorEl, onClose, open } = props;
   const router = useRouter();
   const auth = useAuth();
@@ -18,6 +19,13 @@ export const AccountPopover = (props) => {
     [onClose, auth, router]
   );
 
+  const handleAccount = useCallback(
+      () => {
+        router.push('/account');
+      },
+      [router]
+    );
+
   return (
     <Popover
       anchorEl={anchorEl}
@@ -27,35 +35,28 @@ export const AccountPopover = (props) => {
       }}
       onClose={onClose}
       open={open}
-      PaperProps={{ sx: { width: 200 } }}
     >
-      <Box
-        sx={{
-          py: 1.5,
-          px: 2
-        }}
-      >
-        <Typography variant="overline">
-          Account
-        </Typography>
+    <MenuList
+            disablePadding
+            dense
+            sx={{
+              p: '8px',
+              '& > *': {
+                borderRadius: 1
+              }
+            }}
+          >
+       {authenticatedUser && (
+       <MenuItem onClick={handleAccount}>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          Anika Visser
+          {authenticatedUser.name} {authenticatedUser.lastname}
         </Typography>
-      </Box>
+        </MenuItem>
+         )}
       <Divider />
-      <MenuList
-        disablePadding
-        dense
-        sx={{
-          p: '8px',
-          '& > *': {
-            borderRadius: 1
-          }
-        }}
-      >
         <MenuItem onClick={handleSignOut}>
           Sign out
         </MenuItem>
