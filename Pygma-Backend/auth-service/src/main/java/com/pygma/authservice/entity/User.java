@@ -41,6 +41,8 @@ public class User {
     @Column(nullable = false)
     private String email;
     private String phone;
+    private String country;
+    private String city;
     @ManyToMany(fetch = EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

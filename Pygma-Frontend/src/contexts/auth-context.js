@@ -90,7 +90,10 @@ export const AuthProvider = (props) => {
         id: authenticatedUser.id,
         avatar: '/assets/avatars/avatar-pygma.png',
         name: authenticatedUser.name,
-        email: authenticatedUser.email
+        email: authenticatedUser.email,
+        phone: authenticatedUser.phone,
+        city: authenticatedUser.city,
+        country: authenticatedUser.country,
       };
 
       dispatch({

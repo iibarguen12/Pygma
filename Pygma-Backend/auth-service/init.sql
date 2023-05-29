@@ -7,6 +7,8 @@ CREATE TABLE users (
   lastname VARCHAR(100),
   email VARCHAR(100) NOT NULL,
   phone VARCHAR(20),
+  country VARCHAR(20),
+  city VARCHAR(20),
   UNIQUE (username),
   UNIQUE (email)
 );
@@ -32,7 +34,7 @@ INSERT INTO roles (name) VALUES
   ('ROLE_USER');
 
 -- INSERT USER
-INSERT INTO users (id, username, password, name, lastname, email, phone)
+INSERT INTO users (id, username, password, name, lastname, email, phone, country, city)
 VALUES (
   'c592534f-0d71-4f2c-8d3c-fb0e08101e29',
   'pygma',
@@ -40,7 +42,9 @@ VALUES (
   'Pygma',
   'Admin',
   'demo@pygma.com',
-  '1234567890'
+  '1234567890',
+  'US',
+  'New York City'
 );
 
 --  ROLES TO USER

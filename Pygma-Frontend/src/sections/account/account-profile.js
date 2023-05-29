@@ -16,8 +16,8 @@ export const AccountProfile = () => {
   const user = {
     username: authenticatedUser?.username || '_',
     avatar: '/assets/avatars/avatar-pygma.png',
-    city: authenticatedUser?.city || 'Los Angeles',
-    country: authenticatedUser?.country || 'USA',
+    city: authenticatedUser?.city || '_',
+    country: authenticatedUser?.country || '_',
     name: authenticatedUser?.name || '_',
     timezone: 'GMT-7'
   };

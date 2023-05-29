@@ -22,8 +22,8 @@ export const AccountProfileDetails = () => {
     lastName: authenticatedUser?.lastname || '',
     email: authenticatedUser?.email || '',
     phone: authenticatedUser?.phone || '',
-    country: 'US',
-    city: 'los-angeles'
+    country: authenticatedUser?.country || '',
+    city: authenticatedUser?.city || '',
   });
   const countryOptions = countries.all();
   const cityOptions = useMemo(() => {
@@ -64,6 +64,8 @@ export const AccountProfileDetails = () => {
             lastname: values.lastName,
             email: values.email,
             phone: values.phone,
+            country: values.country,
+            city: values.city
           }),
           true
         );
