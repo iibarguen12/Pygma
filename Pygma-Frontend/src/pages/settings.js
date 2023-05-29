@@ -4,7 +4,7 @@ import { SettingsGeneral } from 'src/sections/settings/settings-general';
 import { SettingsPassword } from 'src/sections/settings/settings-password';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
-const PADDING_TOP = 1; // TODO move to a global variable
+const PADDING_TOP = 1;
 const Page = () => (
   <>
     <Head>
