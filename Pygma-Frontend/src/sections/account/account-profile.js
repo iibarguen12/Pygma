@@ -14,10 +14,11 @@ export const AccountProfile = () => {
   const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
 
   const user = {
+    username: authenticatedUser?.username || '_',
     avatar: '/assets/avatars/avatar-pygma.png',
     city: authenticatedUser?.city || 'Los Angeles',
     country: authenticatedUser?.country || 'USA',
-    name: authenticatedUser?.name || '',
+    name: authenticatedUser?.name || '_',
     timezone: 'GMT-7'
   };
 
@@ -43,7 +44,7 @@ export const AccountProfile = () => {
             gutterBottom
             variant="h5"
           >
-            {user.name}
+            {user.username}
           </Typography>
           <Typography
             color="text.secondary"

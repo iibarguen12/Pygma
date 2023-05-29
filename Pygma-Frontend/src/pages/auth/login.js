@@ -190,10 +190,6 @@ const Page = () => {
                   size="large"
                   sx={{
                     mt: 3,
-                    backgroundColor: '#000000',
-                    '&:hover': {
-                      backgroundColor: '#c7e200', // TODO move this style to a global Button component
-                    },
                   }}
                   type="submit"
                   variant="contained"

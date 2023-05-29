@@ -104,7 +104,7 @@ export const SettingsPassword = () => {
         <CardHeader subheader="Update password" title="Password" />
         <Divider />
         <CardContent>
-          <Grid container spacing={3}>
+          <Grid container spacing={1}>
           	<Grid item xs={12}>
           	  <TextField
                 fullWidth
@@ -191,17 +191,10 @@ export const SettingsPassword = () => {
           	</Grid>
           </Grid>
         </CardContent>
-        <Divider />
-        <CardActions sx={{ justifyContent: 'flex-end' }}>
+        <CardActions sx={{ justifyContent: 'flex-end', marginTop: '-30px' }}>
           <Button
-            sx={{
-              backgroundColor: '#000000',
-              '&:hover': {
-                backgroundColor: '#c7e200', // TODO move this style to a global Button component
-              },
-            }}
             type="submit"
-            variant="contained"
+            variant="text"
           >
             Update
           </Button>

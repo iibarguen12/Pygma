@@ -24,12 +24,34 @@ export const neutral = {
   900: '#111927'
 };
 
+export const neutralDark = {
+  50: '#111927',
+  100: '#000000',
+  200: '#2F3746',
+  300: '#4D5761',
+  400: '#6C737F',
+  500: '#9DA4AE',
+  600: '#D2D6DB',
+  700: '#E5E7EB',
+  800: '#000000',
+  900: '#F8F9FA'
+};
+
 export const indigo = withAlphas({
   lightest: '#F5F7FF',
   light: '#EBEEFE',
   main: '#CCE700',
   dark: '#000000',
   darkest: '#312E81',
+  contrastText: '#FFFFFF'
+});
+
+export const indigoDark = withAlphas({
+  lightest: '#222222',
+  light: '#FFFFFF',
+  main: '#CCE700',
+  dark: '#333333',
+  darkest: '#444444',
   contrastText: '#FFFFFF'
 });
 

@@ -22,7 +22,7 @@ const ModalContainer = styled(Box)`
 `;
 
 const SuccessMessage = styled(Typography)`
-  color: #CCE700;
+  color: #000000;
   font-weight: bold;
   text-align: center;
   margin-bottom: 16px;
@@ -47,12 +47,6 @@ export function ModalMessage ({ open, message, onClose, success  }) {
           <FailedMessage variant="body1">{message}</FailedMessage>
         )}
         <Button
-        sx={{
-              backgroundColor: '#000000',
-              '&:hover': {
-                backgroundColor: '#c7e200', // TODO move this style to a global Button component
-              },
-            }}
         variant="contained" onClick={onClose}>
           Close
         </Button>

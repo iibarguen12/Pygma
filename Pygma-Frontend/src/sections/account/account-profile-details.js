@@ -93,9 +93,6 @@ export const AccountProfileDetails = () => {
 
   const handleModalClose = useCallback(() => {
     setOpen(false);
-    if (requestWasSuccess) {
-      window.location.reload(true);
-    }
   }, [requestWasSuccess]);
 
   return (
@@ -186,14 +183,8 @@ export const AccountProfileDetails = () => {
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
-            sx={{
-              backgroundColor: '#000000',
-              '&:hover': {
-                backgroundColor: '#c7e200', // TODO move this style to a global Button component
-              },
-            }}
             type="submit"
-            variant="contained"
+            variant="text"
           >
             Save details
           </Button>

@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { CacheProvider } from '@emotion/react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,7 +12,7 @@ import { createEmotionCache } from 'src/utils/create-emotion-cache';
 import 'simplebar-react/dist/simplebar.min.css';
 import { useThemeDetector } from 'src/hooks/use-theme';
 
-const ThemeContext = createContext('ligth');
+const ThemeContext = createContext('light');
 const clientSideEmotionCache = createEmotionCache();
 
 const SplashScreen = () => null;
@@ -24,8 +24,17 @@ const App = (props) => {
 
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  const theme = createTheme();
   const isDarkTheme = useThemeDetector();
+  const [currentTheme, setCurrentTheme] = useState(isDarkTheme ? 'dark' : 'light');
+  const theme = createTheme(currentTheme);
+
+  useEffect(() => {
+    setCurrentTheme(isDarkTheme ? 'dark' : 'light');
+  }, [isDarkTheme]);
+
+  const handleChangeTheme = useCallback((theme) => {
+    setCurrentTheme(theme);
+  }, []);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -37,7 +46,7 @@ const App = (props) => {
         <AuthProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <ThemeContext.Provider value={isDarkTheme}>
+            <ThemeContext.Provider value={{ currentTheme, setCurrentTheme: handleChangeTheme }}>
               <AuthConsumer>
                 {(auth) =>
                   auth.isLoading ? (

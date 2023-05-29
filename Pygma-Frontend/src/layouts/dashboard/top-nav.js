@@ -16,7 +16,8 @@ import {
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
-import { BlackLogo } from 'src/components/logo';
+import { BlackLogo, WhiteLogo } from 'src/components/logo';
+import { useTheme } from '@mui/material/styles';
 
 const SIDE_NAV_WIDTH = 0;
 const TOP_NAV_HEIGHT = 64;
@@ -25,6 +26,8 @@ export const TopNav = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
+  const theme = useTheme();
+  const isLightMode = theme.palette.mode === 'light';
 
   return (
     <>
@@ -68,7 +71,7 @@ export const TopNav = (props) => {
                     width: 32
                   }}
                 >
-                  <BlackLogo />
+                  {isLightMode ? <BlackLogo /> : <WhiteLogo />}
                 </Box>
               </IconButton>
             )}
