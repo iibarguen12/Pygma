@@ -39,6 +39,7 @@ const GenericCheckbox = ({ options, selectedOptions, onChange, formik, fieldName
                 />
               }
               label={<span style={labelStyle}>{option}</span>}
+              style={{ textAlign: 'left' }}
             />
           </Grid>
         ))}
