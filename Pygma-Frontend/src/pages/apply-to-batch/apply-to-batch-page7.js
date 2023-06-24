@@ -3,7 +3,7 @@ import { Typography, Grid, TextField, FormControlLabel, Radio } from '@mui/mater
 import GenericCheckbox from 'src/components/generic-checkbox';
 import { StyledRadioGroup, StyledTextarea } from 'src/components/styled-components';
 
-const ApplyPage7 = ({ formik }) => {
+const ApplyPage7 = React.memo(({ formik }) => {
   const handleHowDidYouHearAboutUs = (selectedOptions) => {
     formik.setFieldValue('howDidYouHearAboutUs', selectedOptions);
   };
@@ -199,6 +199,6 @@ const ApplyPage7 = ({ formik }) => {
       </Grid>
     </Grid>
   );
-};
+});
 
 export default ApplyPage7;
