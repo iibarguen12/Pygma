@@ -65,7 +65,7 @@ const Page = () => {
             </Typography>
             <Button
               component={NextLink}
-              href="/"
+              href="/apply-to-batch"
               startIcon={(
                 <SvgIcon fontSize="small">
                   <ArrowLeftIcon />
@@ -77,7 +77,7 @@ const Page = () => {
               }
               variant="contained"
             >
-              Go back to dashboard
+              Go back to apply to batch
             </Button>
           </Box>
         </Container>

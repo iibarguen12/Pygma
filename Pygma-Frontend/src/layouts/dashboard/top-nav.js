@@ -85,40 +85,6 @@ export const TopNav = (props) => {
             direction="row"
             spacing={2}
           >
-            <Button
-              type="submit"
-              variant="text"
-              onClick={() => router.push('/apply-to-batch')}
-            >
-              Apply to PY4
-              <SvgIcon fontSize="small"
-               sx={{
-                   margin: 1
-                 }}
-              >
-                <ForwardIcon />
-              </SvgIcon>
-            </Button>
-            <Tooltip title="Contacts">
-              <IconButton>
-                <SvgIcon fontSize="small">
-                  <UsersIcon />
-                </SvgIcon>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Notifications">
-              <IconButton>
-                <Badge
-                  badgeContent={4}
-                  color="success"
-                  variant="dot"
-                >
-                  <SvgIcon fontSize="small">
-                    <BellIcon />
-                  </SvgIcon>
-                </Badge>
-              </IconButton>
-            </Tooltip>
             <Avatar
               onClick={accountPopover.handleOpen}
               ref={accountPopover.anchorRef}

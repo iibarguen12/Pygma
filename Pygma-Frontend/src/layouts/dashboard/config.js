@@ -11,35 +11,8 @@ import { SvgIcon } from '@mui/material';
 
 export const items = [
   {
-    title: 'About Us',
-    path: '/about',
-    icon: (
-      <SvgIcon fontSize="small">
-        <HandThumbUpIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Dashboard',
-    path: '/',
-    icon: (
-      <SvgIcon fontSize="small">
-        <ChartBarIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Co-Founders',
-    path: '/co-founders',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UsersIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Companies',
-    path: '/companies',
+    title: 'Apply to PY4',
+    path: '/apply-to-batch',
     icon: (
       <SvgIcon fontSize="small">
         <RocketLaunchIcon />

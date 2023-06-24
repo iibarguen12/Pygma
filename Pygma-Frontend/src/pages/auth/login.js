@@ -56,7 +56,7 @@ const Page = () => {
         if (errorMessage !== null){
           throw new Error(errorMessage);
         }
-        router.replace('/about');
+        router.replace('/apply-to-batch');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useContext, useState, useMemo, useCallback } from 'react';
 import Head from 'next/head';
 import ArrowSmallLeftIcon from '@heroicons/react/24/solid/ArrowSmallLeftIcon';
 import ArrowSmallRightIcon from '@heroicons/react/24/solid/ArrowSmallRightIcon';
@@ -20,6 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
+import { ThemeContext } from 'src/pages/_app';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { StyledTextarea, StyledRadioGroup } from 'src/components/styled-components';
 import ApplyPage0 from 'src/pages/apply-to-batch/apply-to-batch-page0';
@@ -215,6 +216,9 @@ const validationSchema = yup.object().shape({
 });
 
 const Page = () => {
+  const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
+  console.log("Theme="+ currentTheme);
+  const isDarkTheme = (currentTheme=='dark') ? true : false;
   const authenticatedUser = useMemo(() => JSON.parse(window.sessionStorage.getItem('user')), []);
   const [isCheckboxChecked, setCheckboxChecked] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -351,7 +355,9 @@ const Page = () => {
             overflow: 'hidden',
           }}
         >
-          <BannerImage src="/assets/banners/build-the-future-with-us.png" alt="Form cover" />
+          <BannerImage
+           src={isDarkTheme ? '/assets/banners/build-the-future-with-us-black.png' : '/assets/banners/build-the-future-with-us-white.png'}
+           alt="Form cover" />
           <BannerOverlay />
         </Paper>
         <Container
