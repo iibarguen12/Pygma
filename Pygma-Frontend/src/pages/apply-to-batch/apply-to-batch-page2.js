@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Grid } from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
 
-const ApplyPage2 = ({ formik, handleTopThreeSkillsChange, handleTopThreeExperiencesChange }) => {
+const ApplyPage2 = React.memo(({ formik, handleTopThreeSkillsChange, handleTopThreeExperiencesChange }) => {
   return (
     <>
       <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 4 }}>
@@ -94,7 +94,6 @@ const ApplyPage2 = ({ formik, handleTopThreeSkillsChange, handleTopThreeExperien
       </Grid>
     </>
   );
-};
+});
 
 export default ApplyPage2;
-

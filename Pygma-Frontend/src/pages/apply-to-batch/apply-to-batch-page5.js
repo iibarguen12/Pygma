@@ -2,7 +2,12 @@ import React from 'react';
 import { Typography, Grid, TextField } from '@mui/material';
 import { StyledTextarea } from 'src/components/styled-components';
 
-const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) => {
+const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOptions }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    formik.setFieldValue(name, value);
+  };
+
   return (
     <>
       <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
@@ -21,7 +26,7 @@ const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) =>
             margin="normal"
             value={formik.values.startupShortBlurb}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupShortBlurb && formik.errors.startupShortBlurb}
           />
           {formik.touched.startupShortBlurb && formik.errors.startupShortBlurb && (
@@ -42,7 +47,7 @@ const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) =>
             margin="normal"
             value={formik.values.startupPurpose}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupPurpose && formik.errors.startupPurpose}
           />
           {formik.touched.startupPurpose && formik.errors.startupPurpose && (
@@ -62,7 +67,7 @@ const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) =>
             size="small"
             value={formik.values.startupIndustry}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupIndustry && formik.errors.startupIndustry}
             helperText={formik.touched.startupIndustry && formik.errors.startupIndustry}
             select
@@ -87,7 +92,7 @@ const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) =>
             margin="normal"
             value={formik.values.startupHowBigMarket}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupHowBigMarket && formik.errors.startupHowBigMarket}
           />
           {formik.touched.startupHowBigMarket && formik.errors.startupHowBigMarket && (
@@ -108,7 +113,7 @@ const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) =>
             margin="normal"
             value={formik.values.startupUniqueMarketInsight}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupUniqueMarketInsight && formik.errors.startupUniqueMarketInsight}
           />
           {formik.touched.startupUniqueMarketInsight && formik.errors.startupUniqueMarketInsight && (
@@ -129,7 +134,7 @@ const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) =>
             margin="normal"
             value={formik.values.startupUnfairAdvantage}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupUnfairAdvantage && formik.errors.startupUnfairAdvantage}
           />
           {formik.touched.startupUnfairAdvantage && formik.errors.startupUnfairAdvantage && (
@@ -149,7 +154,7 @@ const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) =>
             size="small"
             value={formik.values.startupBusinessModel}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupBusinessModel && formik.errors.startupBusinessModel}
             helperText={formik.touched.startupBusinessModel && formik.errors.startupBusinessModel}
             select
@@ -165,6 +170,6 @@ const ApplyPage5 = ({ formik, startupIndustryOptions, businessModelOptions }) =>
       </Grid>
     </>
   );
-};
+});
 
 export default ApplyPage5;

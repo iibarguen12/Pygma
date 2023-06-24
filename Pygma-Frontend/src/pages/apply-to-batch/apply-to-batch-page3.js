@@ -3,7 +3,11 @@ import { Typography, Grid, TextField } from '@mui/material';
 import { StyledTextarea, StyledRadioGroup } from 'src/components/styled-components';
 import { FormControlLabel, Radio } from '@mui/material';
 
-const ApplyPage3 = ({ formik }) => {
+const ApplyPage3 = React.memo(({ formik }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    formik.setFieldValue(name, value);
+  };
   return (
     <>
       <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
@@ -18,7 +22,7 @@ const ApplyPage3 = ({ formik }) => {
             margin="normal"
             value={formik.values.startupName}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupName && formik.errors.startupName}
             helperText={formik.touched.startupName && formik.errors.startupName}
           />
@@ -31,7 +35,7 @@ const ApplyPage3 = ({ formik }) => {
             margin="normal"
             value={formik.values.startupWebsite}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupWebsite && formik.errors.startupWebsite}
             helperText={formik.touched.startupWebsite && formik.errors.startupWebsite}
           />
@@ -45,7 +49,7 @@ const ApplyPage3 = ({ formik }) => {
             margin="normal"
             value={formik.values.startupDemo}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupDemo && formik.errors.startupDemo}
             helperText={formik.touched.startupDemo && formik.errors.startupDemo}
           />
@@ -60,7 +64,7 @@ const ApplyPage3 = ({ formik }) => {
             type="number"
             value={formik.values.startupTime}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupTime && formik.errors.startupTime}
             helperText={formik.touched.startupTime && formik.errors.startupTime}
           />
@@ -77,7 +81,7 @@ const ApplyPage3 = ({ formik }) => {
             margin="normal"
             value={formik.values.startupWhy}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupWhy && formik.errors.startupWhy}
           />
           {formik.touched.startupWhy && formik.errors.startupWhy && (
@@ -93,7 +97,7 @@ const ApplyPage3 = ({ formik }) => {
           <StyledRadioGroup
             name="startupHowFar"
             value={formik.values.startupHowFar}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
           >
             <FormControlLabel
               value="I'm working on an idea"
@@ -136,7 +140,7 @@ const ApplyPage3 = ({ formik }) => {
             margin="none"
             value={formik.values.startupHowMuchRaised}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.startupHowMuchRaised && formik.errors.startupHowMuchRaised}
             helperText={formik.touched.startupHowMuchRaised && formik.errors.startupHowMuchRaised}
           />
@@ -149,7 +153,7 @@ const ApplyPage3 = ({ formik }) => {
             name="startupFundraising"
             margin="normal"
             value={formik.values.startupFundraising}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             sx={{ display: 'flex' }}
           >
             <FormControlLabel
@@ -169,6 +173,6 @@ const ApplyPage3 = ({ formik }) => {
       </Grid>
     </>
   );
-};
+});
 
 export default ApplyPage3;

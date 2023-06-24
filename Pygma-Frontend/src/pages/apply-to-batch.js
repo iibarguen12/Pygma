@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import Head from 'next/head';
 import ArrowSmallLeftIcon from '@heroicons/react/24/solid/ArrowSmallLeftIcon';
 import ArrowSmallRightIcon from '@heroicons/react/24/solid/ArrowSmallRightIcon';
-import { Box, Button, Checkbox, Container, FormControlLabel,
-         Grid, Paper, Radio, RadioGroup,
-         Slider, SvgIcon, styled, TextareaAutosize, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  Grid,
+  Paper,
+  Radio,
+  RadioGroup,
+  Slider,
+  SvgIcon,
+  styled,
+  TextareaAutosize,
+  TextField,
+  Typography,
+} from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { StyledTextarea, StyledRadioGroup } from 'src/components/styled-components';
@@ -75,7 +89,6 @@ const legalStructureOptions = [
   { key: "Other", value: "Other" },
   { key: "I don't have one yet", value: "I don't have one yet" },
 ];
-
 
 const BannerImage = styled('img')({
   width: '100%',
@@ -202,7 +215,7 @@ const validationSchema = yup.object().shape({
 });
 
 const Page = () => {
-  const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
+  const authenticatedUser = useMemo(() => JSON.parse(window.sessionStorage.getItem('user')), []);
   const [isCheckboxChecked, setCheckboxChecked] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
@@ -264,52 +277,52 @@ const Page = () => {
     },
   });
 
-  const handleCheckboxChange = (event) => {
+  const handleCheckboxChange = useCallback((event) => {
     setCheckboxChecked(event.target.checked);
-  };
+  }, []);
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = useCallback((event) => {
     event.preventDefault();
     formik.handleSubmit();
-  };
+  }, [formik]);
 
-  const handleTopThreeSkillsChange = (selectedOptions) => {
+  const handleTopThreeSkillsChange = useCallback((selectedOptions) => {
     formik.setFieldValue('topThreeSkills', selectedOptions);
     formik.setFieldTouched('topThreeSkills', true);
-  };
+  }, [formik]);
 
-  const handleTopThreeExperiencesChange = (selectedOptions) => {
+  const handleTopThreeExperiencesChange = useCallback((selectedOptions) => {
     formik.setFieldValue('topThreeExperiences', selectedOptions);
     formik.setFieldTouched('topThreeExperiences', true);
-  };
+  }, [formik]);
 
-  const handleStartupNeeds = (selectedOptions) => {
+  const handleStartupNeeds = useCallback((selectedOptions) => {
     formik.setFieldValue('startupNeeds', selectedOptions);
     formik.setFieldTouched('startupNeeds', true);
-  };
+  }, [formik]);
 
-  const handleStartupCustomerSegment = (selectedOptions) => {
-      formik.setFieldValue('startupCustomerSegment', selectedOptions);
-      formik.setFieldTouched('startupCustomerSegment', true);
-    };
+  const handleStartupCustomerSegment = useCallback((selectedOptions) => {
+    formik.setFieldValue('startupCustomerSegment', selectedOptions);
+    formik.setFieldTouched('startupCustomerSegment', true);
+  }, [formik]);
 
-  const handleHowDidYouHearAboutUs = (selectedOptions) => {
+  const handleHowDidYouHearAboutUs = useCallback((selectedOptions) => {
     formik.setFieldValue('howDidYouHearAboutUs', selectedOptions);
     formik.setFieldTouched('howDidYouHearAboutUs', true);
-  };
+  }, [formik]);
 
-  const handleConfirmForm = (selectedOptions) => {
+  const handleConfirmForm = useCallback((selectedOptions) => {
     formik.setFieldValue('confirmForm', selectedOptions);
     formik.setFieldTouched('confirmForm', true);
-  };
+  }, [formik]);
 
-  const handleSliderStartupCoFounders = (event, value) => {
+  const handleSliderStartupCoFounders = useCallback((event, value) => {
     formik.setFieldValue('startupCoFounders', value);
-  };
+  }, [formik]);
 
-  const handleSliderStartupHowBigTeam = (event, value) => {
+  const handleSliderStartupHowBigTeam = useCallback((event, value) => {
     formik.setFieldValue('startupHowBigTeam', value);
-  };
+  }, [formik]);
 
   return (
     <>
@@ -373,21 +386,21 @@ const Page = () => {
               </Button>
             </>
           ) : (
-          <>
-            <Button
-              variant="text"
-              color="primary"
-              size="small"
-              disabled={!isCheckboxChecked}
-              onClick={() => setShowForm(false)}
-              sx={{
-                padding: '2px 0px'
-              }}
-            >
-              <SvgIcon fontSize="small" sx={{ marginRight: 1 }}>
-                <ArrowSmallLeftIcon />
-              </SvgIcon>
-              <Typography variant="body1" component="span">
+            <>
+              <Button
+                variant="text"
+                color="primary"
+                size="small"
+                disabled={!isCheckboxChecked}
+                onClick={() => setShowForm(false)}
+                sx={{
+                  padding: '2px 0px',
+                }}
+              >
+                <SvgIcon fontSize="small" sx={{ marginRight: 1 }}>
+                  <ArrowSmallLeftIcon />
+                </SvgIcon>
+                <Typography variant="body1" component="span">
                   Back
                 </Typography>
             </Button>
@@ -425,21 +438,21 @@ const Page = () => {
               {/*Last Details*/}
               <ApplyPage7 formik={formik} />
 
-              <Button
-                variant="text"
-                color="primary"
-                size="small"
-                type="submit"
-                disabled={!formik.isValid || !isCheckboxChecked}
-              >
-                <Typography variant="body1" component="span">
-                  Submit
-                </Typography>
-                <SvgIcon fontSize="small" sx={{ margin: 1 }}>
-                  <ArrowSmallRightIcon />
-                </SvgIcon>
-              </Button>
-            </form>
+                <Button
+                  variant="text"
+                  color="primary"
+                  size="small"
+                  type="submit"
+                  disabled={!formik.isValid || !isCheckboxChecked}
+                >
+                  <Typography variant="body1" component="span">
+                    Submit
+                  </Typography>
+                  <SvgIcon fontSize="small" sx={{ margin: 1 }}>
+                    <ArrowSmallRightIcon />
+                  </SvgIcon>
+                </Button>
+              </form>
             </>
           )}
         </Container>

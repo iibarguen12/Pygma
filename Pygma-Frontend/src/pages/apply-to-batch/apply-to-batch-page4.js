@@ -3,7 +3,12 @@ import { Typography, Grid, Slider } from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
 import { StyledTextarea } from 'src/components/styled-components';
 
-const ApplyPage4 = ({ formik, handleStartupNeeds, handleSliderStartupCoFounders, handleSliderStartupHowBigTeam }) => {
+const ApplyPage4 = React.memo(({ formik, handleStartupNeeds, handleSliderStartupCoFounders, handleSliderStartupHowBigTeam }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    formik.setFieldValue(name, value);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={12}>
@@ -47,7 +52,7 @@ const ApplyPage4 = ({ formik, handleStartupNeeds, handleSliderStartupCoFounders,
           margin="normal"
           value={formik.values.startupExpectations}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupExpectations && formik.errors.startupExpectations}
         />
         {formik.touched.startupExpectations && formik.errors.startupExpectations && (
@@ -96,7 +101,7 @@ const ApplyPage4 = ({ formik, handleStartupNeeds, handleSliderStartupCoFounders,
           margin="normal"
           value={formik.values.startupHowMeetCoFounders}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupHowMeetCoFounders && formik.errors.startupHowMeetCoFounders}
         />
         {formik.touched.startupHowMeetCoFounders && formik.errors.startupHowMeetCoFounders && (
@@ -134,6 +139,6 @@ const ApplyPage4 = ({ formik, handleStartupNeeds, handleSliderStartupCoFounders,
       </Grid>
     </Grid>
   );
-};
+});
 
 export default ApplyPage4;

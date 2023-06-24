@@ -3,7 +3,12 @@ import { Grid, Typography, TextField, Radio, FormControlLabel } from '@mui/mater
 import GenericCheckbox from 'src/components/generic-checkbox';
 import { StyledRadioGroup, StyledTextarea } from 'src/components/styled-components';
 
-const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOptions }) => {
+const ApplyPage6 = React.memo(({ formik, handleStartupCustomerSegment, legalStructureOptions }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    formik.setFieldValue(name, value);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={12}>
@@ -44,7 +49,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           name="startupPeopleUsingProduct"
           margin="normal"
           value={formik.values.startupPeopleUsingProduct}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           sx={{ display: 'flex' }}
         >
           <FormControlLabel
@@ -73,7 +78,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           name="startupFinanciallySustainable"
           margin="normal"
           value={formik.values.startupFinanciallySustainable}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           sx={{ display: 'flex' }}
         >
           <FormControlLabel
@@ -102,7 +107,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           margin="normal"
           value={formik.values.startupActiveUsers}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupActiveUsers && formik.errors.startupActiveUsers}
           helperText={formik.touched.startupActiveUsers && formik.errors.startupActiveUsers}
         />
@@ -115,7 +120,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           margin="normal"
           value={formik.values.startupPayingUsers}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupPayingUsers && formik.errors.startupPayingUsers}
           helperText={formik.touched.startupPayingUsers && formik.errors.startupPayingUsers}
         />
@@ -128,7 +133,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           margin="normal"
           value={formik.values.startupMakeMoneyPerMonth}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupMakeMoneyPerMonth && formik.errors.startupMakeMoneyPerMonth}
           helperText={formik.touched.startupMakeMoneyPerMonth && formik.errors.startupMakeMoneyPerMonth}
         />
@@ -141,7 +146,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           margin="normal"
           value={formik.values.startupSpendMoneyPerMonth}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupSpendMoneyPerMonth && formik.errors.startupSpendMoneyPerMonth}
           helperText={formik.touched.startupSpendMoneyPerMonth && formik.errors.startupSpendMoneyPerMonth}
         />
@@ -158,7 +163,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           margin="normal"
           value={formik.values.startupBiggestChallenge}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupBiggestChallenge && formik.errors.startupBiggestChallenge}
         />
         {formik.touched.startupBiggestChallenge && formik.errors.startupBiggestChallenge && (
@@ -175,7 +180,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           name="startupFormAnyLegalCompanyYet"
           margin="normal"
           value={formik.values.startupFormAnyLegalCompanyYet}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           sx={{ display: 'flex' }}
         >
           <FormControlLabel
@@ -207,7 +212,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           size="small"
           value={formik.values.startupLegalStructure}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupLegalStructure && formik.errors.startupLegalStructure}
           helperText={formik.touched.startupLegalStructure && formik.errors.startupLegalStructure}
           select
@@ -232,7 +237,7 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
           margin="normal"
           value={formik.values.startupLegalStructureDescription}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupLegalStructureDescription && formik.errors.startupLegalStructureDescription}
         />
         {formik.touched.startupBiggestChallenge && formik.errors.startupLegalStructureDescription && (
@@ -243,6 +248,6 @@ const ApplyPage6 = ({ formik, handleStartupCustomerSegment, legalStructureOption
       </Grid>
     </Grid>
   );
-};
+});
 
 export default ApplyPage6;

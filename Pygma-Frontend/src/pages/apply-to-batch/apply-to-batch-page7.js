@@ -12,6 +12,11 @@ const ApplyPage7 = ({ formik }) => {
     formik.setFieldValue('confirmForm', selectedOptions);
   };
 
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    formik.setFieldValue(name, value);
+  };
+
   return (
     <Grid container spacing={2} marginBottom={2}>
       <Grid item xs={12} sm={12}>
@@ -24,7 +29,7 @@ const ApplyPage7 = ({ formik }) => {
           Share a pitch deck of your company
         </Typography>
         <Typography variant="body2" gutterBottom textAlign="justify" color="grey">
-          Please share your pitch deck by using a platform such as DocSend, BriefLink, Google Drive or equivalent.
+          Please share your pitch deck by using a platform such as DocSend, BriefLink, Google Drive, or equivalent.
         </Typography>
         <TextField
           name="startupPitchDeck"
@@ -33,7 +38,7 @@ const ApplyPage7 = ({ formik }) => {
           margin="none"
           value={formik.values.startupPitchDeck}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupPitchDeck && formik.errors.startupPitchDeck}
           helperText={formik.touched.startupPitchDeck && formik.errors.startupPitchDeck}
         />
@@ -67,7 +72,7 @@ const ApplyPage7 = ({ formik }) => {
           margin="none"
           value={formik.values.startupVideo}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.startupVideo && formik.errors.startupVideo}
           helperText={formik.touched.startupVideo && formik.errors.startupVideo}
         />
@@ -84,7 +89,7 @@ const ApplyPage7 = ({ formik }) => {
           margin="normal"
           value={formik.values.whatConvincedYouToApply}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.whatConvincedYouToApply && formik.errors.whatConvincedYouToApply}
         />
         {formik.touched.whatConvincedYouToApply && formik.errors.whatConvincedYouToApply && (
@@ -133,7 +138,7 @@ const ApplyPage7 = ({ formik }) => {
           margin="none"
           value={formik.values.referralName}
           onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}
           error={formik.touched.referralName && formik.errors.referralName}
           helperText={formik.touched.referralName && formik.errors.referralName}
         />

@@ -2,14 +2,18 @@ import React from 'react';
 import { Typography, Grid, TextField } from '@mui/material';
 import { StyledTextarea } from 'src/components/styled-components';
 
+const ApplyPage1 = React.memo(({ formik, countryOptions }) => {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    formik.setFieldValue(name, value);
+  };
 
-const ApplyPage1 = ({ formik, countryOptions }) => {
   return (
     <>
       <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
         Tell us about you
       </Typography>
-      <Typography variant="body1" gutterBottom textAlign="justify" sx={{marginTop: 5}}>
+      <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 5 }}>
         Please share your contact info *
       </Typography>
       <Grid container spacing={2}>
@@ -21,7 +25,7 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
             margin="normal"
             value={formik.values.firstName}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.firstName && formik.errors.firstName}
             helperText={formik.touched.firstName && formik.errors.firstName}
           />
@@ -34,7 +38,7 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
             margin="normal"
             value={formik.values.lastName}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.lastName && formik.errors.lastName}
             helperText={formik.touched.lastName && formik.errors.lastName}
           />
@@ -47,7 +51,7 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
             margin="normal"
             value={formik.values.email}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.email && formik.errors.email}
             helperText={formik.touched.email && formik.errors.email}
             disabled
@@ -61,7 +65,7 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
             margin="normal"
             value={formik.values.country}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.country && formik.errors.country}
             helperText={formik.touched.country && formik.errors.country}
             select
@@ -82,7 +86,7 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
             margin="normal"
             value={formik.values.linkedIn}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.linkedIn && formik.errors.linkedIn}
             helperText={formik.touched.linkedIn && formik.errors.linkedIn}
           />
@@ -95,7 +99,7 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
             margin="normal"
             value={formik.values.gender}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.gender && formik.errors.gender}
             helperText={formik.touched.gender && formik.errors.gender}
             select
@@ -107,7 +111,7 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
           </TextField>
         </Grid>
       </Grid>
-      <Typography variant="body1" gutterBottom textAlign="justify" sx={{marginTop: 5}}>
+      <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 5 }}>
         Please share a quick bio (professional background, highlights) *
       </Typography>
       <Grid container spacing={2}>
@@ -120,11 +124,11 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
             margin="normal"
             value={formik.values.quickBio}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={handleInputChange}
             error={formik.touched.quickBio && formik.errors.quickBio}
           />
           {formik.touched.quickBio && formik.errors.quickBio && (
-            <Typography variant="caption" color="error" sx={{marginLeft: 2}}>
+            <Typography variant="caption" color="error" sx={{ marginLeft: 2 }}>
               {formik.errors.quickBio}
             </Typography>
           )}
@@ -132,6 +136,6 @@ const ApplyPage1 = ({ formik, countryOptions }) => {
       </Grid>
     </>
   );
-};
+});
 
 export default ApplyPage1;
