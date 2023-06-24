@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import BellIcon from '@heroicons/react/24/solid/BellIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
+import ForwardIcon from '@heroicons/react/24/solid/ForwardIcon';
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
 import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
 import {
   Avatar,
   Badge,
   Box,
+  Button,
   IconButton,
   Stack,
   SvgIcon,
@@ -18,6 +20,7 @@ import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
 import { BlackLogo, WhiteLogo } from 'src/components/logo';
 import { useTheme } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
 
 const SIDE_NAV_WIDTH = 0;
 const TOP_NAV_HEIGHT = 64;
@@ -28,6 +31,7 @@ export const TopNav = (props) => {
   const accountPopover = usePopover();
   const theme = useTheme();
   const isLightMode = theme.palette.mode === 'light';
+  const router = useRouter();
 
   return (
     <>
@@ -81,6 +85,20 @@ export const TopNav = (props) => {
             direction="row"
             spacing={2}
           >
+            <Button
+              type="submit"
+              variant="text"
+              onClick={() => router.push('/apply-to-batch')}
+            >
+              Apply to PY4
+              <SvgIcon fontSize="small"
+               sx={{
+                   margin: 1
+                 }}
+              >
+                <ForwardIcon />
+              </SvgIcon>
+            </Button>
             <Tooltip title="Contacts">
               <IconButton>
                 <SvgIcon fontSize="small">

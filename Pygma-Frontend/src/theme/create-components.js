@@ -122,6 +122,17 @@ export function createComponents(config) {
           top: 0,
           width: '100%',
           zIndex: 2000
+        },
+        '::-webkit-scrollbar': {
+          width: '6px',
+          backgroundColor: 'transparent'
+        },
+        '::-webkit-scrollbar-thumb': {
+          backgroundColor: 'grey',
+          borderRadius: '6px'
+        },
+        '::-webkit-scrollbar-thumb:hover': {
+          backgroundColor: '#CCE700'
         }
       }
     },
@@ -293,6 +304,16 @@ export function createComponents(config) {
       }
     },
     MuiTextField: {
+      defaultProps: {
+        variant: 'filled'
+      }
+    },
+    MuiTextareaAutosize: {
+      defaultProps: {
+        variant: 'filled'
+      }
+    },
+    MuiFormControlLabel: {
       defaultProps: {
         variant: 'filled'
       }

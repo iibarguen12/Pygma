@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -8,8 +8,10 @@ import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { ModalMessage } from 'src/components/modal-message';
+import { ThemeContext } from 'src/pages/_app';
 
 const Page = () => {
+  const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
   const [successMessage, setSuccessMessage] = useState('');
   const [open, setOpen] = useState(false);
   const handleSuccess = (message) => {
@@ -167,9 +169,10 @@ const Page = () => {
               <Button
                 fullWidth
                 size="large"
-                sx={{
-                  mt: 3,
-                }}
+                sx={
+                  currentTheme === 'dark'? {mt: 3, color: "black",
+                  '&:hover': { color: 'white' }}: {mt: 3,}
+                }
                 type="submit"
                 variant="contained"
               >

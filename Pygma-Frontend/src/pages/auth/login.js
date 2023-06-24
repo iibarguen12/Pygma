@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -22,12 +22,14 @@ import {
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { EyeIcon, EyeSlashIcon   } from '@heroicons/react/24/solid';
+import { ThemeContext } from 'src/pages/_app';
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState('email');
   const [showPassword, setShowPassword] = useState(false);
+  const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
 
   const toggleShowPassword = () => {
      setShowPassword((showPassword) => !showPassword);
@@ -54,7 +56,7 @@ const Page = () => {
         if (errorMessage !== null){
           throw new Error(errorMessage);
         }
-        router.replace('/');
+        router.replace('/about');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -188,9 +190,10 @@ const Page = () => {
                 <Button
                   fullWidth
                   size="large"
-                  sx={{
-                    mt: 3,
-                  }}
+                  sx={
+                    currentTheme === 'dark'? {mt: 3, color: "black",
+                    '&:hover': { color: 'white' }}: {mt: 3,}
+                  }
                   type="submit"
                   variant="contained"
                 >
