@@ -1,17 +1,56 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Grid, Typography, TextField, Radio, FormControlLabel } from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
 import { StyledRadioGroup, StyledTextarea } from 'src/components/styled-components';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-const ApplyPage6 = React.memo(({ formik, handleStartupCustomerSegment, legalStructureOptions }) => {
-  const handleInputChange = (event) => {
+const ApplyPage6 = React.memo(({pageValues, onChangePageValues}) => {
+
+  const prevValuesRef = useRef(pageValues);
+
+  const validationSchema = yup.object().shape({
+    startupCustomerSegment: yup
+      .array()
+      .min(1, 'Please select at least one option.')
+      .max(2, 'Please select up to two options.'),
+    startupPeopleUsingProduct: yup
+      .string()
+      .required('Please select if people are using your product'),
+    startupActiveUsers: yup.string().required('Please share your active users'),
+    startupPayingUsers: yup.string().required('Please share your paying users'),
+    startupFinanciallySustainable: yup
+      .string()
+      .required('Please select if your startup is financially sustainable'),
+    startupMakeMoneyPerMonth: yup
+      .string()
+      .required('Please share how much money you make per month'),
+    startupSpendMoneyPerMonth: yup
+      .string()
+      .required('Please share how much money you spend per month'),
+  });
+
+  const formik = useFormik({
+    initialValues: pageValues,
+    validationSchema,
+  });
+
+  useEffect(() => {
+    if (prevValuesRef.current !== formik.values) {
+      onChangePageValues(formik.values, 6);
+      prevValuesRef.current = formik.values;
+    }
+  }, [formik.values, onChangePageValues]);
+
+  const handleInputChange = useCallback((event) => {
     const { name, value } = event.target;
     formik.setFieldValue(name, value);
-  };
+  }, []);
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={12}>
+        <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
         <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 3 }}>
           What is your customer segment?
         </Typography>
@@ -19,6 +58,7 @@ const ApplyPage6 = React.memo(({ formik, handleStartupCustomerSegment, legalStru
           * You can only select up to 2.
         </Typography>
         <GenericCheckbox
+          ceiling={2}
           formik={formik}
           fieldName='startupCustomerSegment'
           options={[
@@ -31,7 +71,6 @@ const ApplyPage6 = React.memo(({ formik, handleStartupCustomerSegment, legalStru
             'Other',
           ]}
           selectedOptions={formik.values.startupCustomerSegment}
-          onChange={handleStartupCustomerSegment}
           onBlur={formik.startupCustomerSegment}
           error={formik.touched.startupCustomerSegment && formik.errors.startupCustomerSegment}
         />
@@ -150,101 +189,6 @@ const ApplyPage6 = React.memo(({ formik, handleStartupCustomerSegment, legalStru
           error={formik.touched.startupSpendMoneyPerMonth && formik.errors.startupSpendMoneyPerMonth}
           helperText={formik.touched.startupSpendMoneyPerMonth && formik.errors.startupSpendMoneyPerMonth}
         />
-      </Grid>
-      <Grid item xs={12} sm={12}>
-        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 1 }}>
-          Biggest challenge about your business model?
-        </Typography>
-        <StyledTextarea
-          minRows={4}
-          placeholder="Please share your biggest challenge"
-          label=""
-          name="startupBiggestChallenge"
-          margin="normal"
-          value={formik.values.startupBiggestChallenge}
-          onBlur={formik.handleBlur}
-          onChange={handleInputChange}
-          error={formik.touched.startupBiggestChallenge && formik.errors.startupBiggestChallenge}
-        />
-        {formik.touched.startupBiggestChallenge && formik.errors.startupBiggestChallenge && (
-          <Typography variant="caption" color="error" sx={{ marginLeft: 2 }}>
-            {formik.errors.startupBiggestChallenge}
-          </Typography>
-        )}
-      </Grid>
-      <Grid item xs={12} sm={12} sx={{ alignItems: 'center' }}>
-        <Typography variant="body1" gutterBottom sx={{ marginTop: 3 }}>
-          Have you incorporated or formed any legal company yet?
-        </Typography>
-        <StyledRadioGroup
-          name="startupFormAnyLegalCompanyYet"
-          margin="normal"
-          value={formik.values.startupFormAnyLegalCompanyYet}
-          onChange={handleInputChange}
-          sx={{ display: 'flex' }}
-        >
-          <FormControlLabel
-            value="Yes"
-            control={<Radio />}
-            label="Yes"
-            sx={{ fontSize: '0.80rem' }}
-          />
-          <FormControlLabel
-            value="No"
-            control={<Radio />}
-            label="No"
-          />
-        </StyledRadioGroup>
-        {formik.touched.startupFormAnyLegalCompanyYet && formik.errors.startupFormAnyLegalCompanyYet && (
-          <Typography variant="caption" color="error" sx={{ marginLeft: 2 }}>
-            {formik.errors.startupFormAnyLegalCompanyYet}
-          </Typography>
-        )}
-      </Grid>
-      <Grid item xs={12} sm={12}>
-        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 1 }}>
-          What is the legal structure of your company?
-        </Typography>
-        <TextField
-          name="startupLegalStructure"
-          fullWidth
-          margin="none"
-          size="small"
-          value={formik.values.startupLegalStructure}
-          onBlur={formik.handleBlur}
-          onChange={handleInputChange}
-          error={formik.touched.startupLegalStructure && formik.errors.startupLegalStructure}
-          helperText={formik.touched.startupLegalStructure && formik.errors.startupLegalStructure}
-          select
-          SelectProps={{ native: true }}
-        >
-          {legalStructureOptions.map((option) => (
-            <option key={option.key} value={option.value}>
-              {option.value}
-            </option>
-          ))}
-        </TextField>
-      </Grid>
-      <Grid item xs={12} sm={12}>
-        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 1 }}>
-          Please describe the legal structure of your company:
-        </Typography>
-        <StyledTextarea
-          minRows={4}
-          placeholder="1)Who is in your cap table? 2)Where are you incorporated? 3)Any other relevant details."
-          label=""
-          name="startupLegalStructureDescription"
-          margin="normal"
-          value={formik.values.startupLegalStructureDescription}
-          onBlur={formik.handleBlur}
-          onChange={handleInputChange}
-          error={formik.touched.startupLegalStructureDescription && formik.errors.startupLegalStructureDescription}
-        />
-        {formik.touched.startupBiggestChallenge && formik.errors.startupLegalStructureDescription && (
-          <Typography variant="caption" color="error" sx={{ marginLeft: 2 }}>
-            {formik.errors.startupLegalStructureDescription}
-          </Typography>
-        )}
       </Grid>
     </Grid>
   );

@@ -1,15 +1,55 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Typography, Grid, TextField } from '@mui/material';
 import { StyledTextarea, StyledRadioGroup } from 'src/components/styled-components';
 import { FormControlLabel, Radio } from '@mui/material';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-const ApplyPage3 = React.memo(({ formik }) => {
-  const handleInputChange = (event) => {
+const ApplyPage3 = React.memo(({pageValues, onChangePageValues}) => {
+
+  const validationSchema = yup.object().shape({
+    startupName: yup.string().required('Startup name is required'),
+    startupWebsite: yup
+      .string()
+      .url('Invalid Website URL')
+      .required('Website URL is required'),
+    startupDemo: yup.string().url('Invalid Demo URL').required('Demo URL is required'),
+    startupTime: yup
+      .number()
+      .required('Startup age is required')
+      .typeError('Startup age must be a number')
+      .positive('Startup age must be a positive number')
+      .integer('Startup age must be an integer'),
+    startupWhy: yup
+      .string()
+      .required('Please write your motivation')
+      .min(100, 'Motivation must be at least 100 characters'),
+    startupHowFar: yup.string().required('Please select your progress'),
+    startupFundraising: yup.string().required('Please select an option'),
+  });
+
+  const formik = useFormik({
+    initialValues: pageValues,
+    validationSchema,
+  });
+
+  const handleInputChange = useCallback((event) => {
     const { name, value } = event.target;
     formik.setFieldValue(name, value);
-  };
+  }, []);
+
+  const handleInputOnBlur = useCallback((event) => {
+    const { name } = event.target;
+    formik.setFieldTouched(name, true);
+    if (validationSchema.fields[name]) {
+      formik.validateField(name);
+    }
+    onChangePageValues(formik.values, 3);
+  }, [formik, onChangePageValues]);
+
   return (
     <>
+      <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
       <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
         Let's talk about your business
       </Typography>
@@ -21,7 +61,7 @@ const ApplyPage3 = React.memo(({ formik }) => {
             fullWidth
             margin="normal"
             value={formik.values.startupName}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupName && formik.errors.startupName}
             helperText={formik.touched.startupName && formik.errors.startupName}
@@ -34,7 +74,7 @@ const ApplyPage3 = React.memo(({ formik }) => {
             fullWidth
             margin="normal"
             value={formik.values.startupWebsite}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupWebsite && formik.errors.startupWebsite}
             helperText={formik.touched.startupWebsite && formik.errors.startupWebsite}
@@ -48,7 +88,7 @@ const ApplyPage3 = React.memo(({ formik }) => {
             fullWidth
             margin="normal"
             value={formik.values.startupDemo}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupDemo && formik.errors.startupDemo}
             helperText={formik.touched.startupDemo && formik.errors.startupDemo}
@@ -63,7 +103,7 @@ const ApplyPage3 = React.memo(({ formik }) => {
             margin="normal"
             type="number"
             value={formik.values.startupTime}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupTime && formik.errors.startupTime}
             helperText={formik.touched.startupTime && formik.errors.startupTime}
@@ -80,7 +120,7 @@ const ApplyPage3 = React.memo(({ formik }) => {
             name="startupWhy"
             margin="normal"
             value={formik.values.startupWhy}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupWhy && formik.errors.startupWhy}
           />
@@ -98,6 +138,7 @@ const ApplyPage3 = React.memo(({ formik }) => {
             name="startupHowFar"
             value={formik.values.startupHowFar}
             onChange={handleInputChange}
+            onBlur={handleInputOnBlur}
           >
             <FormControlLabel
               value="I'm working on an idea"
@@ -139,7 +180,7 @@ const ApplyPage3 = React.memo(({ formik }) => {
             fullWidth
             margin="none"
             value={formik.values.startupHowMuchRaised}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupHowMuchRaised && formik.errors.startupHowMuchRaised}
             helperText={formik.touched.startupHowMuchRaised && formik.errors.startupHowMuchRaised}
@@ -154,6 +195,7 @@ const ApplyPage3 = React.memo(({ formik }) => {
             margin="normal"
             value={formik.values.startupFundraising}
             onChange={handleInputChange}
+            onBlur={handleInputOnBlur}
             sx={{ display: 'flex' }}
           >
             <FormControlLabel

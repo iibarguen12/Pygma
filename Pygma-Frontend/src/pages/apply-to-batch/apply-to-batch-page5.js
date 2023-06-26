@@ -1,15 +1,89 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Typography, Grid, TextField } from '@mui/material';
 import { StyledTextarea } from 'src/components/styled-components';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOptions }) => {
-  const handleInputChange = (event) => {
+const ApplyPage5 = React.memo(({pageValues, onChangePageValues}) => {
+
+  const validationSchema = yup.object().shape({
+    startupShortBlurb: yup.string().required('Please share a short blurb'),
+    startupPurpose: yup.string().required('Please share your purpose'),
+    startupIndustry: yup.string().required('Please select your industry'),
+    startupHowBigMarket: yup.string().required('Please share your market'),
+    startupUniqueMarketInsight: yup
+      .string()
+      .required('Please share your unique insight'),
+    startupUnfairAdvantage: yup
+      .string()
+      .required('Please share your unfair advantage'),
+    startupBusinessModel: yup.string().required('Please select a business model'),
+  });
+
+  const formik = useFormik({
+    initialValues: pageValues,
+    validationSchema,
+  });
+
+  const startupIndustryOptions = [
+    { key: "Advertisement", value: "Advertisement" },
+    { key: "Asset Management", value: "Asset Management" },
+    { key: "Crypto / Blockchain", value: "Crypto / Blockchain" },
+    { key: "E-commerce", value: "E-commerce" },
+    { key: "Finance", value: "Finance" },
+    { key: "Gaming", value: "Gaming" },
+    { key: "Government / Politics", value: "Government / Politics" },
+    { key: "Hardware", value: "Hardware" },
+    { key: "Human Resources", value: "Human Resources" },
+    { key: "Insurance", value: "Insurance" },
+    { key: "Logistics", value: "Logistics" },
+    { key: "Marketing", value: "Marketing" },
+    { key: "Mobility", value: "Mobility" },
+    { key: "Real Estate", value: "Real Estate" },
+    { key: "Recruiting", value: "Recruiting" },
+    { key: "Retail", value: "Retail" },
+    { key: "Software / Web Development", value: "Software / Web Development" },
+    { key: "Social Media", value: "Social Media" },
+    { key: "Turism", value: "Turism" },
+    { key: "Venture", value: "Venture" },
+    { key: "Web 3", value: "Web 3" },
+    { key: "Other*", value: "Other*" }
+  ];
+
+  const businessModelOptions = [
+    { key: "Ad-Based Model", value: "Ad-Based Model" },
+    { key: "Broker", value: "Broker" },
+    { key: "Direct sell", value: "Direct sell" },
+    { key: "Enterprise", value: "Enterprise" },
+    { key: "Freemium", value: "Freemium" },
+    { key: "Marketplace", value: "Marketplace" },
+    { key: "Membership", value: "Membership" },
+    { key: "Reseller", value: "Reseller" },
+    { key: "SaaS", value: "SaaS" },
+    { key: "Service Model", value: "Service Model" },
+    { key: "Subscription-Based Model", value: "Subscription-Based Model" },
+    { key: "Transactional", value: "Transactional" },
+    { key: "On-Demand", value: "On-Demand" },
+    { key: "Usage-based model", value: "Usage-based model" },
+  ];
+
+  const handleInputChange = useCallback((event) => {
     const { name, value } = event.target;
     formik.setFieldValue(name, value);
-  };
+  }, []);
+
+  const handleInputOnBlur = useCallback((event) => {
+    const { name } = event.target;
+    formik.setFieldTouched(name, true);
+    if (validationSchema.fields[name]) {
+      formik.validateField(name);
+    }
+    onChangePageValues(formik.values, 5);
+  }, [formik, onChangePageValues]);
 
   return (
     <>
+      <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
       <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
         Tell us more about your business
       </Typography>
@@ -25,7 +99,7 @@ const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOp
             name="startupShortBlurb"
             margin="normal"
             value={formik.values.startupShortBlurb}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupShortBlurb && formik.errors.startupShortBlurb}
           />
@@ -46,7 +120,7 @@ const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOp
             name="startupPurpose"
             margin="normal"
             value={formik.values.startupPurpose}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupPurpose && formik.errors.startupPurpose}
           />
@@ -66,7 +140,7 @@ const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOp
             margin="none"
             size="small"
             value={formik.values.startupIndustry}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupIndustry && formik.errors.startupIndustry}
             helperText={formik.touched.startupIndustry && formik.errors.startupIndustry}
@@ -91,7 +165,7 @@ const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOp
             name="startupHowBigMarket"
             margin="normal"
             value={formik.values.startupHowBigMarket}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupHowBigMarket && formik.errors.startupHowBigMarket}
           />
@@ -112,7 +186,7 @@ const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOp
             name="startupUniqueMarketInsight"
             margin="normal"
             value={formik.values.startupUniqueMarketInsight}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupUniqueMarketInsight && formik.errors.startupUniqueMarketInsight}
           />
@@ -133,7 +207,7 @@ const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOp
             name="startupUnfairAdvantage"
             margin="normal"
             value={formik.values.startupUnfairAdvantage}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupUnfairAdvantage && formik.errors.startupUnfairAdvantage}
           />
@@ -153,7 +227,7 @@ const ApplyPage5 = React.memo(({ formik, startupIndustryOptions, businessModelOp
             margin="none"
             size="small"
             value={formik.values.startupBusinessModel}
-            onBlur={formik.handleBlur}
+            onBlur={handleInputOnBlur}
             onChange={handleInputChange}
             error={formik.touched.startupBusinessModel && formik.errors.startupBusinessModel}
             helperText={formik.touched.startupBusinessModel && formik.errors.startupBusinessModel}

@@ -1,10 +1,39 @@
-import React from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { Typography, Grid } from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-const ApplyPage2 = React.memo(({ formik, handleTopThreeSkillsChange, handleTopThreeExperiencesChange }) => {
+const ApplyPage2 = React.memo(({pageValues, onChangePageValues}) => {
+
+  const prevValuesRef = useRef(pageValues);
+
+  const validationSchema = yup.object().shape({
+    topThreeSkills: yup
+      .array()
+      .min(1, 'Please select at least one skill.')
+      .max(3, 'Please select up to three skills.'),
+    topThreeExperiences: yup
+      .array()
+      .min(1, 'Please select at least one experience.')
+      .max(3, 'Please select up to three experiences.'),
+  });
+
+  const formik = useFormik({
+    initialValues: pageValues,
+    validationSchema,
+  });
+
+  useEffect(() => {
+    if (prevValuesRef.current !== formik.values) {
+      onChangePageValues(formik.values, 2);
+      prevValuesRef.current = formik.values;
+    }
+  }, [formik.values, onChangePageValues]);
+
   return (
     <>
+      <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
       <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 4 }}>
         Please select your top three skills
       </Typography>
@@ -14,6 +43,7 @@ const ApplyPage2 = React.memo(({ formik, handleTopThreeSkillsChange, handleTopTh
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12}>
           <GenericCheckbox
+            ceiling={3}
             formik={formik}
             fieldName='topThreeSkills'
             options={[
@@ -32,7 +62,6 @@ const ApplyPage2 = React.memo(({ formik, handleTopThreeSkillsChange, handleTopTh
               'Other',
             ]}
             selectedOptions={formik.values.topThreeSkills}
-            onChange={handleTopThreeSkillsChange}
             onBlur={formik.topThreeSkills}
             error={formik.touched.topThreeSkills && formik.errors.topThreeSkills}
           />
@@ -52,6 +81,7 @@ const ApplyPage2 = React.memo(({ formik, handleTopThreeSkillsChange, handleTopTh
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12}>
           <GenericCheckbox
+            ceiling={3}
             formik={formik}
             fieldName='topThreeExperiences'
             options={[
@@ -81,7 +111,6 @@ const ApplyPage2 = React.memo(({ formik, handleTopThreeSkillsChange, handleTopTh
               'Other',
             ]}
             selectedOptions={formik.values.topThreeExperiences}
-            onChange={handleTopThreeExperiencesChange}
             onBlur={formik.topThreeExperiences}
             error={formik.touched.topThreeExperiences && formik.errors.topThreeExperiences}
           />

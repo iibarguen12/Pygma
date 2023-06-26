@@ -1,112 +1,86 @@
-import React from 'react';
-import { Typography, Grid, TextField, FormControlLabel, Radio } from '@mui/material';
+import React, { useCallback } from 'react';
+import { Grid, Typography, TextField, Radio, FormControlLabel } from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
 import { StyledRadioGroup, StyledTextarea } from 'src/components/styled-components';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-const ApplyPage7 = React.memo(({ formik }) => {
-  const handleHowDidYouHearAboutUs = (selectedOptions) => {
-    formik.setFieldValue('howDidYouHearAboutUs', selectedOptions);
-  };
+const ApplyPage7 = React.memo(({pageValues, onChangePageValues}) => {
 
-  const handleConfirmForm = (selectedOptions) => {
-    formik.setFieldValue('confirmForm', selectedOptions);
-  };
+  const validationSchema = yup.object().shape({
+    startupBiggestChallenge: yup
+      .string()
+      .required('Please share your biggest challenge'),
+    startupFormAnyLegalCompanyYet: yup
+      .string()
+      .required('Please select an option'),
+    startupLegalStructure: yup.string().required('Please select your legal structure'),
+    startupLegalStructureDescription: yup
+      .string()
+      .required('Please describe your legal structure'),
+  });
 
-  const handleInputChange = (event) => {
+  const formik = useFormik({
+    initialValues: pageValues,
+    validationSchema,
+  });
+
+  const handleInputChange = useCallback((event) => {
     const { name, value } = event.target;
     formik.setFieldValue(name, value);
-  };
+  }, []);
+
+  const handleInputOnBlur = useCallback((event) => {
+    const { name } = event.target;
+    formik.setFieldTouched(name, true);
+    if (validationSchema.fields[name]) {
+      formik.validateField(name);
+    }
+    onChangePageValues(formik.values, 7);
+  }, [formik, onChangePageValues]);
+
+  const legalStructureOptions = [
+    { key: "Untitled multiple choice field", value: "Untitled multiple choice field" },
+    { key: "Local legal entity", value: "Local legal entity" },
+    { key: "C-Corp", value: "C-Corp" },
+    { key: "LLC", value: "LLC" },
+    { key: "Cayman- Island Sandwich", value: "Cayman- Island Sandwich" },
+    { key: "Other", value: "Other" },
+    { key: "I don't have one yet", value: "I don't have one yet" },
+  ];
 
   return (
-    <Grid container spacing={2} marginBottom={2}>
-      <Grid item xs={12} sm={12}>
-        <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
-          Share the last details
-        </Typography>
-      </Grid>
-      <Grid item xs={12} sm={12}>
-        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
-          Share a pitch deck of your company
-        </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" color="grey">
-          Please share your pitch deck by using a platform such as DocSend, BriefLink, Google Drive, or equivalent.
-        </Typography>
-        <TextField
-          name="startupPitchDeck"
-          placeholder="..."
-          fullWidth
-          margin="none"
-          value={formik.values.startupPitchDeck}
-          onBlur={formik.handleBlur}
-          onChange={handleInputChange}
-          error={formik.touched.startupPitchDeck && formik.errors.startupPitchDeck}
-          helperText={formik.touched.startupPitchDeck && formik.errors.startupPitchDeck}
-        />
-      </Grid>
-      <Grid item xs={12} sm={12}>
-        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
-          Upload a 2 minute video
-        </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" color="grey">
-          Please send a 2 min. video over a YouTube (delisted), Loom, or comparable; where you and your co-founder(s) cover the following:
-        </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" color="grey">
-          - Short intro of you and your experience
-        </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" color="grey">
-          - Short pitch about your startup
-        </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" color="grey">
-          - Why are you excited to build this?
-        </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" color="grey">
-          - Why are you excited to join Pygma?
-        </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" color="grey">
-          * Make sure you stay within the 2 min.
-        </Typography>
-        <TextField
-          name="startupVideo"
-          placeholder="..."
-          fullWidth
-          margin="none"
-          value={formik.values.startupVideo}
-          onBlur={formik.handleBlur}
-          onChange={handleInputChange}
-          error={formik.touched.startupVideo && formik.errors.startupVideo}
-          helperText={formik.touched.startupVideo && formik.errors.startupVideo}
-        />
-      </Grid>
+    <Grid container spacing={2}>
       <Grid item xs={12} sm={12}>
         <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 1 }}>
-          What convinced you to apply to Pygma?
+          Biggest challenge about your business model?
         </Typography>
         <StyledTextarea
           minRows={4}
-          placeholder="Please share your motivation"
+          placeholder="Please share your biggest challenge"
           label=""
-          name="whatConvincedYouToApply"
+          name="startupBiggestChallenge"
           margin="normal"
-          value={formik.values.whatConvincedYouToApply}
-          onBlur={formik.handleBlur}
+          value={formik.values.startupBiggestChallenge}
+          onBlur={handleInputOnBlur}
           onChange={handleInputChange}
-          error={formik.touched.whatConvincedYouToApply && formik.errors.whatConvincedYouToApply}
+          error={formik.touched.startupBiggestChallenge && formik.errors.startupBiggestChallenge}
         />
-        {formik.touched.whatConvincedYouToApply && formik.errors.whatConvincedYouToApply && (
+        {formik.touched.startupBiggestChallenge && formik.errors.startupBiggestChallenge && (
           <Typography variant="caption" color="error" sx={{ marginLeft: 2 }}>
-            {formik.errors.whatConvincedYouToApply}
+            {formik.errors.startupBiggestChallenge}
           </Typography>
         )}
       </Grid>
       <Grid item xs={12} sm={12} sx={{ alignItems: 'center' }}>
         <Typography variant="body1" gutterBottom sx={{ marginTop: 3 }}>
-          Did someone encourage you to apply?
+          Have you incorporated or formed any legal company yet?
         </Typography>
         <StyledRadioGroup
-          name="someoneEncourageYouToApply"
+          name="startupFormAnyLegalCompanyYet"
           margin="normal"
-          value={formik.values.someoneEncourageYouToApply}
-          onChange={formik.handleChange}
+          value={formik.values.startupFormAnyLegalCompanyYet}
+          onChange={handleInputChange}
           sx={{ display: 'flex' }}
         >
           <FormControlLabel
@@ -121,81 +95,56 @@ const ApplyPage7 = React.memo(({ formik }) => {
             label="No"
           />
         </StyledRadioGroup>
-        {formik.touched.someoneEncourageYouToApply && formik.errors.someoneEncourageYouToApply && (
+        {formik.touched.startupFormAnyLegalCompanyYet && formik.errors.startupFormAnyLegalCompanyYet && (
           <Typography variant="caption" color="error" sx={{ marginLeft: 2 }}>
-            {formik.errors.someoneEncourageYouToApply}
+            {formik.errors.startupFormAnyLegalCompanyYet}
           </Typography>
         )}
       </Grid>
       <Grid item xs={12} sm={12}>
-        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
-          If a Pygma Alumni or someone from our network referred you, please share their name
+        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 1 }}>
+          What is the legal structure of your company?
         </Typography>
         <TextField
-          name="referralName"
-          placeholder="..."
+          name="startupLegalStructure"
           fullWidth
           margin="none"
-          value={formik.values.referralName}
-          onBlur={formik.handleBlur}
+          size="small"
+          value={formik.values.startupLegalStructure}
+          onBlur={handleInputOnBlur}
           onChange={handleInputChange}
-          error={formik.touched.referralName && formik.errors.referralName}
-          helperText={formik.touched.referralName && formik.errors.referralName}
-        />
+          error={formik.touched.startupLegalStructure && formik.errors.startupLegalStructure}
+          helperText={formik.touched.startupLegalStructure && formik.errors.startupLegalStructure}
+          select
+          SelectProps={{ native: true }}
+        >
+          {legalStructureOptions.map((option) => (
+            <option key={option.key} value={option.value}>
+              {option.value}
+            </option>
+          ))}
+        </TextField>
       </Grid>
       <Grid item xs={12} sm={12}>
-        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 3 }}>
-          How did you hear about us?
+        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 1 }}>
+          Please describe the legal structure of your company:
         </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" sx={{ color: 'grey' }}>
-          * Select all that matches.
-        </Typography>
-        <GenericCheckbox
-          formik={formik}
-          fieldName="howDidYouHearAboutUs"
-          options={[
-            'Referred by someone',
-            'LinkedIn',
-            'Instagram',
-            'Facebook',
-            'Twitter',
-            'Company website',
-            'Other',
-          ]}
-          selectedOptions={formik.values.howDidYouHearAboutUs}
-          onChange={handleHowDidYouHearAboutUs}
-          onBlur={formik.howDidYouHearAboutUs}
-          error={formik.touched.howDidYouHearAboutUs && formik.errors.howDidYouHearAboutUs}
+        <StyledTextarea
+          minRows={4}
+          placeholder="1)Who is in your cap table? 2)Where are you incorporated? 3)Any other relevant details."
+          label=""
+          name="startupLegalStructureDescription"
+          margin="normal"
+          value={formik.values.startupLegalStructureDescription}
+          onBlur={handleInputOnBlur}
+          onChange={handleInputChange}
+          error={formik.touched.startupLegalStructureDescription && formik.errors.startupLegalStructureDescription}
         />
-        {formik.touched.howDidYouHearAboutUs && formik.errors.howDidYouHearAboutUs && (
+        {formik.touched.startupBiggestChallenge && formik.errors.startupLegalStructureDescription && (
           <Typography variant="caption" color="error" sx={{ marginLeft: 2 }}>
-            {formik.errors.howDidYouHearAboutUs}
+            {formik.errors.startupLegalStructureDescription}
           </Typography>
         )}
-      </Grid>
-      <Grid item xs={12} sm={12}>
-        <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
-          <strong>Confirm your submission</strong>
-        </Typography>
-        <Typography variant="body2" gutterBottom textAlign="justify" sx={{ color: 'grey' }}>
-          * I have completed this form truthfully, and I have reviewed all of the information I shared
-        </Typography>
-        <Grid item xs={12} sm={12}>
-          <GenericCheckbox
-            formik={formik}
-            fieldName="confirmForm"
-            options={['Yes']}
-            selectedOptions={formik.values.confirmForm}
-            onChange={handleConfirmForm}
-            onBlur={formik.confirmForm}
-            error={formik.touched.confirmForm && formik.errors.confirmForm}
-          />
-          {formik.touched.confirmForm && formik.errors.confirmForm && (
-            <Typography variant="caption" color="error" sx={{ marginLeft: 2 }}>
-              {formik.errors.confirmForm}
-            </Typography>
-          )}
-        </Grid>
       </Grid>
     </Grid>
   );

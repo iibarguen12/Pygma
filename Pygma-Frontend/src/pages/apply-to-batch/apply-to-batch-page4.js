@@ -1,17 +1,63 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef }  from 'react';
 import { Typography, Grid, Slider } from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
 import { StyledTextarea } from 'src/components/styled-components';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-const ApplyPage4 = React.memo(({ formik, handleStartupNeeds, handleSliderStartupCoFounders, handleSliderStartupHowBigTeam }) => {
-  const handleInputChange = (event) => {
+const ApplyPage4 = React.memo(({pageValues, onChangePageValues}) => {
+
+  const prevValuesRef = useRef(pageValues);
+
+  const validationSchema = yup.object().shape({
+    startupNeeds: yup
+      .array()
+      .min(1, 'Please select at least one option.')
+      .max(2, 'Please select up to two options.'),
+    startupExpectations: yup.string().required('Please share your expectations'),
+    startupCoFounders: yup.string().required('Co-founders are required'),
+    startupHowMeetCoFounders: yup
+      .string()
+      .required('Please tell us how you met them'),
+    startupHowBigTeam: yup.string().required('Team length is required'),
+  });
+
+  const formik = useFormik({
+    initialValues: pageValues,
+    validationSchema,
+  });
+
+  const handleSliderStartupCoFounders = useCallback((event, value) => {
+    formik.setFieldValue('startupCoFounders', value);
+  }, [formik]);
+
+  const startupHowBigTeamValueToLabelMap = {
+    1: '1-5',
+    2: '5-10',
+    3: 'More than 10',
+  };
+
+  const handleSliderStartupHowBigTeam = useCallback((event, value) => {
+    const label = startupHowBigTeamValueToLabelMap[value] || '';
+    formik.setFieldValue('startupHowBigTeam', label);
+  }, [formik]);
+
+  const handleInputChange = useCallback((event) => {
     const { name, value } = event.target;
     formik.setFieldValue(name, value);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (prevValuesRef.current !== formik.values) {
+      onChangePageValues(formik.values, 4);
+      prevValuesRef.current = formik.values;
+    }
+  }, [formik.values, onChangePageValues]);
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={12}>
+        <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
         <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 5 }}>
           What do you need help with the most?
         </Typography>
@@ -19,6 +65,7 @@ const ApplyPage4 = React.memo(({ formik, handleStartupNeeds, handleSliderStartup
           * You can only select up to 3.
         </Typography>
         <GenericCheckbox
+          ceiling={3}
           formik={formik}
           fieldName='startupNeeds'
           options={[
@@ -30,7 +77,6 @@ const ApplyPage4 = React.memo(({ formik, handleStartupNeeds, handleSliderStartup
             'Getting support from our network',
           ]}
           selectedOptions={formik.values.startupNeeds}
-          onChange={handleStartupNeeds}
           onBlur={formik.startupNeeds}
           error={formik.touched.startupNeeds && formik.errors.startupNeeds}
         />
@@ -69,7 +115,6 @@ const ApplyPage4 = React.memo(({ formik, handleStartupNeeds, handleSliderStartup
           Remember you must have at least one co-founder, and preferably someone in your co-founder team, to take the CTO role. Max. 5 co-founders.
         </Typography>
         <Slider
-          onBlur={formik.handleBlur}
           onChange={handleSliderStartupCoFounders}
           error={formik.touched.startupCoFounders && formik.errors.startupCoFounders}
           valueLabelDisplay="auto"
@@ -118,7 +163,6 @@ const ApplyPage4 = React.memo(({ formik, handleStartupNeeds, handleSliderStartup
           This could be employees, associates with little equity or advisors.
         </Typography>
         <Slider
-          onBlur={formik.handleBlur}
           onChange={handleSliderStartupHowBigTeam}
           error={formik.touched.startupHowBigTeam && formik.errors.startupHowBigTeam}
           valueLabelDisplay="auto"

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Checkbox, FormControlLabel, FormGroup, Grid } from '@mui/material';
 
-const GenericCheckbox = ({ options, selectedOptions, onChange, formik, fieldName }) => {
+const GenericCheckbox = ({ options, selectedOptions, formik, fieldName, ceiling }) => {
   const handleOptionChange = (event) => {
     const { value, checked } = event.target;
     let updatedOptions;
 
     if (checked) {
-      if (selectedOptions.length < 3) {
+      if (selectedOptions.length < ceiling) {
         updatedOptions = [...selectedOptions, value];
       } else {
         return; // Limit reached, do not update options
