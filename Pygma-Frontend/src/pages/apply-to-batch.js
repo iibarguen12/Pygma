@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useCallback } from 'react';
+import React, { useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import Head from 'next/head';
 import ArrowSmallLeftIcon from '@heroicons/react/24/solid/ArrowSmallLeftIcon';
 import ArrowSmallRightIcon from '@heroicons/react/24/solid/ArrowSmallRightIcon';
@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { ThemeContext } from 'src/pages/_app';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import { ModalMessage } from 'src/components/modal-message';
 import ApplyPage0 from 'src/pages/apply-to-batch/apply-to-batch-page0';
 import ApplyPage1 from 'src/pages/apply-to-batch/apply-to-batch-page1';
 import ApplyPage2 from 'src/pages/apply-to-batch/apply-to-batch-page2';
@@ -24,6 +25,7 @@ import ApplyPage6 from 'src/pages/apply-to-batch/apply-to-batch-page6';
 import ApplyPage7 from 'src/pages/apply-to-batch/apply-to-batch-page7';
 import ApplyPage8 from 'src/pages/apply-to-batch/apply-to-batch-page8';
 import ApplyPage9 from 'src/pages/apply-to-batch/apply-to-batch-page9';
+import * as yup from 'yup';
 
 const PADDING_TOP = -10;
 
@@ -43,8 +45,15 @@ const BannerOverlay = styled('div')(({ theme }) => ({
 }));
 
 const Page = () => {
+  const [modalMessage, setModalMessage] = useState('');
+  const [openModalMessage, setOpenModalMessage] = useState(false);  
+  const [isSuccessModalMessage, setIsSuccessModalMessage] = useState(false);
+  const handleErrorOrSuccess = (message, isValid) => {
+    setModalMessage(message);
+    setIsSuccessModalMessage(isValid);
+    setOpenModalMessage(true);
+  };
   const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
-  console.log("Theme="+ currentTheme);
   const isDarkTheme = (currentTheme=='dark') ? true : false;
   const [isCheckboxChecked, setCheckboxChecked] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -121,7 +130,7 @@ const Page = () => {
     whatConvincedYouToApply: '',
   });
 
-  const [page9Values, setPageValues] = useState({
+  const [page9Values, setPage9Values] = useState({
     someoneEncourageYouToApply: '',
     referralName: '',
     howDidYouHearAboutUs: [],
@@ -129,8 +138,6 @@ const Page = () => {
   });
 
   const handleChangeValues = useCallback((values, page) => {
-    console.log('page:',page);
-    console.log('values:',values);
     switch (page) {
       case 1:
         setPage1Values(values);
@@ -162,19 +169,139 @@ const Page = () => {
       default:
         break;
     }
-  }, []);
+  }, [page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
+
+  const validationSchema = yup.object().shape({
+    firstName: yup.string().required('First Name is required'),
+    lastName: yup.string().required('Last Name is required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
+    country: yup.string().required('Country of Residence is required'),
+    linkedIn: yup
+      .string()
+      .url('Invalid LinkedIn URL')
+      .matches(/linkedin\.com/, 'Invalid LinkedIn URL')
+      .required('LinkedIn URL is required'),
+    gender: yup.string().required('Gender is required'),
+    quickBio: yup
+      .string()
+      .required('Please write a quick bio')
+      .min(100, 'Quick bio must be at least 100 characters'),
+    topThreeSkills: yup
+      .array()
+      .min(1, 'Please select at least one skill.')
+      .max(3, 'Please select up to three skills.'),
+    topThreeExperiences: yup
+      .array()
+      .min(1, 'Please select at least one experience.')
+      .max(3, 'Please select up to three experiences.'),
+    startupName: yup.string().required('Startup name is required'),
+    startupWebsite: yup
+      .string()
+      .url('Invalid Website URL')
+      .required('Website URL is required'),
+    startupDemo: yup.string().url('Invalid Demo URL').required('Demo URL is required'),
+    startupTime: yup
+      .number()
+      .required('Startup age is required')
+      .typeError('Startup age must be a number')
+      .positive('Startup age must be a positive number')
+      .integer('Startup age must be an integer'),
+    startupWhy: yup
+      .string()
+      .required('Please write your motivation')
+      .min(100, 'Motivation must be at least 100 characters'),
+    startupHowFar: yup.string().required('Please select your progress'),
+    startupFundraising: yup.string().required('Please select an option'),
+    startupNeeds: yup
+      .array()
+      .min(1, 'Please select at least one option.')
+      .max(2, 'Please select up to two options.'),
+    startupExpectations: yup.string().required('Please share your expectations'),
+    startupCoFounders: yup.string().required('Co-founders are required'),
+    startupHowMeetCoFounders: yup
+      .string()
+      .required('Please tell us how you met them'),
+    startupHowBigTeam: yup.string().required('Team length is required'),
+    startupShortBlurb: yup.string().required('Please share a short blurb'),
+    startupPurpose: yup.string().required('Please share your purpose'),
+    startupIndustry: yup.string().required('Please select your industry'),
+    startupHowBigMarket: yup.string().required('Please share your market'),
+    startupUniqueMarketInsight: yup
+      .string()
+      .required('Please share your unique insight'),
+    startupUnfairAdvantage: yup
+      .string()
+      .required('Please share your unfair advantage'),
+    startupBusinessModel: yup.string().required('Please select a business model'),
+    startupCustomerSegment: yup
+      .array()
+      .min(1, 'Please select at least one option.')
+      .max(2, 'Please select up to two options.'),
+    startupPeopleUsingProduct: yup
+      .string()
+      .required('Please select if people are using your product'),
+    startupActiveUsers: yup.string().required('Please share your active users'),
+    startupPayingUsers: yup.string().required('Please share your paying users'),
+    startupFinanciallySustainable: yup
+      .string()
+      .required('Please select if your startup is financially sustainable'),
+    startupMakeMoneyPerMonth: yup
+      .string()
+      .required('Please share how much money you make per month'),
+    startupSpendMoneyPerMonth: yup
+      .string()
+      .required('Please share how much money you spend per month'),
+    startupBiggestChallenge: yup
+      .string()
+      .required('Please share your biggest challenge'),
+    startupFormAnyLegalCompanyYet: yup
+      .string()
+      .required('Please select an option'),
+    startupLegalStructure: yup.string().required('Please select your legal structure'),
+    startupLegalStructureDescription: yup
+      .string()
+      .required('Please describe your legal structure'),
+    startupPitchDeck: yup
+      .string()
+      .url('Invalid Pitch Deck Link')
+      .required('Please share your pitch deck'),
+    startupVideo: yup.string().url('Invalid video Link').required('Please share a 2 minutes video'),
+    whatConvincedYouToApply: yup.string().required('Please share your motivation'),
+    someoneEncourageYouToApply: yup.string().required('Please select an option'),
+    howDidYouHearAboutUs: yup
+      .array()
+      .min(1, 'Please select at least one option.')
+      .max(7, 'Please select all that matches.'),
+    confirmForm: yup.array().min(1, 'You have to check this to submit the form.'),
+  });
 
   const handleFormSubmit = useCallback((event) => {
     event.preventDefault();
-    console.log('page1Values:', page1Values);
-    console.log('page2Values:', page2Values);
-    console.log('page3Values:', page3Values);
-    console.log('page4Values:', page4Values);
-    console.log('page5Values:', page5Values);
-    console.log('page6Values:', page6Values);
-    console.log('page8Values:', page8Values);
-  }, [page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
+    const flattenFormValues = {
+      ...page1Values,
+      ...page2Values,
+      ...page3Values,
+      ...page4Values,
+      ...page5Values,
+      ...page6Values,
+      ...page7Values,
+      ...page8Values,
+      ...page9Values,
+    };
 
+    const isValid = true;
+
+    validationSchema.validate(flattenFormValues, { abortEarly: false })
+      .then((isValid) => {
+        console.log('Valid Form');
+        handleErrorOrSuccess('Form successfully sent', isValid);
+      })
+      .catch((validationErrors) => {
+        console.log('Form validation errors:', validationErrors.errors);
+        let fieldsInError = validationErrors.inner.map(err => err.path);
+        handleErrorOrSuccess('Some fields still need to be filled!' , !isValid);
+      });
+  }, [page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
 
   return (
     <>
@@ -277,7 +404,6 @@ const Page = () => {
                 color="primary"
                 size="small"
                 type="submit"
-                disabled={!isCheckboxChecked}
               >
                 <Typography variant="body1" component="span">
                   Submit
@@ -287,6 +413,12 @@ const Page = () => {
                 </SvgIcon>
               </Button>
             </form>
+            <ModalMessage
+              open={openModalMessage}
+              message={modalMessage}
+              onClose={() => setOpenModalMessage(false)}
+              success={isSuccessModalMessage}
+            />
           </>
           )}
         </Container>

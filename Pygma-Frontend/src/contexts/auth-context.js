@@ -85,7 +85,6 @@ export const AuthProvider = (props) => {
 
     if (isAuthenticated) {
       const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
-      console.log(authenticatedUser);
       const user = {
         id: authenticatedUser.id,
         avatar: '/assets/avatars/avatar-pygma.png',
