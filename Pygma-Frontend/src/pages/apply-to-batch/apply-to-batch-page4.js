@@ -5,7 +5,7 @@ import { StyledTextarea } from 'src/components/styled-components';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-const ApplyPage4 = React.memo(({pageValues, onChangePageValues}) => {
+const ApplyPage4 = React.memo(({pageValues, onChangePageValues, performValidation}) => {
 
   const prevValuesRef = useRef(pageValues);
 
@@ -53,6 +53,12 @@ const ApplyPage4 = React.memo(({pageValues, onChangePageValues}) => {
       prevValuesRef.current = formik.values;
     }
   }, [formik.values, onChangePageValues]);
+
+  useEffect(() => {
+    if (performValidation){
+      formik.handleSubmit();
+    }
+  }, [performValidation]);
 
   return (
     <Grid container spacing={2}>

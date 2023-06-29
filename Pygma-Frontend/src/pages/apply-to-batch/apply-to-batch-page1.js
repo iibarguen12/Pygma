@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Typography, Grid, TextField } from '@mui/material';
 import { StyledTextarea } from 'src/components/styled-components';
 import { countries } from 'country-cities';
@@ -7,7 +7,7 @@ import * as yup from 'yup';
 
 const countryOptions = countries.all();
 
-const ApplyPage1 = React.memo(({pageValues, onChangePageValues}) => {
+const ApplyPage1 = React.memo(({ pageValues, onChangePageValues, performValidation }) => {
   const authenticatedUser = useMemo(() => JSON.parse(window.sessionStorage.getItem('user')), []);
 
   const validationSchema = yup.object().shape({
@@ -46,6 +46,11 @@ const ApplyPage1 = React.memo(({pageValues, onChangePageValues}) => {
     onChangePageValues(formik.values, 1);
   }, [formik, onChangePageValues]);
 
+  useEffect(() => {
+    if (performValidation){
+      formik.handleSubmit();
+    }
+  }, [performValidation]);
 
   return (
     <>

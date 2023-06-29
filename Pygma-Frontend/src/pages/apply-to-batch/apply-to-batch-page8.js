@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Typography, Grid, TextField, FormControlLabel, Radio } from '@mui/material';
 import GenericCheckbox from 'src/components/generic-checkbox';
 import { StyledRadioGroup, StyledTextarea } from 'src/components/styled-components';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-const ApplyPage8 = React.memo(({pageValues, onChangePageValues}) => {
+const ApplyPage8 = React.memo(({pageValues, onChangePageValues, performValidation}) => {
 
   const validationSchema = yup.object().shape({
     startupPitchDeck: yup
@@ -34,6 +34,12 @@ const ApplyPage8 = React.memo(({pageValues, onChangePageValues}) => {
     }
     onChangePageValues(formik.values, 8);
   }, [formik, onChangePageValues]);
+
+  useEffect(() => {
+    if (performValidation){
+      formik.handleSubmit();
+    }
+  }, [performValidation]);
 
   return (
     <Grid container spacing={2} marginBottom={2}>

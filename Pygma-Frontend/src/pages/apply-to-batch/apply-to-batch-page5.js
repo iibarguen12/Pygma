@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Typography, Grid, TextField } from '@mui/material';
 import { StyledTextarea } from 'src/components/styled-components';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-const ApplyPage5 = React.memo(({pageValues, onChangePageValues}) => {
+const ApplyPage5 = React.memo(({pageValues, onChangePageValues, performValidation}) => {
 
   const validationSchema = yup.object().shape({
     startupShortBlurb: yup.string().required('Please share a short blurb'),
@@ -80,6 +80,12 @@ const ApplyPage5 = React.memo(({pageValues, onChangePageValues}) => {
     }
     onChangePageValues(formik.values, 5);
   }, [formik, onChangePageValues]);
+
+  useEffect(() => {
+    if (performValidation){
+      formik.handleSubmit();
+    }
+  }, [performValidation]);
 
   return (
     <>

@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Typography, Grid, TextField } from '@mui/material';
 import { StyledTextarea, StyledRadioGroup } from 'src/components/styled-components';
 import { FormControlLabel, Radio } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-const ApplyPage3 = React.memo(({pageValues, onChangePageValues}) => {
+const ApplyPage3 = React.memo(({pageValues, onChangePageValues, performValidation}) => {
 
   const validationSchema = yup.object().shape({
     startupName: yup.string().required('Startup name is required'),
@@ -46,6 +46,12 @@ const ApplyPage3 = React.memo(({pageValues, onChangePageValues}) => {
     }
     onChangePageValues(formik.values, 3);
   }, [formik, onChangePageValues]);
+
+  useEffect(() => {
+    if (performValidation){
+      formik.handleSubmit();
+    }
+  }, [performValidation]);
 
   return (
     <>

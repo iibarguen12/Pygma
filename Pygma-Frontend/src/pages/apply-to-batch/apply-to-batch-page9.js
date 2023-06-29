@@ -5,7 +5,7 @@ import { StyledRadioGroup, StyledTextarea } from 'src/components/styled-componen
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-const ApplyPage9 = React.memo(({pageValues, onChangePageValues}) => {
+const ApplyPage9 = React.memo(({pageValues, onChangePageValues, performValidation}) => {
 
   const prevValuesRef = useRef(pageValues);
 
@@ -34,6 +34,12 @@ const ApplyPage9 = React.memo(({pageValues, onChangePageValues}) => {
       prevValuesRef.current = formik.values;
     }
   }, [formik.values, onChangePageValues]);
+
+  useEffect(() => {
+    if (performValidation){
+      formik.handleSubmit();
+    }
+  }, [performValidation]);
 
   return (
     <Grid container spacing={2} marginBottom={2}>

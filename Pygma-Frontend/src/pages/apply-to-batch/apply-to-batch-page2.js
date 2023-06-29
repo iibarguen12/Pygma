@@ -4,7 +4,7 @@ import GenericCheckbox from 'src/components/generic-checkbox';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-const ApplyPage2 = React.memo(({pageValues, onChangePageValues}) => {
+const ApplyPage2 = React.memo(({pageValues, onChangePageValues, performValidation}) => {
 
   const prevValuesRef = useRef(pageValues);
 
@@ -30,6 +30,12 @@ const ApplyPage2 = React.memo(({pageValues, onChangePageValues}) => {
       prevValuesRef.current = formik.values;
     }
   }, [formik.values, onChangePageValues]);
+
+  useEffect(() => {
+    if (performValidation){
+      formik.handleSubmit();
+    }
+  }, [performValidation]);
 
   return (
     <>
