@@ -22,8 +22,7 @@ const ApplyPage3 = React.memo(({pageValues, onChangePageValues, performValidatio
       .integer('Startup age must be an integer'),
     startupWhy: yup
       .string()
-      .required('Please write your motivation')
-      .min(100, 'Motivation must be at least 100 characters'),
+      .required('Please write your motivation'),
     startupHowFar: yup.string().required('Please select your progress'),
     startupFundraising: yup.string().required('Please select an option'),
   });
@@ -44,7 +43,7 @@ const ApplyPage3 = React.memo(({pageValues, onChangePageValues, performValidatio
     if (validationSchema.fields[name]) {
       formik.validateField(name);
     }
-    onChangePageValues(formik.values, 3);
+    onChangePageValues(formik.values);
   }, [formik, onChangePageValues]);
 
   useEffect(() => {
@@ -55,7 +54,6 @@ const ApplyPage3 = React.memo(({pageValues, onChangePageValues, performValidatio
 
   return (
     <>
-      <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
       <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
         Let's talk about your business
       </Typography>

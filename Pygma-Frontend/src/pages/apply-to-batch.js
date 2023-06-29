@@ -53,7 +53,15 @@ const Page = () => {
     setIsSuccessModalMessage(isValid);
     setOpenModalMessage(true);
   };
-  const [performChildrenValidations, setPerformChildrenValidations] = useState(false);
+  const [performPage1Validations, setPerformPage1Validations] = useState(false);
+  const [performPage2Validations, setPerformPage2Validations] = useState(false);
+  const [performPage3Validations, setPerformPage3Validations] = useState(false);
+  const [performPage4Validations, setPerformPage4Validations] = useState(false);
+  const [performPage5Validations, setPerformPage5Validations] = useState(false);
+  const [performPage6Validations, setPerformPage6Validations] = useState(false);
+  const [performPage7Validations, setPerformPage7Validations] = useState(false);
+  const [performPage8Validations, setPerformPage8Validations] = useState(false);
+  const [performPage9Validations, setPerformPage9Validations] = useState(false);
   const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
   const isDarkTheme = (currentTheme=='dark') ? true : false;
   const [isCheckboxChecked, setCheckboxChecked] = useState(false);
@@ -138,39 +146,41 @@ const Page = () => {
     confirmForm: [],
   });
 
-  const handleChangeValues = useCallback((values, page) => {
-    switch (page) {
-      case 1:
-        setPage1Values(values);
-        break;
-      case 2:
-        setPage2Values(values);
-        break;
-      case 3:
-        setPage3Values(values);
-        break;
-      case 4:
-        setPage4Values(values);
-        break;
-      case 5:
-        setPage5Values(values);
-        break;
-      case 6:
-        setPage6Values(values);
-        break;
-      case 7:
-        setPage7Values(values);
-        break;
-      case 8:
-        setPage8Values(values);
-        break;
-      case 9:
-        setPage9Values(values);
-        break;
-      default:
-        break;
-    }
-  }, [page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
+ const handleChangePage1Values = useCallback((values) => {
+   setPage1Values(values);
+ }, [page1Values]);
+
+ const handleChangePage2Values = useCallback((values) => {
+   setPage2Values(values);
+ }, [page2Values]);
+
+ const handleChangePage3Values = useCallback((values) => {
+   setPage3Values(values);
+ }, [page3Values]);
+
+ const handleChangePage4Values = useCallback((values) => {
+   setPage4Values(values);
+ }, [page4Values]);
+
+ const handleChangePage5Values = useCallback((values) => {
+   setPage5Values(values);
+ }, [page5Values]);
+
+ const handleChangePage6Values = useCallback((values) => {
+   setPage6Values(values);
+ }, [page6Values]);
+
+ const handleChangePage7Values = useCallback((values) => {
+   setPage7Values(values);
+ }, [page7Values]);
+
+ const handleChangePage8Values = useCallback((values) => {
+   setPage8Values(values);
+ }, [page8Values]);
+
+ const handleChangePage9Values = useCallback((values) => {
+   setPage9Values(values);
+ }, [page9Values]);
 
   const validationSchema = yup.object().shape({
     firstName: yup.string().required('First Name is required'),
@@ -209,8 +219,7 @@ const Page = () => {
       .integer('Startup age must be an integer'),
     startupWhy: yup
       .string()
-      .required('Please write your motivation')
-      .min(100, 'Motivation must be at least 100 characters'),
+      .required('Please write your motivation'),
     startupHowFar: yup.string().required('Please select your progress'),
     startupFundraising: yup.string().required('Please select an option'),
     startupNeeds: yup
@@ -278,7 +287,15 @@ const Page = () => {
 
   const handleFormSubmit = useCallback((event) => {
     event.preventDefault();
-    setPerformChildrenValidations(true);
+    setPerformPage1Validations(true);
+    setPerformPage2Validations(true);
+    setPerformPage3Validations(true);
+    setPerformPage4Validations(true);
+    setPerformPage5Validations(true);
+    setPerformPage6Validations(true);
+    setPerformPage7Validations(true);
+    setPerformPage8Validations(true);
+    setPerformPage9Validations(true);
     const flattenFormValues = {
       ...page1Values,
       ...page2Values,
@@ -295,6 +312,7 @@ const Page = () => {
 
     validationSchema.validate(flattenFormValues, { abortEarly: false })
       .then((isValid) => {
+      console.log(flattenFormValues);
         handleErrorOrSuccess('Form successfully sent', isValid);
       })
       .catch((validationErrors) => {
@@ -386,18 +404,18 @@ const Page = () => {
             </Button>
             <form onSubmit={handleFormSubmit}>
               <hr style={{ margin: '2rem 0' }} />
-              <ApplyPage1 pageValues={page1Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
-              <ApplyPage2 pageValues={page2Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
+              <ApplyPage1 pageValues={page1Values} onChangePageValues={handleChangePage1Values} performValidation={performPage1Validations}/>
+              <ApplyPage2 pageValues={page2Values} onChangePageValues={handleChangePage2Values} performValidation={performPage2Validations}/>
               <hr style={{ margin: '2rem 0' }} />
-              <ApplyPage3 pageValues={page3Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
-              <ApplyPage4 pageValues={page4Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
+              <ApplyPage3 pageValues={page3Values} onChangePageValues={handleChangePage3Values} performValidation={performPage3Validations}/>
+              <ApplyPage4 pageValues={page4Values} onChangePageValues={handleChangePage4Values} performValidation={performPage4Validations}/>
               <hr style={{marginTop:'3rem', marginBottom:'2rem' }} />
-              <ApplyPage5 pageValues={page5Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
-              <ApplyPage6 pageValues={page6Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
-              <ApplyPage7 pageValues={page7Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
+              <ApplyPage5 pageValues={page5Values} onChangePageValues={handleChangePage5Values} performValidation={performPage5Validations}/>
+              <ApplyPage6 pageValues={page6Values} onChangePageValues={handleChangePage6Values} performValidation={performPage6Validations}/>
+              <ApplyPage7 pageValues={page7Values} onChangePageValues={handleChangePage7Values} performValidation={performPage7Validations}/>
               <hr style={{ margin: '2rem 0' }} />
-              <ApplyPage8 pageValues={page8Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
-              <ApplyPage9 pageValues={page9Values} onChangePageValues={handleChangeValues} performValidation={performChildrenValidations}/>
+              <ApplyPage8 pageValues={page8Values} onChangePageValues={handleChangePage8Values} performValidation={performPage8Validations}/>
+              <ApplyPage9 pageValues={page9Values} onChangePageValues={handleChangePage9Values} performValidation={performPage9Validations}/>
               <Button
                 variant="text"
                 color="primary"

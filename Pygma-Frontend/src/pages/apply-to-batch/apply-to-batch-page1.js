@@ -43,7 +43,7 @@ const ApplyPage1 = React.memo(({ pageValues, onChangePageValues, performValidati
     if (validationSchema.fields[name]) {
       formik.validateField(name);
     }
-    onChangePageValues(formik.values, 1);
+    onChangePageValues(formik.values);
   }, [formik, onChangePageValues]);
 
   useEffect(() => {
@@ -54,7 +54,6 @@ const ApplyPage1 = React.memo(({ pageValues, onChangePageValues, performValidati
 
   return (
     <>
-     <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
       <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
         Tell us about you
       </Typography>

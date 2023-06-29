@@ -26,7 +26,7 @@ const ApplyPage2 = React.memo(({pageValues, onChangePageValues, performValidatio
 
   useEffect(() => {
     if (prevValuesRef.current !== formik.values) {
-      onChangePageValues(formik.values, 2);
+      onChangePageValues(formik.values);
       prevValuesRef.current = formik.values;
     }
   }, [formik.values, onChangePageValues]);
@@ -39,7 +39,6 @@ const ApplyPage2 = React.memo(({pageValues, onChangePageValues, performValidatio
 
   return (
     <>
-      <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
       <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 4 }}>
         Please select your top three skills
       </Typography>

@@ -32,7 +32,7 @@ const ApplyPage8 = React.memo(({pageValues, onChangePageValues, performValidatio
     if (validationSchema.fields[name]) {
       formik.validateField(name);
     }
-    onChangePageValues(formik.values, 8);
+    onChangePageValues(formik.values);
   }, [formik, onChangePageValues]);
 
   useEffect(() => {
@@ -44,7 +44,6 @@ const ApplyPage8 = React.memo(({pageValues, onChangePageValues, performValidatio
   return (
     <Grid container spacing={2} marginBottom={2}>
       <Grid item xs={12} sm={12}>
-        <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
         <Typography variant="h5" gutterBottom textAlign="justify" sx={{ marginTop: 2 }}>
           Share the last details
         </Typography>

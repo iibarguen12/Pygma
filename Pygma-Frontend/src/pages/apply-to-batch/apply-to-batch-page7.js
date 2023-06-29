@@ -36,7 +36,7 @@ const ApplyPage7 = React.memo(({pageValues, onChangePageValues, performValidatio
     if (validationSchema.fields[name]) {
       formik.validateField(name);
     }
-    onChangePageValues(formik.values, 7);
+    onChangePageValues(formik.values);
   }, [formik, onChangePageValues]);
 
   const legalStructureOptions = [

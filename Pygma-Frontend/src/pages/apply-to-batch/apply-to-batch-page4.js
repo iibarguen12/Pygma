@@ -49,7 +49,7 @@ const ApplyPage4 = React.memo(({pageValues, onChangePageValues, performValidatio
 
   useEffect(() => {
     if (prevValuesRef.current !== formik.values) {
-      onChangePageValues(formik.values, 4);
+      onChangePageValues(formik.values);
       prevValuesRef.current = formik.values;
     }
   }, [formik.values, onChangePageValues]);
@@ -63,7 +63,6 @@ const ApplyPage4 = React.memo(({pageValues, onChangePageValues, performValidatio
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={12}>
-        <Typography variant="h1"> RE-RENDER {(Math.random() * 100).toFixed()} </Typography>
         <Typography variant="body1" gutterBottom textAlign="justify" sx={{ marginTop: 5 }}>
           What do you need help with the most?
         </Typography>
