@@ -26,6 +26,8 @@ import ApplyPage7 from 'src/pages/apply-to-batch/apply-to-batch-page7';
 import ApplyPage8 from 'src/pages/apply-to-batch/apply-to-batch-page8';
 import ApplyPage9 from 'src/pages/apply-to-batch/apply-to-batch-page9';
 import * as yup from 'yup';
+import { GoogleSpreadsheet } from 'google-spreadsheet';
+import { JWT } from 'google-auth-library'
 
 const PADDING_TOP = -10;
 
@@ -72,78 +74,80 @@ const Page = () => {
 
   const authenticatedUser = useMemo(() => JSON.parse(window.sessionStorage.getItem('user')), []);
 
-  const [page1Values, setPage1Values] = useState({
-    firstName: authenticatedUser?.name || '',
-    lastName: authenticatedUser?.lastname || '',
-    email: authenticatedUser?.email || '',
-    country: authenticatedUser?.country || '',
-    linkedIn: '',
-    gender: 'male',
-    quickBio: '',
-  });
+  const [page1Values, setPage1Values] = useState(
+  {
+    "firstName": "Pygma",
+    "lastName": "Admin",
+    "email": "demo@pygma.com",
+    "country": "CO",
+    "linkedIn": "https://nl.linkedin.com/in/iries-david-ibarguen-ruiz-1056101",
+    "gender": "male",
+    "quickBio": "qwqwe kqwejkqwkejhkqweekj kjkwqhekjhqwkjehkqwjehkjwqe kjqwhekjqhwekjh qu2uiu2oqiwueiou qweouoiwqueoiquweoiuwqo",
+  }
+  );
 
   const [page2Values, setPage2Values] = useState({
-    topThreeSkills: [],
-    topThreeExperiences: [],
+    "topThreeSkills": ["Business Development"],
+    "topThreeExperiences": ["Mobility","E-commerce"],
   });
 
   const [page3Values, setPage3Values] = useState({
-    startupName: '',
-    startupWebsite: '',
-    startupDemo: '',
-    startupTime: '',
-    startupWhy: '',
-    startupHowFar: '',
-    startupHowMuchRaised: '',
-    startupFundraising: '',
+    "startupName": "asdas",
+    "startupWebsite": "http://1.com",
+    "startupDemo": "http://asdaa.com",
+    "startupTime": "2",
+    "startupWhy": "asdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasdasdasdasd asd asd asd asd as",
+    "startupHowFar": "I have significant traction (users/sales/capital)",
+    "startupHowMuchRaised": "",
+    "startupFundraising": "Yes",
   });
 
   const [page4Values, setPage4Values] = useState({
-    startupNeeds: [],
-    startupExpectations: '',
-    startupCoFounders: '',
-    startupHowMeetCoFounders: '',
-    startupHowBigTeam: '',
+    "startupNeeds": ["Fundraising for your Startup"],
+    "startupExpectations": "asdasd",
+    "startupCoFounders": 3,
+    "startupHowMeetCoFounders": "asdasd",
+    "startupHowBigTeam": "5-10",
   });
 
   const [page5Values, setPage5Values] = useState({
-    startupShortBlurb: '',
-    startupPurpose: '',
-    startupIndustry: '',
-    startupHowBigMarket: '',
-    startupUniqueMarketInsight: '',
-    startupUnfairAdvantage: '',
-    startupBusinessModel: '',
+    "startupShortBlurb": "asd asd as asd asda s as d",
+    "startupPurpose": "asds",
+    "startupIndustry": "Hardware",
+    "startupHowBigMarket": "asd",
+    "startupUniqueMarketInsight": "asd",
+    "startupUnfairAdvantage": "asd",
+    "startupBusinessModel": "Marketplace",
   });
 
   const [page6Values, setPage6Values] = useState({
-    startupCustomerSegment: [],
-    startupPeopleUsingProduct: '',
-    startupActiveUsers: '',
-    startupPayingUsers: '',
-    startupFinanciallySustainable: '',
-    startupMakeMoneyPerMonth: '',
-    startupSpendMoneyPerMonth: '',
+    "startupCustomerSegment": ["C2C"],
+    "startupPeopleUsingProduct": "Yes",
+    "startupActiveUsers": "345",
+    "startupPayingUsers": "345",
+    "startupFinanciallySustainable": "Yes",
+    "startupMakeMoneyPerMonth": "123",
+    "startupSpendMoneyPerMonth": "3333",
   });
 
   const [page7Values, setPage7Values] = useState({
-    startupBiggestChallenge: '',
-    startupFormAnyLegalCompanyYet: '',
-    startupLegalStructure: '',
-    startupLegalStructureDescription: '',
+    "startupBiggestChallenge": "sadas",
+    "startupFormAnyLegalCompanyYet": "Yes",
+    "startupLegalStructure": "Local legal entity",
+    "startupLegalStructureDescription": "asd",
   });
 
   const [page8Values, setPage8Values] = useState({
-    startupPitchDeck: '',
-    startupVideo: '',
-    whatConvincedYouToApply: '',
+    "startupPitchDeck": "http://www.coms",
+    "startupVideo": "http://www.com",
+    "whatConvincedYouToApply": "asdasd",
   });
 
   const [page9Values, setPage9Values] = useState({
-    someoneEncourageYouToApply: '',
-    referralName: '',
-    howDidYouHearAboutUs: [],
-    confirmForm: [],
+    "someoneEncourageYouToApply": "Yes",
+    "referralName": "asd asd asd asd asd",
+    "howDidYouHearAboutUs": ["Twitter"],
+    "confirmForm": ["Yes"]
   });
 
  const handleChangePage1Values = useCallback((values) => {
@@ -285,18 +289,55 @@ const Page = () => {
     confirmForm: yup.array().min(1, 'You have to check this to submit the form.'),
   });
 
+  const mapFormValuesToGoogleSheetValues = (inputValues) => {
+    // Flatten the object and convert array values to strings
+    const flattenNestedObjects = (object, parentKey = '') => {
+      return Object.keys(object).reduce((result, key) => {
+        const value = object[key];
+        const nestedKey = parentKey ? `${parentKey}.${key}` : key;
+
+        if (Array.isArray(value)) {
+          // Convert array values to strings
+          result[nestedKey] = value.join(', ');
+        } else if (typeof value === 'object') {
+          // Flatten nested objects
+          Object.assign(result, flattenNestedObjects(value, nestedKey));
+        } else {
+          // Assign other values as-is
+          result[nestedKey] = value;
+        }
+
+        return result;
+      }, {});
+    };
+
+    return flattenNestedObjects(inputValues);
+  };
+
+  const appendToSpreadsheet = async (row) => {
+    try {
+      const auth = new JWT({
+        email: process.env.NEXT_PUBLIC_GS_CLIENT_EMAIL,
+        key: process.env.NEXT_PUBLIC_GS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      });
+      const doc = new GoogleSpreadsheet(process.env.NEXT_PUBLIC_GS_SPREADSHEET_ID, auth);
+
+      await doc.loadInfo();
+
+      const sheet = doc.sheetsById[process.env.NEXT_PUBLIC_GS_SHEET_ID];
+      const result = await sheet.addRow(row);
+
+      handleErrorOrSuccess('Application successfully sent!', true);
+    } catch (e) {
+      handleErrorOrSuccess("Error sending application: " + e , false);
+    }
+  };
+
   const handleFormSubmit = useCallback((event) => {
     event.preventDefault();
-    setPerformPage1Validations(true);
-    setPerformPage2Validations(true);
-    setPerformPage3Validations(true);
-    setPerformPage4Validations(true);
-    setPerformPage5Validations(true);
-    setPerformPage6Validations(true);
-    setPerformPage7Validations(true);
-    setPerformPage8Validations(true);
-    setPerformPage9Validations(true);
-    const flattenFormValues = {
+
+    const joinedFormValues = {
       ...page1Values,
       ...page2Values,
       ...page3Values,
@@ -308,12 +349,26 @@ const Page = () => {
       ...page9Values,
     };
 
+
+    setPerformPage1Validations(true);
+    setPerformPage2Validations(true);
+    setPerformPage3Validations(true);
+    setPerformPage4Validations(true);
+    setPerformPage5Validations(true);
+    setPerformPage6Validations(true);
+    setPerformPage7Validations(true);
+    setPerformPage8Validations(true);
+    setPerformPage9Validations(true);
+
     const isValid = true;
 
-    validationSchema.validate(flattenFormValues, { abortEarly: false })
+    validationSchema.validate(joinedFormValues, { abortEarly: false })
       .then((isValid) => {
-      console.log(flattenFormValues);
-        handleErrorOrSuccess('Form successfully sent', isValid);
+        try{
+          appendToSpreadsheet(mapFormValuesToGoogleSheetValues(joinedFormValues));
+        }catch(error){
+          handleErrorOrSuccess('Unexpected error happened: '+ error , !isValid);
+        }
       })
       .catch((validationErrors) => {
         handleErrorOrSuccess('Some fields still need to be filled!' , !isValid);
