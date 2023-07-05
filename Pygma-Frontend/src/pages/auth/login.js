@@ -23,7 +23,7 @@ import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { EyeIcon, EyeSlashIcon   } from '@heroicons/react/24/solid';
 import { ThemeContext } from 'src/pages/_app';
-import StyledGoogleButton from 'src/components/google-button';
+import GoogleSignDiv from 'src/components/google-button';
 
 const Page = () => {
   const router = useRouter();
@@ -229,11 +229,7 @@ const Page = () => {
               </form>
             )}
             {method === 'withGoogle' && (
-                <StyledGoogleButton
-                  buttonText="Sign in with Google"
-                  handleGoogleSuccess={handleGoogleSuccess}
-                  handleGoogleFailure={handleGoogleFailure}
-                />
+                <GoogleSignDiv buttonType="signin"/>
             )}
           </div>
         </Box>

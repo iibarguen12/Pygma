@@ -1,52 +1,52 @@
-import { useContext, useState } from 'react';
-import { GoogleLogin } from 'react-google-login';
-import { useTheme } from '@mui/material/styles';
-import { ThemeContext } from 'src/pages/_app';
-import { Button } from '@mui/material';
-import { memo } from 'react';
+import { useEffect } from 'react';
 
-//TODO check error while login CORS
-const StyledGoogleButton = memo(({ buttonText, handleGoogleSuccess, handleGoogleFailure }) => {
-  const theme = useTheme();
-  const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
+const GoogleSignDiv = ({buttonType}) => {
+  useEffect(() => {
+    // Load the Google GSI client script asynchronously
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
 
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
+    return () => {
+      // Clean up the script when the component unmounts
+      document.body.removeChild(script);
+    };
+  }, []);
 
-  const handleButtonMouseEnter = () => {
-    setIsButtonHovered(true);
+  // Define the googleCallback function
+  const googleCallback = (response) => {
+    // Handle the Google Sign-In callback response
+    console.log(response);
+    // Perform further actions with the response as needed
   };
 
-  const handleButtonMouseLeave = () => {
-    setIsButtonHovered(false);
-  };
-
-  const renderButton = (renderProps) => (
-    <Button
-      fullWidth
-      size="large"
-      sx={
-        currentTheme === 'dark'? {mt: 3, color: "black",
-        '&:hover': { color: 'white' }}: {mt: 3,}
-      }
-      type="submit"
-      variant="contained"
-      onClick={renderProps.onClick}
-      onMouseEnter={handleButtonMouseEnter}
-      onMouseLeave={handleButtonMouseLeave}
-    >
-      {buttonText}
-    </Button>
-  );
+  // Conditionally assign the googleCallback function in the browser environment
+  if (typeof window !== 'undefined') {
+    window.googleCallback = googleCallback;
+  }
 
   return (
-    <GoogleLogin
-      clientId={process.env.NEXT_PUBLIC_GS_CLIENT_ID}
-      onSuccess={handleGoogleSuccess}
-      onFailure={handleGoogleFailure}
-      cookiePolicy={'single_host_origin'}
-      render={renderButton}
-    />
+    <div
+      id="g_id_onload"
+      data-client_id={process.env.NEXT_PUBLIC_GS_CLIENT_ID}
+      data-context={buttonType}
+      data-ux_mode="popup"
+      data-callback="googleCallback"
+      data-auto_prompt="false"
+    >
+      <div
+        className="g_id_signin"
+        data-type="standard"
+        data-shape="rectangular"
+        data-theme="filled_black"
+        data-text="signin_with"
+        data-size="large"
+        data-logo_alignment="left"
+      ></div>
+    </div>
   );
-});
+};
 
-export default StyledGoogleButton;
+export default GoogleSignDiv;

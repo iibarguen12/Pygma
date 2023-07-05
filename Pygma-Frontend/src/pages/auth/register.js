@@ -8,7 +8,7 @@ import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { ModalMessage } from 'src/components/modal-message';
 import { ThemeContext } from 'src/pages/_app';
-import StyledGoogleButton from 'src/components/google-button';
+import GoogleSignDiv from 'src/components/google-button';
 
 const Page = () => {
   const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
@@ -212,12 +212,7 @@ const Page = () => {
               />
             </form>
           </div>
-          //TODO implement the side-by-side visibility
-          <StyledGoogleButton
-            buttonText="Register with Google"
-            handleGoogleSuccess={handleGoogleSuccess}
-            handleGoogleFailure={handleGoogleFailure}
-          />
+          <GoogleSignDiv buttonType="signup"/>
         </Box>
       </Box>
     </>
