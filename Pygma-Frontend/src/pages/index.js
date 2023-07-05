@@ -77,80 +77,78 @@ const Page = () => {
 
   const authenticatedUser = useMemo(() => JSON.parse(window.sessionStorage.getItem('user')), []);
 
-  const [page1Values, setPage1Values] = useState(
-  {
-    "firstName": "Pygma",
-    "lastName": "Admin",
-    "email": "demo@pygma.com",
-    "country": "CO",
-    "linkedIn": "https://nl.linkedin.com/in/iries-david-ibarguen-ruiz-1056101",
-    "gender": "male",
-    "quickBio": "qwqwe kqwejkqwkejhkqweekj kjkwqhekjhqwkjehkqwjehkjwqe kjqwhekjqhwekjh qu2uiu2oqiwueiou qweouoiwqueoiquweoiuwqo",
-  }
-  );
+  const [page1Values, setPage1Values] = useState({
+    firstName: authenticatedUser?.name || '',
+    lastName: authenticatedUser?.lastname || '',
+    email: authenticatedUser?.email || '',
+    country: authenticatedUser?.country || '',
+    linkedIn: '',
+    gender: 'male',
+    quickBio: '',
+  });
 
   const [page2Values, setPage2Values] = useState({
-    "topThreeSkills": ["Business Development"],
-    "topThreeExperiences": ["Mobility","E-commerce"],
+    topThreeSkills: [],
+    topThreeExperiences: [],
   });
 
   const [page3Values, setPage3Values] = useState({
-    "startupName": "asdas",
-    "startupWebsite": "http://1.com",
-    "startupDemo": "http://asdaa.com",
-    "startupTime": "2",
-    "startupWhy": "asdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasdasdasdasd asd asd asd asd as",
-    "startupHowFar": "I have significant traction (users/sales/capital)",
-    "startupHowMuchRaised": "",
-    "startupFundraising": "Yes",
+    startupName: '',
+    startupWebsite: '',
+    startupDemo: '',
+    startupTime: '',
+    startupWhy: '',
+    startupHowFar: '',
+    startupHowMuchRaised: '',
+    startupFundraising: '',
   });
 
   const [page4Values, setPage4Values] = useState({
-    "startupNeeds": ["Fundraising for your Startup"],
-    "startupExpectations": "asdasd",
-    "startupCoFounders": 3,
-    "startupHowMeetCoFounders": "asdasd",
-    "startupHowBigTeam": "5-10",
+    startupNeeds: [],
+    startupExpectations: '',
+    startupCoFounders: '',
+    startupHowMeetCoFounders: '',
+    startupHowBigTeam: '',
   });
 
   const [page5Values, setPage5Values] = useState({
-    "startupShortBlurb": "asd asd as asd asda s as d",
-    "startupPurpose": "asds",
-    "startupIndustry": "Hardware",
-    "startupHowBigMarket": "asd",
-    "startupUniqueMarketInsight": "asd",
-    "startupUnfairAdvantage": "asd",
-    "startupBusinessModel": "Marketplace",
+    startupShortBlurb: '',
+    startupPurpose: '',
+    startupIndustry: '',
+    startupHowBigMarket: '',
+    startupUniqueMarketInsight: '',
+    startupUnfairAdvantage: '',
+    startupBusinessModel: '',
   });
 
   const [page6Values, setPage6Values] = useState({
-    "startupCustomerSegment": ["C2C"],
-    "startupPeopleUsingProduct": "Yes",
-    "startupActiveUsers": "345",
-    "startupPayingUsers": "345",
-    "startupFinanciallySustainable": "Yes",
-    "startupMakeMoneyPerMonth": "123",
-    "startupSpendMoneyPerMonth": "3333",
+    startupCustomerSegment: [],
+    startupPeopleUsingProduct: '',
+    startupActiveUsers: '',
+    startupPayingUsers: '',
+    startupFinanciallySustainable: '',
+    startupMakeMoneyPerMonth: '',
+    startupSpendMoneyPerMonth: '',
   });
 
   const [page7Values, setPage7Values] = useState({
-    "startupBiggestChallenge": "sadas",
-    "startupFormAnyLegalCompanyYet": "Yes",
-    "startupLegalStructure": "Local legal entity",
-    "startupLegalStructureDescription": "asd",
+    startupBiggestChallenge: '',
+    startupFormAnyLegalCompanyYet: '',
+    startupLegalStructure: '',
+    startupLegalStructureDescription: '',
   });
 
   const [page8Values, setPage8Values] = useState({
-    "startupPitchDeck": "http://www.coms",
-    "startupVideo": "http://www.com",
-    "whatConvincedYouToApply": "asdasd",
+    startupPitchDeck: '',
+    startupVideo: '',
+    whatConvincedYouToApply: '',
   });
 
   const [page9Values, setPage9Values] = useState({
-    "someoneEncourageYouToApply": "Yes",
-    "referralName": "asd asd asd asd asd",
-    "howDidYouHearAboutUs": ["Twitter"],
-    "confirmForm": ["Yes"]
+    someoneEncourageYouToApply: '',
+    referralName: '',
+    howDidYouHearAboutUs: [],
+    confirmForm: [],
   });
 
  const handleChangePage1Values = useCallback((values) => {
