@@ -65,7 +65,7 @@ const Page = () => {
             </Typography>
             <Button
               component={NextLink}
-              href="/apply-to-batch"
+              href="/"
               startIcon={(
                 <SvgIcon fontSize="small">
                   <ArrowLeftIcon />

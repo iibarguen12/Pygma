@@ -12,7 +12,7 @@ import { SvgIcon } from '@mui/material';
 export const items = [
   {
     title: 'Apply to PY4',
-    path: '/apply-to-batch',
+    path: '/',
     icon: (
       <SvgIcon fontSize="small">
         <RocketLaunchIcon />
