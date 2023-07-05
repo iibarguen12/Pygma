@@ -19,4 +19,6 @@ public class SignupRequest {
     private String lastname;
     @NonNull
     private String email;
+    @NonNull
+    private Boolean isGoogleAuth;
 }

@@ -23,17 +23,25 @@ import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { EyeIcon, EyeSlashIcon   } from '@heroicons/react/24/solid';
 import { ThemeContext } from 'src/pages/_app';
+import { ModalMessage } from 'src/components/modal-message';
 import GoogleSignDiv from 'src/components/google-button';
+import jwt_decode from 'jwt-decode';
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
+  const [errorMessage, setErrorMessage] = useState('');
   const [method, setMethod] = useState('email');
+  const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
 
   const toggleShowPassword = () => {
      setShowPassword((showPassword) => !showPassword);
+  };
+  const showErrorModal = (message) => {
+    setErrorMessage(message);
+    setOpen(true);
   };
   const formik = useFormik({
     initialValues: {
@@ -53,7 +61,7 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        let errorMessage = await auth.signIn(values.email, values.password);
+        let errorMessage = await auth.signIn(values.email, values.password, false);
         if (errorMessage !== null){
           throw new Error(errorMessage);
         }
@@ -73,30 +81,27 @@ const Page = () => {
     []
   );
 
-  const handleGoogleSuccess = async (response) => {
+  const googleCallback = async (response) => {
+    event.preventDefault();
+    const decodedToken = jwt_decode(response.credential);
+
+    const googleUser = {
+      username: decodedToken.given_name.replace(/\s+/g, ''),
+      name: decodedToken.given_name,
+      lastname: decodedToken.family_name,
+      imageUrl: decodedToken.picture,
+      email: decodedToken.email
+    };
+
     try {
-      // Obtain user information from the response object
-      const { email, givenName, familyName } = response.profileObj;
-      console.log('email:', email);
-      console.log('givenName:', givenName);
-      console.log('familyName:', familyName);
-
-      // Call your sign up API with the obtained user information
-      const errorMessage = ''//await auth.signUpGoogle(email, givenName, familyName);
-
-      if (errorMessage !== null) {
+      let errorMessage = await auth.signIn(googleUser.email, 'None', true);
+      if (errorMessage !== null){
         throw new Error(errorMessage);
       }
-
-      handleSuccess('Registration successful, please check your email account.');
+      router.replace('/');
     } catch (err) {
-      handleSuccess('Error: '+ err);
+      showErrorModal(err);
     }
-  };
-
-  const handleGoogleFailure = (error) => {
-    console.log('Google Sign In Error:', error);
-    // Handle the failure case if needed
   };
 
   return (
@@ -229,8 +234,14 @@ const Page = () => {
               </form>
             )}
             {method === 'withGoogle' && (
-                <GoogleSignDiv buttonType="signin"/>
+                <GoogleSignDiv buttonType="signin" googleCallback={googleCallback}/>
             )}
+            <ModalMessage
+              open={open}
+              message={errorMessage}
+              onClose={() => setOpen(false)}
+              success={false}
+            />
           </div>
         </Box>
       </Box>

@@ -15,4 +15,6 @@ public class LoginRequest {
     private String username;
     @NonNull
     private String password;
+    @NonNull
+    private Boolean isGoogleAuth;
 }

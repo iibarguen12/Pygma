@@ -114,13 +114,14 @@ export const AuthProvider = (props) => {
     []
   );
 
-  const signIn = async (emailOrUsername, password) => {
+  const signIn = async (emailOrUsername, password, isGoogleAuth) => {
   try {
       const loginResponse =
       await sendRequest('http://localhost:8080/api/v1/auth/login','POST',
         JSON.stringify({
           username: emailOrUsername,
           password: password,
+          isGoogleAuth: isGoogleAuth,
         }),
         false,
       );
@@ -165,7 +166,7 @@ export const AuthProvider = (props) => {
     }
   };
 
-  const signUp = async (username, name, lastname, email) => {
+  const signUp = async (username, name, lastname, email, isGoogleAuth) => {
     try {
       const signupResponse =
       await sendRequest('http://localhost:8080/api/v1/auth/signup','POST',
@@ -174,6 +175,7 @@ export const AuthProvider = (props) => {
           name: name,
           lastname: lastname,
           email: email,
+          isGoogleAuth: isGoogleAuth,
         }),
         false,
       );

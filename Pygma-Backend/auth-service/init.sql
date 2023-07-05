@@ -9,6 +9,7 @@ CREATE TABLE users (
   phone VARCHAR(20),
   country VARCHAR(20),
   city VARCHAR(20),
+  is_google_auth BOOLEAN NOT NULL,
   UNIQUE (username),
   UNIQUE (email)
 );
@@ -34,7 +35,7 @@ INSERT INTO roles (name) VALUES
   ('ROLE_USER');
 
 -- INSERT USER
-INSERT INTO users (id, username, password, name, lastname, email, phone, country, city)
+INSERT INTO users (id, username, password, name, lastname, email, phone, country, city, is_google_auth)
 VALUES (
   'c592534f-0d71-4f2c-8d3c-fb0e08101e29',
   'pygma',
@@ -44,7 +45,8 @@ VALUES (
   'demo@pygma.com',
   '1234567890',
   'US',
-  'New York City'
+  'New York City',
+  false
 );
 
 --  ROLES TO USER

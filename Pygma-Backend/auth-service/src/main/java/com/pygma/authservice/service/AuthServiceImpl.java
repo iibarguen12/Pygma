@@ -29,8 +29,10 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         User user = userService.findUserByUsernameOrEmail(loginRequest.getUsername(), loginRequest.getUsername());
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
-            throw new NotFoundException("User not found");
+        if (!loginRequest.getIsGoogleAuth()){
+            if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
+                throw new NotFoundException("User not found");
+            }
         }
         return jwtGeneratorService.generateToken(user);
     }
@@ -41,27 +43,31 @@ public class AuthServiceImpl implements AuthService{
         try {
             user = userService.findUserByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail());
         }catch (NotFoundException e){
-            User newUser = UserMapper.mapSignupRequestToUser(signupRequest);
-            String temporalPassword = UserUtils.generateRandomPassword();
-            newUser.setPassword(temporalPassword);
-            Set<Role> userRole = userService.getRoles()
-                    .stream()
-                    .filter(role -> role.getName().equals(Roles.ROLE_USER.name()))
-                    .collect(Collectors.toSet());
-            newUser.setRoles(userRole);
-            userService.saveUser(newUser);
-            emailService.composeAndSendEmail(newUser, temporalPassword);
+            saveAndSendEmail(signupRequest);
             return SimpleResponse.builder()
                     .statusCode(200)
                     .message("User registered successfully")
                     .build();
         }
         if (user.getUsername().equals(signupRequest.getUsername())){
-            throw new InvalidDataException("Username is already taken");
+            throw new InvalidDataException("Username is already in use");
         } else if (user.getEmail().equals(signupRequest.getEmail())) {
             throw new InvalidDataException("Email is already in use");
         }
         return null;
+    }
+
+    private void saveAndSendEmail(SignupRequest signupRequest) {
+        User newUser = UserMapper.mapSignupRequestToUser(signupRequest);
+        String temporalPassword = UserUtils.generateRandomPassword();
+        newUser.setPassword(temporalPassword);
+        Set<Role> userRole = userService.getRoles()
+                .stream()
+                .filter(role -> role.getName().equals(Roles.ROLE_USER.name()))
+                .collect(Collectors.toSet());
+        newUser.setRoles(userRole);
+        userService.saveUser(newUser);
+        emailService.composeAndSendEmail(newUser, temporalPassword, signupRequest.getIsGoogleAuth());
     }
 
     @Override

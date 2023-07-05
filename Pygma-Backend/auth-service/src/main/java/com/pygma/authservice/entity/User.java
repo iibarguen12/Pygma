@@ -47,5 +47,7 @@ public class User {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
+    @Column(nullable = false, name="is_google_auth")
+    private boolean isGoogleAuth;
 
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const GoogleSignDiv = ({ buttonType }) => {
+const GoogleSignDiv = ({ buttonType, googleCallback }) => {
   const containerRef = useRef(null);
   const [, setForceUpdate] = useState(false);
 
@@ -18,13 +18,6 @@ const GoogleSignDiv = ({ buttonType }) => {
     };
   }, []);
 
-  // Define the googleCallback function
-  const googleCallback = (response) => {
-    // Handle the Google Sign-In callback response
-    console.log(response);
-    // Perform further actions with the response as needed
-  };
-
   // Conditionally assign the googleCallback function in the browser environment
   if (typeof window !== 'undefined') {
     window.googleCallback = googleCallback;
@@ -33,7 +26,7 @@ const GoogleSignDiv = ({ buttonType }) => {
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current) {
-        const width = window.innerWidth >= 600 ? "400" : "300";
+        const width = window.innerWidth >= 600 ? "400" : "350";
         containerRef.current.setAttribute("data-width", width);
         // Trigger a re-render by updating the state
         setForceUpdate((prev) => !prev);

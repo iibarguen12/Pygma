@@ -9,10 +9,12 @@ import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { ModalMessage } from 'src/components/modal-message';
 import { ThemeContext } from 'src/pages/_app';
 import GoogleSignDiv from 'src/components/google-button';
+import jwt_decode from 'jwt-decode';
 
 const Page = () => {
   const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [isSuccessMessage, setIsSuccessMessage] = useState(true);
   const [method, setMethod] = useState('email');
   const [open, setOpen] = useState(false);
   const handleMethodChange = useCallback(
@@ -21,8 +23,9 @@ const Page = () => {
       },
       []
     );
-  const handleSuccess = (message) => {
-        setSuccessMessage(message);
+  const handleMessageModal = (message, isSuccess) => {
+        setModalMessage(message);
+        setIsSuccessMessage(isSuccess);
         setOpen(true);
       };
 
@@ -57,11 +60,11 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        let errorMessage = await auth.signUp(values.username, values.name, values.lastname, values.email);
+        let errorMessage = await auth.signUp(values.username, values.name, values.lastname, values.email, false);
         if (errorMessage !== null){
           throw new Error(errorMessage);
         }
-        handleSuccess('Registration successful, please check your email account.', true);
+        handleMessageModal('Registration successful, please check your email account.', true);
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -70,30 +73,27 @@ const Page = () => {
     }
   });
 
-  const handleGoogleSuccess = async (response) => {
+  const googleCallback = async (response) => {
+    event.preventDefault();
+    const decodedToken = jwt_decode(response.credential);
+
+    const googleUser = {
+      username: decodedToken.given_name.replace(/\s+/g, ''),
+      name: decodedToken.given_name,
+      lastname: decodedToken.family_name,
+      imageUrl: decodedToken.picture,
+      email: decodedToken.email
+    };
+
     try {
-      // Obtain user information from the response object
-      const { email, givenName, familyName } = response.profileObj;
-      console.log('email:', email);
-      console.log('givenName:', givenName);
-      console.log('familyName:', familyName);
-
-      // Call your sign up API with the obtained user information
-      const errorMessage = ''//await auth.signUpGoogle(email, givenName, familyName);
-
-      if (errorMessage !== null) {
+      let errorMessage = await auth.signUp(googleUser.username, googleUser.name, googleUser.lastname, googleUser.email, true);
+      if (errorMessage !== null){
         throw new Error(errorMessage);
       }
-
-      handleSuccess('Registration successful, please check your email account.');
+      handleMessageModal('Registration successful, please go to the login page and log in using your Google account', true);
     } catch (err) {
-      handleSuccess('Error: '+ err);
+      handleMessageModal("Error: "+err.message, false);
     }
-  };
-
-  const handleGoogleFailure = (error) => {
-    console.log('Google Sign In Error:', error);
-    // Handle the failure case if needed
   };
 
   return (
@@ -226,20 +226,20 @@ const Page = () => {
                 >
                   Continue
                 </Button>
-                <ModalMessage
-                  open={open}
-                  message={successMessage}
-                  onClose={() => setOpen(false)}
-                  success={true}
-                />
               </form>
             </div>
           )}
           {method === 'withGoogle' && (
-            <GoogleSignDiv buttonType="signup"/>
+            <GoogleSignDiv buttonType="signup" googleCallback={googleCallback}/>
           )}
         </Box>
       </Box>
+      <ModalMessage
+        open={open}
+        message={modalMessage}
+        onClose={() => setOpen(false)}
+        success={isSuccessMessage}
+      />
     </>
   );
 };

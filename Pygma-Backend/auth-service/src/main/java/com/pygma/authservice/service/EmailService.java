@@ -23,18 +23,24 @@ public class EmailService {
     }
 
     @Async
-    public void composeAndSendEmail(User newUser, String temporalPassword) {
+    public void composeAndSendEmail(User newUser, String temporalPassword, Boolean isGoogleAuth) {
         String emailText = """
-        Welcome aboard %s!
-        
-        The extraordinary potential awaits your company! Let's soar together to new heights and redefine success.
-        
-        Your temporal password is "%s" please make sure to change it.
-        
-        See you there!
-        
-        Pygma
-        """.formatted(newUser.getName(), temporalPassword);
+                Welcome aboard %s!
+
+                The extraordinary potential awaits your company! Let's soar together to new heights and redefine success.
+
+                %s
+
+                See you there!
+
+                Pygma""";
+
+        String authPart = isGoogleAuth ?
+                "Please use your Google account to login.":
+                String.format("Your temporal password is \"%s\". Please make sure to change it.", temporalPassword);
+
+        emailText = String.format(emailText, newUser.getName(), authPart);
+
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newUser.getEmail());
         mailMessage.setSubject("Welcome to Pygma!");
