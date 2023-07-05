@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const GoogleSignDiv = ({ buttonType }) => {
+  const containerRef = useRef(null);
+  const [, setForceUpdate] = useState(false);
+
   useEffect(() => {
     // Load the Google GSI client script asynchronously
     const script = document.createElement('script');
@@ -27,7 +30,25 @@ const GoogleSignDiv = ({ buttonType }) => {
     window.googleCallback = googleCallback;
   }
 
-  const buttonText = buttonType+"_with";
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        const width = window.innerWidth >= 600 ? "400" : "300";
+        containerRef.current.setAttribute("data-width", width);
+        // Trigger a re-render by updating the state
+        setForceUpdate((prev) => !prev);
+      }
+    };
+
+    handleResize(); // Set initial width
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const buttonText = `${buttonType}_with`;
 
   return (
     <div
@@ -39,6 +60,7 @@ const GoogleSignDiv = ({ buttonType }) => {
       data-auto_prompt="false"
     >
       <div
+        ref={containerRef}
         className="g_id_signin"
         data-type="standard"
         data-shape="rectangular"
