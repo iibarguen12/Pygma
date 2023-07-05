@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   Container,
   Paper,
   SvgIcon,
@@ -48,6 +49,8 @@ const BannerOverlay = styled('div')(({ theme }) => ({
 
 const Page = () => {
   const [modalMessage, setModalMessage] = useState('');
+  const [loadingNext, setLoadingNext] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [openModalMessage, setOpenModalMessage] = useState(false);  
   const [isSuccessModalMessage, setIsSuccessModalMessage] = useState(false);
   const handleErrorOrSuccess = (message, isValid) => {
@@ -328,15 +331,15 @@ const Page = () => {
       const sheet = doc.sheetsById[process.env.NEXT_PUBLIC_GS_SHEET_ID];
       const result = await sheet.addRow(row);
 
+      setLoadingSubmit(false);
       handleErrorOrSuccess('Application successfully sent!', true);
     } catch (e) {
+      setLoadingSubmit(false);
       handleErrorOrSuccess("Error sending application: " + e , false);
     }
   };
 
   const handleFormSubmit = useCallback((event) => {
-    event.preventDefault();
-
     const joinedFormValues = {
       ...page1Values,
       ...page2Values,
@@ -348,7 +351,6 @@ const Page = () => {
       ...page8Values,
       ...page9Values,
     };
-
 
     setPerformPage1Validations(true);
     setPerformPage2Validations(true);
@@ -367,10 +369,12 @@ const Page = () => {
         try{
           appendToSpreadsheet(mapFormValuesToGoogleSheetValues(joinedFormValues));
         }catch(error){
+          setLoadingSubmit(false);
           handleErrorOrSuccess('Unexpected error happened: '+ error , !isValid);
         }
       })
       .catch((validationErrors) => {
+        setLoadingSubmit(false);
         handleErrorOrSuccess('Some fields still need to be filled!' , !isValid);
       });
   }, [page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
@@ -427,15 +431,24 @@ const Page = () => {
                 variant="text"
                 color="primary"
                 size="small"
-                disabled={!isCheckboxChecked}
-                onClick={() => setShowForm(true)}
+                disabled={!isCheckboxChecked || loadingNext}
+                onClick={async () => {
+                  setLoadingNext(true);
+                  await new Promise((resolve) => setTimeout(resolve, 1));
+                  setShowForm(true);
+                  await new Promise((resolve) => setTimeout(resolve, 3000)); // Simulating an asynchronous action to show the spinner
+                  setLoadingNext(false);
+                }}
               >
                 <Typography variant="body1" component="span">
                   Next
                 </Typography>
+                {loadingNext ?
+                <CircularProgress size={24} color="primary" sx={{ marginLeft: 1 }}/> :
                 <SvgIcon fontSize="small" sx={{ marginLeft: 1 }}>
                   <ArrowSmallRightIcon />
                 </SvgIcon>
+                }
               </Button>
             </>
           ) : (
@@ -476,13 +489,23 @@ const Page = () => {
                 color="primary"
                 size="small"
                 type="submit"
+                disabled={loadingSubmit}
+                onClick={async (event) => {
+                   event.preventDefault();
+                   setLoadingSubmit(true);
+                   await new Promise((resolve) => setTimeout(resolve, 1));
+                   handleFormSubmit(event);
+                }}
               >
                 <Typography variant="body1" component="span">
                   Submit
                 </Typography>
-                <SvgIcon fontSize="small" sx={{ margin: 1 }}>
-                  <ArrowSmallRightIcon />
-                </SvgIcon>
+                {loadingSubmit ?
+                  <CircularProgress size={24} color="primary" sx={{ marginLeft: 1 }}/> :
+                  <SvgIcon fontSize="small" sx={{ margin: 1 }}>
+                    <ArrowSmallRightIcon />
+                  </SvgIcon>
+                }
               </Button>
             </form>
             <ModalMessage
