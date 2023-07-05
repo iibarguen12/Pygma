@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.pygma.authservice.util.UserUtils.IMAGE_URL_PREFIX;
+
 @Service
 @Slf4j
 public class AuthServiceImpl implements AuthService{
@@ -29,7 +31,10 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         User user = userService.findUserByUsernameOrEmail(loginRequest.getUsername(), loginRequest.getUsername());
-        if (!loginRequest.getIsGoogleAuth()){
+        if (!user.getIsGoogleAuth()){
+            if (loginRequest.getIsGoogleAuth() && !user.getIsGoogleAuth()){
+                throw new NotFoundException("User registered by email/username and password, please use that method");
+            }
             if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
                 throw new NotFoundException("User not found");
             }
@@ -61,6 +66,10 @@ public class AuthServiceImpl implements AuthService{
         User newUser = UserMapper.mapSignupRequestToUser(signupRequest);
         String temporalPassword = UserUtils.generateRandomPassword();
         newUser.setPassword(temporalPassword);
+        String userImageURL = signupRequest.getImageURL().isEmpty()?
+                IMAGE_URL_PREFIX+newUser.getUsername():
+                signupRequest.getImageURL();
+        newUser.setImageURL(userImageURL);
         Set<Role> userRole = userService.getRoles()
                 .stream()
                 .filter(role -> role.getName().equals(Roles.ROLE_USER.name()))

@@ -3,7 +3,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Box, Button, Link, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Link, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { ModalMessage } from 'src/components/modal-message';
@@ -17,6 +17,8 @@ const Page = () => {
   const [isSuccessMessage, setIsSuccessMessage] = useState(true);
   const [method, setMethod] = useState('email');
   const [open, setOpen] = useState(false);
+  const [loadingByEmail, setLoadingByEmail] = useState(false);
+  const [loadingByGoogle, setLoadingByGoogle] = useState(false);
   const handleMethodChange = useCallback(
       (event, value) => {
         setMethod(value);
@@ -24,10 +26,10 @@ const Page = () => {
       []
     );
   const handleMessageModal = (message, isSuccess) => {
-        setModalMessage(message);
-        setIsSuccessMessage(isSuccess);
-        setOpen(true);
-      };
+    setModalMessage(message);
+    setIsSuccessMessage(isSuccess);
+    setOpen(true);
+  };
 
   const auth = useAuth();
   const formik = useFormik({
@@ -59,6 +61,7 @@ const Page = () => {
         .required('Email is required')
     }),
     onSubmit: async (values, helpers) => {
+      setLoadingByEmail(true);
       try {
         let errorMessage = await auth.signUp(values.username, values.name, values.lastname, values.email, false);
         if (errorMessage !== null){
@@ -70,10 +73,12 @@ const Page = () => {
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
       }
+      setLoadingByEmail(false);
     }
   });
 
   const googleCallback = async (response) => {
+    setLoadingByGoogle(true);
     event.preventDefault();
     const decodedToken = jwt_decode(response.credential);
 
@@ -94,6 +99,7 @@ const Page = () => {
     } catch (err) {
       handleMessageModal("Error: "+err.message, false);
     }
+    setLoadingByGoogle(false);
   };
 
   return (
@@ -224,13 +230,16 @@ const Page = () => {
                   type="submit"
                   variant="contained"
                 >
-                  Continue
+                  {loadingByEmail ? <CircularProgress size={24} color="info"/> : 'Continue'}
                 </Button>
               </form>
             </div>
           )}
           {method === 'withGoogle' && (
+            <>
             <GoogleSignDiv buttonType="signup" googleCallback={googleCallback}/>
+            {loadingByGoogle ? <CircularProgress size={24} color="primary"/> : ''}
+            </>
           )}
         </Box>
       </Box>

@@ -48,6 +48,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
     @Column(nullable = false, name="is_google_auth")
-    private boolean isGoogleAuth;
+    private Boolean isGoogleAuth;
+    @Column(name="image_url")
+    private String imageURL;
 
 }

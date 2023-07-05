@@ -10,7 +10,8 @@ public class UserMapper {
         user.setName(signupRequest.getName());
         user.setLastname(signupRequest.getLastname());
         user.setEmail(signupRequest.getEmail());
-        user.setGoogleAuth(signupRequest.getIsGoogleAuth());
+        user.setIsGoogleAuth(signupRequest.getIsGoogleAuth());
+        user.setImageURL(signupRequest.getImageURL());
         return user;
     }
 }

@@ -15,7 +15,7 @@ export const AccountProfile = () => {
 
   const user = {
     username: authenticatedUser?.username || '_',
-    avatar: '/assets/avatars/avatar-pygma.png',
+    avatar: authenticatedUser?.imageURL || 'https://api.dicebear.com/6.x/bottts/svg?seed=12345567890',
     city: authenticatedUser?.city || '_',
     country: authenticatedUser?.country || '_',
     name: authenticatedUser?.name || '_',

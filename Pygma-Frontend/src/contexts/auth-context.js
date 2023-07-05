@@ -87,7 +87,7 @@ export const AuthProvider = (props) => {
       const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
       const user = {
         id: authenticatedUser.id,
-        avatar: '/assets/avatars/avatar-pygma.png',
+        avatar: authenticatedUser.imageURL,
         name: authenticatedUser.name,
         email: authenticatedUser.email,
         phone: authenticatedUser.phone,
@@ -145,7 +145,7 @@ export const AuthProvider = (props) => {
 
         const user = {
           id: userResponseData.id,
-          avatar: '/assets/avatars/avatar-pygma.png',
+          avatar: userResponseData.imageURL,
           name: userResponseData.name,
           email: userResponseData.email
         };

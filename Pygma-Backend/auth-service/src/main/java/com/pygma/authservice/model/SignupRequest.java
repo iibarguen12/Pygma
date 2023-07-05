@@ -21,4 +21,5 @@ public class SignupRequest {
     private String email;
     @NonNull
     private Boolean isGoogleAuth;
+    private String imageURL;
 }

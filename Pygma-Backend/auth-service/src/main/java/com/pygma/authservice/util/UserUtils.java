@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 public class UserUtils {
 
+    public static final String IMAGE_URL_PREFIX = "https://api.dicebear.com/6.x/bottts/svg?seed=";
+
     private UserUtils() {
         // Private constructor to prevent instantiation
     }

@@ -8,6 +8,7 @@ import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   FormHelperText,
   IconButton,
   InputAdornment,
@@ -30,17 +31,21 @@ import jwt_decode from 'jwt-decode';
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [isSuccessMessage, setIsSuccessMessage] = useState(true);
   const [method, setMethod] = useState('email');
   const [open, setOpen] = useState(false);
+  const [loadingByEmail, setLoadingByEmail] = useState(false);
+  const [loadingByGoogle, setLoadingByGoogle] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
 
   const toggleShowPassword = () => {
      setShowPassword((showPassword) => !showPassword);
   };
-  const showErrorModal = (message) => {
-    setErrorMessage(message);
+  const handleMessageModal = (message, isSuccess) => {
+    setModalMessage(message);
+    setIsSuccessMessage(isSuccess);
     setOpen(true);
   };
   const formik = useFormik({
@@ -60,6 +65,7 @@ const Page = () => {
         .required('Password is required')
     }),
     onSubmit: async (values, helpers) => {
+      setLoadingByEmail(true);
       try {
         let errorMessage = await auth.signIn(values.email, values.password, false);
         if (errorMessage !== null){
@@ -70,6 +76,7 @@ const Page = () => {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
+        setLoadingByEmail(false);
       }
     }
   });
@@ -82,6 +89,7 @@ const Page = () => {
   );
 
   const googleCallback = async (response) => {
+    setLoadingByGoogle(true);
     event.preventDefault();
     const decodedToken = jwt_decode(response.credential);
 
@@ -100,7 +108,8 @@ const Page = () => {
       }
       router.replace('/');
     } catch (err) {
-      showErrorModal(err);
+      handleMessageModal("Error: "+err.message, false);
+      setLoadingByGoogle(false);
     }
   };
 
@@ -229,22 +238,25 @@ const Page = () => {
                   type="submit"
                   variant="contained"
                 >
-                  Continue
+                  {loadingByEmail ? <CircularProgress size={24} color="info"/> : 'Continue'}
                 </Button>
               </form>
             )}
             {method === 'withGoogle' && (
+                <>
                 <GoogleSignDiv buttonType="signin" googleCallback={googleCallback}/>
+                {loadingByGoogle ? <CircularProgress size={24} color="primary"/> : ''}
+                </>
             )}
-            <ModalMessage
-              open={open}
-              message={errorMessage}
-              onClose={() => setOpen(false)}
-              success={false}
-            />
           </div>
         </Box>
       </Box>
+      <ModalMessage
+        open={open}
+        message={modalMessage}
+        onClose={() => setOpen(false)}
+        success={isSuccessMessage}
+      />
     </>
   );
 };
