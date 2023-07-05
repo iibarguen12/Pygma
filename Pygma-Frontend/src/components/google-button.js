@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const GoogleSignDiv = ({buttonType}) => {
+const GoogleSignDiv = ({ buttonType }) => {
   useEffect(() => {
     // Load the Google GSI client script asynchronously
     const script = document.createElement('script');
@@ -27,6 +27,8 @@ const GoogleSignDiv = ({buttonType}) => {
     window.googleCallback = googleCallback;
   }
 
+  const buttonText = buttonType+"_with";
+
   return (
     <div
       id="g_id_onload"
@@ -41,7 +43,7 @@ const GoogleSignDiv = ({buttonType}) => {
         data-type="standard"
         data-shape="rectangular"
         data-theme="filled_black"
-        data-text="signin_with"
+        data-text={buttonText}
         data-size="large"
         data-logo_alignment="left"
       ></div>
