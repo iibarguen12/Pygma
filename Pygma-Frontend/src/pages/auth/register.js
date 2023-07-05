@@ -8,6 +8,7 @@ import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { ModalMessage } from 'src/components/modal-message';
 import { ThemeContext } from 'src/pages/_app';
+import StyledGoogleButton from 'src/components/google-button';
 
 const Page = () => {
   const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
@@ -61,6 +62,32 @@ const Page = () => {
       }
     }
   });
+
+  const handleGoogleSuccess = async (response) => {
+    try {
+      // Obtain user information from the response object
+      const { email, givenName, familyName } = response.profileObj;
+      console.log('email:', email);
+      console.log('givenName:', givenName);
+      console.log('familyName:', familyName);
+
+      // Call your sign up API with the obtained user information
+      const errorMessage = ''//await auth.signUpGoogle(email, givenName, familyName);
+
+      if (errorMessage !== null) {
+        throw new Error(errorMessage);
+      }
+
+      handleSuccess('Registration successful, please check your email account.');
+    } catch (err) {
+      handleSuccess('Error: '+ err);
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.log('Google Sign In Error:', error);
+    // Handle the failure case if needed
+  };
 
   return (
     <>
@@ -185,6 +212,12 @@ const Page = () => {
               />
             </form>
           </div>
+          //TODO implement the side-by-side visibility
+          <StyledGoogleButton
+            buttonText="Register with Google"
+            handleGoogleSuccess={handleGoogleSuccess}
+            handleGoogleFailure={handleGoogleFailure}
+          />
         </Box>
       </Box>
     </>

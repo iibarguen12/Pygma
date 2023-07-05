@@ -23,6 +23,7 @@ import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { EyeIcon, EyeSlashIcon   } from '@heroicons/react/24/solid';
 import { ThemeContext } from 'src/pages/_app';
+import StyledGoogleButton from 'src/components/google-button';
 
 const Page = () => {
   const router = useRouter();
@@ -71,6 +72,32 @@ const Page = () => {
     },
     []
   );
+
+  const handleGoogleSuccess = async (response) => {
+    try {
+      // Obtain user information from the response object
+      const { email, givenName, familyName } = response.profileObj;
+      console.log('email:', email);
+      console.log('givenName:', givenName);
+      console.log('familyName:', familyName);
+
+      // Call your sign up API with the obtained user information
+      const errorMessage = ''//await auth.signUpGoogle(email, givenName, familyName);
+
+      if (errorMessage !== null) {
+        throw new Error(errorMessage);
+      }
+
+      handleSuccess('Registration successful, please check your email account.');
+    } catch (err) {
+      handleSuccess('Error: '+ err);
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.log('Google Sign In Error:', error);
+    // Handle the failure case if needed
+  };
 
   return (
     <>
@@ -126,12 +153,12 @@ const Page = () => {
               value={method}
             >
               <Tab
-                label="Email"
+                label="Using Email"
                 value="email"
               />
               <Tab
-                label="Phone Number"
-                value="phoneNumber"
+                label="Using Google"
+                value="withGoogle"
               />
             </Tabs>
             {method === 'email' && (
@@ -201,18 +228,12 @@ const Page = () => {
                 </Button>
               </form>
             )}
-            {method === 'phoneNumber' && (
-              <div>
-                <Typography
-                  sx={{ mb: 1 }}
-                  variant="h6"
-                >
-                  Not available at the moment
-                </Typography>
-                <Typography color="text.secondary">
-                  We temporarily disabled this feature.
-                </Typography>
-              </div>
+            {method === 'withGoogle' && (
+                <StyledGoogleButton
+                  buttonText="Sign in with Google"
+                  handleGoogleSuccess={handleGoogleSuccess}
+                  handleGoogleFailure={handleGoogleFailure}
+                />
             )}
           </div>
         </Box>
