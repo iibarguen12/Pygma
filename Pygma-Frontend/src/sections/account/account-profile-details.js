@@ -8,6 +8,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  CircularProgress,
   Divider,
   TextField,
   Unstable_Grid2 as Grid
@@ -15,15 +16,15 @@ import {
 import Select from 'react-select';
 import { cities, countries } from 'country-cities';
 
-export const AccountProfileDetails = () => {
-  const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
+export const AccountProfileDetails = ({ user, onUserUpdate }) => {
+  const [loadingSave, setLoadingSave] = useState(false);
   const [values, setValues] = useState({
-    firstName: authenticatedUser?.name || '',
-    lastName: authenticatedUser?.lastname || '',
-    email: authenticatedUser?.email || '',
-    phone: authenticatedUser?.phone || '',
-    country: authenticatedUser?.country || '',
-    city: authenticatedUser?.city || '',
+    firstName: user?.name || '',
+    lastName: user?.lastname || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    country: user?.country || '',
+    city: user?.city || '',
   });
   const countryOptions = countries.all();
   const cityOptions = useMemo(() => {
@@ -54,12 +55,15 @@ export const AccountProfileDetails = () => {
     async (event) => {
       event.preventDefault();
 
+      setLoadingSave(true);
+      await new Promise((resolve) => setTimeout(resolve, 1));
+
       try {
         const updateUserResponse = await sendRequest(
-          `http://localhost:8080/api/v1/users/${authenticatedUser.username}`,
+          `http://localhost:8080/api/v1/users/${user.username}`,
           'PUT',
           JSON.stringify({
-            username: authenticatedUser.username,
+            username: user.username,
             name: values.firstName,
             lastname: values.lastName,
             email: values.email,
@@ -74,6 +78,7 @@ export const AccountProfileDetails = () => {
           handleSuccess('Your account details have been saved.', true);
           const userResponseData = await updateUserResponse.json();
           window.sessionStorage.setItem('user', JSON.stringify(userResponseData));
+          onUserUpdate(userResponseData);
         } else {
           const updateUserResponseError = await updateUserResponse.json();
           handleSuccess(`Failed to update account details:\n${updateUserResponseError.message}`, false);
@@ -81,8 +86,9 @@ export const AccountProfileDetails = () => {
       } catch (error) {
         handleSuccess('An error occurred while updating account details.', false);
       }
+      setLoadingSave(false);
     },
-    [authenticatedUser?.name || '', values.firstName, values.lastName, values.email, values.phone, values.country, values.city]
+    [user?.name || '', values.firstName, values.lastName, values.email, values.phone, values.country, values.city]
   );
 
   useEffect(() => {
@@ -131,6 +137,7 @@ export const AccountProfileDetails = () => {
                   onChange={handleChange}
                   required
                   value={values.email}
+                  disabled
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -185,10 +192,14 @@ export const AccountProfileDetails = () => {
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            disabled={loadingSave}
             type="submit"
             variant="text"
           >
-            Save details
+            {loadingSave ?
+            <CircularProgress size={24} color="primary" sx={{ marginLeft: 1 }}/> :
+            'Save details'
+            }
           </Button>
         </CardActions>
       </Card>

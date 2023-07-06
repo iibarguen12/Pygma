@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -10,17 +10,8 @@ import {
   Typography
 } from '@mui/material';
 
-export const AccountProfile = () => {
-  const authenticatedUser = JSON.parse(window.sessionStorage.getItem('user'));
-
-  const user = {
-    username: authenticatedUser?.username || '_',
-    avatar: authenticatedUser?.imageURL || 'https://api.dicebear.com/6.x/bottts/svg?seed=12345567890',
-    city: authenticatedUser?.city || '_',
-    country: authenticatedUser?.country || '_',
-    name: authenticatedUser?.name || '_',
-    timezone: 'GMT-7'
-  };
+export const AccountProfile = ({ user }) => {
+  const timezone = 'GMT-7';
 
   return (
     <Card>
@@ -33,7 +24,7 @@ export const AccountProfile = () => {
           }}
         >
           <Avatar
-            src={user.avatar}
+            src={user.imageURL}
             sx={{
               height: 80,
               mb: 2,
@@ -56,7 +47,7 @@ export const AccountProfile = () => {
             color="text.secondary"
             variant="body2"
           >
-            {user.timezone}
+            {timezone}
           </Typography>
         </Box>
       </CardContent>
