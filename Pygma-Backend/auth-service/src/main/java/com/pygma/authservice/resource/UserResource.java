@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,9 +26,11 @@ public class UserResource {
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> response = userService.getUsers();
-        return response.isEmpty() ?
-                new ResponseEntity<>(HttpStatus.NO_CONTENT):
-                new ResponseEntity<>(response, HttpStatus.OK);
+
+        return response.stream()
+                .findFirst()
+                .map(user -> new ResponseEntity<>(response, HttpStatus.OK))
+                .orElse(ResponseEntity.noContent().build());
     }
 
     @GetMapping("/users/{username}")
@@ -52,6 +55,17 @@ public class UserResource {
                                            @Valid @RequestBody UpdatePasswordRequest updatePasswordRequest) {
         return new ResponseEntity<>(
                 userService.updateUserPassword(username, updatePasswordRequest),
+                HttpStatus.OK);
+    }
+
+    @PutMapping("/users/{username}/image")
+    public ResponseEntity<User> updateImage(@PathVariable("username") String username,
+                                            @RequestParam("image") MultipartFile image) {
+        if (image.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return new ResponseEntity<>(
+                userService.updateUserImage(username, image),
                 HttpStatus.OK);
     }
 

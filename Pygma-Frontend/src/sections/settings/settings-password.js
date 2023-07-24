@@ -77,6 +77,7 @@ export const SettingsPassword = () => {
           handleSuccess(`Failed to update password:\n${updatePasswordResponseError.message}`, false);
         }
       } catch (error) {
+        console.error('Failed to update account password:', error);
         handleSuccess('An error occurred while updating the password.', false);
       }
     }

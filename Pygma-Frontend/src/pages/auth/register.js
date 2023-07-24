@@ -63,7 +63,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       setLoadingByEmail(true);
       try {
-        let errorMessage = await auth.signUp(values.username, values.name, values.lastname, values.email, false);
+        let errorMessage = await auth.signUp(values.username, values.name, values.lastname, values.email, false, null);
         if (errorMessage !== null){
           throw new Error(errorMessage);
         }
@@ -82,8 +82,10 @@ const Page = () => {
     event.preventDefault();
     const decodedToken = jwt_decode(response.credential);
 
+    const concatUsernames = `${decodedToken.given_name}${decodedToken.family_name.split(' ')[0]}`;
+    const randomNum = Math.floor(Math.random() * 90) + 10;
     const googleUser = {
-      username: decodedToken.given_name.replace(/\s+/g, ''),
+      username: `${concatUsernames.replace(/\s+/g, '')}${randomNum}`,
       name: decodedToken.given_name,
       lastname: decodedToken.family_name,
       imageUrl: decodedToken.picture,
@@ -91,7 +93,7 @@ const Page = () => {
     };
 
     try {
-      let errorMessage = await auth.signUp(googleUser.username, googleUser.name, googleUser.lastname, googleUser.email, true);
+      let errorMessage = await auth.signUp(googleUser.username, googleUser.name, googleUser.lastname, googleUser.email, true, googleUser.imageUrl);
       if (errorMessage !== null){
         throw new Error(errorMessage);
       }

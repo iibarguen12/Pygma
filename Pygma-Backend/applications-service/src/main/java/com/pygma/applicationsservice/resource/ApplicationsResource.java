@@ -21,16 +21,13 @@ public class ApplicationsResource {
     public ResponseEntity<List<Application>> getAllApplications(
             @RequestParam(required = false) String name){
         try{
-            List<Application> applications = new ArrayList<>();
-            if (name == null)
-                applications.addAll(applicationRepository.findAll());
-            else
-                applications.addAll(applicationRepository.findByNameContaining(name));
+            List<Application> applications = Optional.ofNullable(name)
+                    .map(applicationRepository::findByNameContaining)
+                    .orElseGet(applicationRepository::findAll);
 
-            if (applications.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(applications, HttpStatus.OK);
+            return applications.isEmpty()
+                    ? ResponseEntity.noContent().build()
+                    : ResponseEntity.ok(applications);
         }
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

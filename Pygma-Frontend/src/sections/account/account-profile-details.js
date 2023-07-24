@@ -84,6 +84,7 @@ export const AccountProfileDetails = ({ user, onUserUpdate }) => {
           handleSuccess(`Failed to update account details:\n${updateUserResponseError.message}`, false);
         }
       } catch (error) {
+        console.error('Failed to update account details:', error);
         handleSuccess('An error occurred while updating account details.', false);
       }
       setLoadingSave(false);
@@ -135,7 +136,6 @@ export const AccountProfileDetails = ({ user, onUserUpdate }) => {
                   label="Email Address"
                   name="email"
                   onChange={handleChange}
-                  required
                   value={values.email}
                   disabled
                 />
@@ -156,10 +156,10 @@ export const AccountProfileDetails = ({ user, onUserUpdate }) => {
                   label="Country"
                   name="country"
                   onChange={handleChange}
-                  required
                   select
                   SelectProps={{ native: true }}
                   value={values.country}
+                  sx={{ pt: 0.8 }}
                 >
                   {countryOptions.map((option) => (
                     <option key={option.isoCode} value={option.isoCode}>
@@ -174,10 +174,10 @@ export const AccountProfileDetails = ({ user, onUserUpdate }) => {
                   label="Select City"
                   name="city"
                   onChange={handleChange}
-                  required
                   select
                   SelectProps={{ native: true }}
                   value={values.city}
+                  sx={{ pt: 0.8 }}
                 >
                   {cityOptions.map((option) => (
                     <option key={option} value={option}>

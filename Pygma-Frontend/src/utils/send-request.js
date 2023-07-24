@@ -1,10 +1,8 @@
 import Cookies from 'js-cookie';
 
-export const sendRequest = async (url, method, body, includeToken = true) => {
+export const sendRequest = async (url, method, body, includeToken = true, contentType = 'application/json' ) => {
   try {
-    let headers = {
-      'Content-Type': 'application/json',
-    };
+    let headers = contentType === 'application/json' ? { 'Content-Type': contentType } : {};
 
     if (includeToken) {
       const token = Cookies.get('jwt');

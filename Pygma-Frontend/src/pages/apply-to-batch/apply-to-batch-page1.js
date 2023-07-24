@@ -114,6 +114,7 @@ const ApplyPage1 = React.memo(({ pageValues, onChangePageValues, performValidati
             helperText={formik.touched.country && formik.errors.country}
             select
             SelectProps={{ native: true }}
+            sx={{ pt: 0.8 }}
           >
             {countryOptions.map((option) => (
               <option key={option.isoCode} value={option.isoCode}>
@@ -148,6 +149,7 @@ const ApplyPage1 = React.memo(({ pageValues, onChangePageValues, performValidati
             helperText={formik.touched.gender && formik.errors.gender}
             select
             SelectProps={{ native: true }}
+            sx={{ pt: 0.8 }}
           >
             <option value="male">Male</option>
             <option value="female">Female</option>

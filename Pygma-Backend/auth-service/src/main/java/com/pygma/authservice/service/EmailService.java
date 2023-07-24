@@ -23,7 +23,7 @@ public class EmailService {
     }
 
     @Async
-    public void composeAndSendEmail(User newUser, String temporalPassword, Boolean isGoogleAuth) {
+    public void composeAndSendEmail(User newUser) {
         String emailText = """
                 Welcome aboard %s!
 
@@ -35,9 +35,9 @@ public class EmailService {
 
                 Pygma""";
 
-        String authPart = isGoogleAuth ?
+        String authPart = newUser.getIsGoogleAuth() ?
                 "Please use your Google account to login.":
-                String.format("Your temporal password is \"%s\". Please make sure to change it.", temporalPassword);
+                String.format("Your temporary password is \"%s\". Please make sure to change it.", newUser.getPassword());
 
         emailText = String.format(emailText, newUser.getName(), authPart);
 

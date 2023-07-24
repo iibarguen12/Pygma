@@ -3,6 +3,7 @@ package com.pygma.authservice.service;
 import com.pygma.authservice.entity.Role;
 import com.pygma.authservice.entity.User;
 import com.pygma.authservice.model.UpdatePasswordRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public interface UserService {
     User saveUser(User user);
     User updateUser(User user, String username);
     User updateUserPassword(String username, UpdatePasswordRequest updatePasswordRequest);
+    User updateUserImage(String username, MultipartFile image);
     List<Role> getRoles();
     Role saveRole(Role role);
     User addRoleToUser(String username, String roleName);

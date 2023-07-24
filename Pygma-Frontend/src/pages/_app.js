@@ -40,7 +40,7 @@ const App = (props) => {
     <CacheProvider value={emotionCache}>
       <Head>
         <title>Pygma</title>
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
       </Head>

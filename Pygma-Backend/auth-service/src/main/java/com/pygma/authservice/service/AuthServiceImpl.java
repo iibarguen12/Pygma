@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -66,9 +67,9 @@ public class AuthServiceImpl implements AuthService{
         User newUser = UserMapper.mapSignupRequestToUser(signupRequest);
         String temporalPassword = UserUtils.generateRandomPassword();
         newUser.setPassword(temporalPassword);
-        String userImageURL = signupRequest.getImageURL().isEmpty()?
-                IMAGE_URL_PREFIX+newUser.getUsername():
-                signupRequest.getImageURL();
+        String userImageURL = Optional.ofNullable(signupRequest.getImageURL())
+                .filter(imageURL -> !imageURL.isEmpty())
+                .orElse(IMAGE_URL_PREFIX + newUser.getUsername());
         newUser.setImageURL(userImageURL);
         Set<Role> userRole = userService.getRoles()
                 .stream()
@@ -76,7 +77,7 @@ public class AuthServiceImpl implements AuthService{
                 .collect(Collectors.toSet());
         newUser.setRoles(userRole);
         userService.saveUser(newUser);
-        emailService.composeAndSendEmail(newUser, temporalPassword, signupRequest.getIsGoogleAuth());
+        emailService.composeAndSendEmail(newUser);
     }
 
     @Override

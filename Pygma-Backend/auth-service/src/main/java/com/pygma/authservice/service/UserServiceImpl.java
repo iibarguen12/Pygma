@@ -12,10 +12,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +36,12 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Value("${spring.resourcesPath}")
+    private String resourcesPath;
+
+    @Value("${spring.imagesFolder}")
+    private String imagesFolder;
 
     @Override
     public User findUserByUsername(String username) {
@@ -94,6 +107,30 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(updatePasswordRequest.getNewPassword());
         return saveUser(user);
+    }
+
+    @Override
+    public User updateUserImage(String username, MultipartFile image){
+        User user = findUserByUsername(username);
+
+        if (!image.isEmpty()) {
+            try{
+                String imagesDirectory = resourcesPath + imagesFolder ;
+                Path uploadDir = Paths.get(imagesDirectory);
+                Files.createDirectories(uploadDir);
+
+                String fileName = username + ".png";
+                Path filePath = uploadDir.resolve(fileName);
+
+                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                String imageURL = imagesFolder + fileName;
+                user.setImageURL(imageURL);
+            }catch (IOException e){
+                throw new InvalidDataException("Error:" + e.getLocalizedMessage());
+            }
+        }
+        return userRepo.save(user);
     }
 
     @Override

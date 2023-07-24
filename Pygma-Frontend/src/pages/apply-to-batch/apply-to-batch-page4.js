@@ -78,7 +78,7 @@ const ApplyPage4 = React.memo(({pageValues, onChangePageValues, performValidatio
             'Fundraising for your Startup',
             'Developing a Product Strategy',
             'Developing a go-to market strategy',
-            'E-Growing the team',
+            'Growing the team',
             'Getting support from our network',
           ]}
           selectedOptions={formik.values.startupNeeds}

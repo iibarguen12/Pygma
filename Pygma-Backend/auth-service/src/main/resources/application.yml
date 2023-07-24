@@ -30,6 +30,8 @@ spring:
     username: hello@pygma.co
     password: jzveaawclbgzdskx
     port: '587'
+  resourcesPath: 'C:/Users/iries/Documents/workspaces/GitHub/Pygma/Pygma-Frontend/public'
+  imagesFolder: '/assets/user-pictures/'
 
 eureka:
   client:

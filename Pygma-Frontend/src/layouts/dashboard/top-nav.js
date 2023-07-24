@@ -92,7 +92,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src={authenticatedUser?.imageURL||''}
+              src={authenticatedUser?.imageURL ? `${authenticatedUser.imageURL}?${Date.now()}` : ''}
             />
           </Stack>
         </Stack>

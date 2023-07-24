@@ -166,7 +166,7 @@ export const AuthProvider = (props) => {
     }
   };
 
-  const signUp = async (username, name, lastname, email, isGoogleAuth) => {
+  const signUp = async (username, name, lastname, email, isGoogleAuth, imageURL) => {
     try {
       const signupResponse =
       await sendRequest('http://localhost:8080/api/v1/auth/signup','POST',
@@ -176,6 +176,7 @@ export const AuthProvider = (props) => {
           lastname: lastname,
           email: email,
           isGoogleAuth: isGoogleAuth,
+          imageURL: imageURL,
         }),
         false,
       );
