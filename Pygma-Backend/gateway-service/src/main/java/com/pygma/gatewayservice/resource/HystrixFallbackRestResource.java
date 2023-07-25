@@ -12,11 +12,6 @@ public class HystrixFallbackRestResource {
         return ResponseEntity.ok(standardFallbackMsg("Auth"));
     }
 
-    @RequestMapping("/applications-service/fallback")
-    public ResponseEntity<String> getFallbackApplicationsServiceMsg() {
-        return ResponseEntity.ok(standardFallbackMsg("Applications"));
-    }
-
     private String standardFallbackMsg(String serviceName){
         return String.format("No response from %s Service, but could be back shortly", serviceName);
     }

@@ -28,15 +28,6 @@ spring:
               args:
                 name: hystrixAuth
                 fallbackUri: forward:/auth-service/fallback
-        - id: applicationsService
-          uri: lb://applications-service
-          predicates:
-            - Path=/api/v1/applications/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: hystrixApplications
-                fallbackUri: forward:/applications-service/fallback
 
 eureka:
   client:
