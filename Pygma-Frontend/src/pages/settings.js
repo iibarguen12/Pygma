@@ -16,7 +16,8 @@ const Page = () => (
       component="main"
       sx={{
         flexGrow: 1,
-        py: PADDING_TOP
+        py: PADDING_TOP,
+        mb: '3rem'
       }}
     >
       <Container maxWidth="lg">

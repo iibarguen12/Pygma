@@ -232,7 +232,7 @@ const Page = () => {
                   type="submit"
                   variant="contained"
                 >
-                  {loadingByEmail ? <CircularProgress size={24} color="info"/> : 'Continue'}
+                  {loadingByEmail ? <CircularProgress size={24} style={{'color': '#CCE700'}}/> : 'Continue'}
                 </Button>
               </form>
             </div>
@@ -240,7 +240,7 @@ const Page = () => {
           {method === 'withGoogle' && (
             <>
             <GoogleSignDiv buttonType="signup" googleCallback={googleCallback}/>
-            {loadingByGoogle ? <CircularProgress size={24} color="primary"/> : ''}
+            {loadingByGoogle ? <CircularProgress size={24} style={{'color': '#CCE700'}}/> : ''}
             </>
           )}
         </Box>
