@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HystrixFallbackRestResource {
 
-    @RequestMapping("/auth-service/fallback")
+    @RequestMapping("/user-service/fallback")
     public ResponseEntity<String> getFallbackAuthServiceMsg() {
-        return ResponseEntity.ok(standardFallbackMsg("Auth"));
+        return ResponseEntity.ok(standardFallbackMsg("User"));
     }
 
     private String standardFallbackMsg(String serviceName){
