@@ -121,7 +121,7 @@ export const SideNav = (props) => {
         PaperProps={{
           sx: {
             backgroundColor: 'neutral.800',
-            color: 'common.white',
+            color: '#CCE700',
             width: 200
           }
         }}

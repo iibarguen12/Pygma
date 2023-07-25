@@ -5,8 +5,8 @@ export const useThemeDetector = () => {
 
   useEffect(() => {
     const getCurrentTheme = () => {
-      const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      return isDarkMode ? 'dark' : 'light';
+      const isDarkMode = false; //Set default theme to light
+      return isDarkMode;
     };
 
     const handleThemeChange = () => {

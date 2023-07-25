@@ -386,7 +386,6 @@ const Page = () => {
         component="main"
         sx={{
           py: PADDING_TOP,
-          marginTop: '-40px',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
@@ -437,6 +436,7 @@ const Page = () => {
                   await new Promise((resolve) => setTimeout(resolve, 3000)); // Simulating an asynchronous action to show the spinner
                   setLoadingNext(false);
                 }}
+                sx={{ marginBottom: '3rem',marginTop: '1rem'  }}
               >
                 <Typography variant="body1" component="span">
                   Next
@@ -494,6 +494,7 @@ const Page = () => {
                    await new Promise((resolve) => setTimeout(resolve, 1));
                    handleFormSubmit(event);
                 }}
+                sx={{ marginBottom: '3rem',marginTop: '1rem'  }}
               >
                 <Typography variant="body1" component="span">
                   Submit

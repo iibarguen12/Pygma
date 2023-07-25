@@ -23,7 +23,7 @@ const ApplyPage0 = ({ isCheckboxChecked, handleCheckboxChange }) => {
           href="https://program.pygma.co/"
           target="_blank"
           rel="noreferrer"
-          sx={{ color: '#CCE700' }}
+          sx={{ fontWeight: 'bold' }}
         >
           explore our program page
         </Link>

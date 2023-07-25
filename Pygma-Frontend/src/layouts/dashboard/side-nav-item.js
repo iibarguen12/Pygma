@@ -50,7 +50,7 @@ export const SideNavItem = (props) => {
               justifyContent: 'center',
               mr: 2,
               ...(active && {
-                color: 'primary.main'
+                color: '#CCE700'
               })
             }}
           >
@@ -68,7 +68,7 @@ export const SideNavItem = (props) => {
             lineHeight: '24px',
             whiteSpace: 'nowrap',
             ...(active && {
-              color: 'common.white'
+              color: '#CCE700'
             }),
             ...(disabled && {
               color: 'neutral.500'

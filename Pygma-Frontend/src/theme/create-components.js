@@ -317,6 +317,13 @@ export function createComponents(config) {
       defaultProps: {
         variant: 'filled'
       }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '0px'
+        }
+      }
     }
   };
 }

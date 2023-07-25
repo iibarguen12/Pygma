@@ -21,7 +21,6 @@ export const AccountProfile = ({ user }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleUploadPicture = useCallback(async (file) => {
-    setLoadingSave(true);
     await new Promise((resolve) => setTimeout(resolve, 1));
 
     const formData = new FormData();
@@ -51,6 +50,7 @@ export const AccountProfile = ({ user }) => {
   }, [user.imageURL]);
 
   const handleButtonClick = () => {
+    setLoadingSave(true);
     document.getElementById('upload-image').click();
   };
 

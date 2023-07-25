@@ -15,8 +15,8 @@ export function createPalette(mode) {
       selected: alpha(isLightMode ? neutral[900] : neutralDark[900], 0.12)
     },
     background: {
-      default: isLightMode ? common.white : '#090909',
-      paper: isLightMode ? common.white : '#000000'
+      default: isLightMode ? '#fffbee' : '#090909',
+      paper: isLightMode ? '#fffbee' : '#000000'
     },
     divider: '#F2F4F7',
     error,
