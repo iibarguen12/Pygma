@@ -44,21 +44,27 @@ public class ApplicationResource {
         return new ResponseEntity<>(
                 SimpleResponse.builder()
                         .statusCode(200)
-                        .message("application POST Success for user " + username)
+                        .message("Application saved successfully for user " + username)
                         .build(), HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<SimpleResponse> updateApplication (
             @PathVariable("username") String username,
-            @Valid @RequestBody Application newApplication) {
+            @Valid @RequestBody ApplicationRequest applicationRequest) {
+
+        Application newApplication =
+                Application.builder()
+                        .data(applicationRequest.getApplicationData())
+                        .username(username)
+                        .build();
 
         applicationService.updateApplication(newApplication, username);
 
         return new ResponseEntity<>(
                 SimpleResponse.builder()
                         .statusCode(200)
-                        .message("application PUT Success for user " + username)
+                        .message("Application updated successfully for user " + username)
                         .build(), HttpStatus.OK);
     }
 
@@ -71,7 +77,7 @@ public class ApplicationResource {
         return new ResponseEntity<>(
                 SimpleResponse.builder()
                         .statusCode(200)
-                        .message("application DELETE Success for user " + username)
+                        .message("Application deleted for user " + username)
                         .build(), HttpStatus.OK);
     }
 }

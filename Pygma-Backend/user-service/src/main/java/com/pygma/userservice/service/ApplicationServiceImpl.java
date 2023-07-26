@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,19 +48,22 @@ public class ApplicationServiceImpl implements ApplicationService{
 
         application.setStatus(isDataFulfilled(dataDetails) ?
                 ApplicationStatus.COMPLETED.name() : ApplicationStatus.IN_PROGRESS.name());
-
+        application.setCreated(application.getCreated() == null?
+                new Timestamp(System.currentTimeMillis()) : application.getCreated() );
         return applicationRepo.save(application);
     }
 
     @Override
     public Application updateApplication(Application newApplication, String username) {
         User user = getUserByUsername(username);
-        Application application = getApplicationByUsername(user.getUsername());
-        if (application.getStatus().equalsIgnoreCase(ApplicationStatus.COMPLETED.name())) {
+        Application storedApplication = getApplicationByUsername(user.getUsername());
+        if (storedApplication.getStatus().equalsIgnoreCase(ApplicationStatus.COMPLETED.name())) {
             log.error("The application is already completed for user: {}", username);
             throw new InvalidDataException("The application is already completed.");
         }
-        return saveApplication(newApplication);
+        storedApplication.setUpdated(new Timestamp(System.currentTimeMillis()));
+        storedApplication.setData(newApplication.getData());
+        return saveApplication(storedApplication);
     }
 
     @Override
