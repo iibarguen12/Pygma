@@ -1,9 +1,11 @@
 package com.pygma.userservice.resource;
 
 
+import com.pygma.userservice.entity.Application;
 import com.pygma.userservice.entity.User;
 import com.pygma.userservice.model.SimpleResponse;
 import com.pygma.userservice.model.UpdatePasswordRequest;
+import com.pygma.userservice.service.ApplicationService;
 import com.pygma.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,8 @@ import java.util.List;
 public class UserResource {
     @Autowired
     private UserService userService;
+    @Autowired
+    private ApplicationService applicationService;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -77,5 +81,14 @@ public class UserResource {
                 .statusCode(200)
                 .message("User deleted successfully")
                 .build(),HttpStatus.OK);
+    }
+
+    @GetMapping("/users/applications")
+    public ResponseEntity<List<Application>> getApplications (){
+        List<Application> applications = applicationService.getApplications();
+        return applications.stream()
+                .findFirst()
+                .map(application -> new ResponseEntity<>(applications, HttpStatus.OK))
+                .orElse(ResponseEntity.noContent().build());
     }
 }
