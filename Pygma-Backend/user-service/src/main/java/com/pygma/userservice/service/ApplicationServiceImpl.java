@@ -44,26 +44,33 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Override
     public Application saveApplication(Application application) {
-        ApplicationDetails dataDetails = parseData(application.getData());
+        User user = getUserByUsername(application.getUsername());
+        try{
+            Application existentApplication = getApplicationByUsername(user.getUsername());
+            String message = String.format("An application already exists for the user %s in status %s",
+                    application.getUsername(), existentApplication.getStatus());
 
-        application.setStatus(isDataFulfilled(dataDetails) ?
-                ApplicationStatus.COMPLETED.name() : ApplicationStatus.IN_PROGRESS.name());
-        application.setCreated(application.getCreated() == null?
-                new Timestamp(System.currentTimeMillis()) : application.getCreated() );
-        return applicationRepo.save(application);
+            log.error(message);
+            throw new InvalidDataException(message);
+        }catch (NotFoundException e){
+
+            validateApplication(application);
+            return applicationRepo.save(application);
+        }
     }
 
     @Override
     public Application updateApplication(Application newApplication, String username) {
         User user = getUserByUsername(username);
-        Application storedApplication = getApplicationByUsername(user.getUsername());
-        if (storedApplication.getStatus().equalsIgnoreCase(ApplicationStatus.COMPLETED.name())) {
+        Application existentApplication = getApplicationByUsername(user.getUsername());
+        if (existentApplication.getStatus().equalsIgnoreCase(ApplicationStatus.COMPLETED.name())) {
             log.error("The application is already completed for user: {}", username);
             throw new InvalidDataException("The application is already completed.");
         }
-        storedApplication.setUpdated(new Timestamp(System.currentTimeMillis()));
-        storedApplication.setData(newApplication.getData());
-        return saveApplication(storedApplication);
+        existentApplication.setUpdated(new Timestamp(System.currentTimeMillis()));
+        existentApplication.setData(newApplication.getData());
+        validateApplication(existentApplication);
+        return applicationRepo.save(existentApplication);
     }
 
     @Override
@@ -81,6 +88,14 @@ public class ApplicationServiceImpl implements ApplicationService{
         User user = getUserByUsername(username);
         return applicationRepo.findApplicationByUsernameIgnoreCase(user.getUsername())
                 .orElseThrow(() -> new NotFoundException("No application found for user: " + username));
+    }
+
+    private void validateApplication(Application application) {
+        ApplicationDetails dataDetails = parseData(application.getData());
+        application.setStatus(isDataFulfilled(dataDetails) ?
+                ApplicationStatus.COMPLETED.name() : ApplicationStatus.IN_PROGRESS.name());
+        application.setCreated(application.getCreated() == null?
+                new Timestamp(System.currentTimeMillis()) : application.getCreated() );
     }
 
     private ApplicationDetails parseData(String jsonData) {
