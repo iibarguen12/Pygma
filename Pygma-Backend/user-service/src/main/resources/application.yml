@@ -45,5 +45,5 @@ eureka:
     fetchRegistry: true
 
 jwt:
-  secret: secret
-  refreshSecret: anotherSecret
+  secret: P9VsR89@c!b9hSE
+  refreshSecret: ESh9b!c@98RsV9PR

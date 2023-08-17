@@ -13,4 +13,6 @@ import lombok.NonNull;
 public class ApplicationRequest {
     @NonNull
     private String applicationData;
+    @NonNull
+    private String applicationStatus;
 }

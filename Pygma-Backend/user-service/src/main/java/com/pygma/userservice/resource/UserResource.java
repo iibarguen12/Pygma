@@ -78,7 +78,7 @@ public class UserResource {
         userService.deleteUserByUsername(username);
         return new ResponseEntity<>(
                 SimpleResponse.builder()
-                .statusCode(200)
+                .status(200)
                 .message("User deleted successfully")
                 .build(),HttpStatus.OK);
     }

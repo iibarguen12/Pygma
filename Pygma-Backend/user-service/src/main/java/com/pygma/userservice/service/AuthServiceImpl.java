@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService{
         }catch (NotFoundException e){
             saveAndSendEmail(signupRequest);
             return SimpleResponse.builder()
-                    .statusCode(200)
+                    .status(200)
                     .message("User registered successfully")
                     .build();
         }

@@ -18,6 +18,7 @@ import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +70,7 @@ public class ApplicationServiceImpl implements ApplicationService{
         }
         existentApplication.setUpdated(new Timestamp(System.currentTimeMillis()));
         existentApplication.setData(newApplication.getData());
+        existentApplication.setStatus(newApplication.getStatus());
         validateApplication(existentApplication);
         return applicationRepo.save(existentApplication);
     }
@@ -92,8 +94,10 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     private void validateApplication(Application application) {
         ApplicationDetails dataDetails = parseData(application.getData());
-        application.setStatus(isDataFulfilled(dataDetails) ?
-                ApplicationStatus.COMPLETED.name() : ApplicationStatus.IN_PROGRESS.name());
+        if (application.getStatus().isEmpty()) {
+            application.setStatus(isDataFulfilled(dataDetails) ?
+                    ApplicationStatus.COMPLETED.name() : ApplicationStatus.IN_PROGRESS.name());
+        }
         application.setCreated(application.getCreated() == null?
                 new Timestamp(System.currentTimeMillis()) : application.getCreated() );
     }

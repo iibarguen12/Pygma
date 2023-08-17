@@ -40,7 +40,7 @@ public class AuthenticationFilter implements GatewayFilter {
             final String token = this.getAuthHeader(request);
 
             try {
-                Algorithm algorithm = Algorithm.HMAC256("secret");
+                Algorithm algorithm = Algorithm.HMAC256("P9VsR89@c!b9hSE");
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT jwt = verifier.verify(token);
 

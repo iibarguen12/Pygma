@@ -29,7 +29,7 @@ public class JwtGeneratorServiceImpl implements JwtGeneratorService {
     public LoginResponse generateToken(User user) {
 
         final Date issuedAt = new Date();
-        final long TOKEN_EXPIRATION = 30;
+        final long TOKEN_EXPIRATION = 120;
         final Date expiration = Date.from(ZonedDateTime.now().plusMinutes(TOKEN_EXPIRATION).toInstant());
         final Date refreshExpiration = Date.from(ZonedDateTime.now().plusDays(TOKEN_EXPIRATION).toInstant());
 

@@ -27,7 +27,11 @@ export function createComponents(config) {
       styleOverrides: {
         root: {
           borderRadius: '12px',
-          textTransform: 'none'
+          textTransform: 'none',
+          '&:hover': {
+                      backgroundColor: 'black',
+                      color: 'white'
+                    }
         },
         sizeSmall: {
           padding: '6px 16px'
@@ -132,7 +136,7 @@ export function createComponents(config) {
           borderRadius: '6px'
         },
         '::-webkit-scrollbar-thumb:hover': {
-          backgroundColor: '#CCE700'
+          backgroundColor: '#000000'
         }
       }
     },

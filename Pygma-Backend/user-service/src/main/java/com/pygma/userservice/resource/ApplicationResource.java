@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users/{username}/applications")
@@ -36,6 +35,7 @@ public class ApplicationResource {
         Application application =
                 Application.builder()
                         .data(applicationRequest.getApplicationData())
+                        .status(applicationRequest.getApplicationStatus())
                         .username(username)
                         .build();
 
@@ -43,7 +43,7 @@ public class ApplicationResource {
 
         return new ResponseEntity<>(
                 SimpleResponse.builder()
-                        .statusCode(200)
+                        .status(200)
                         .message("Application saved successfully for user " + username)
                         .build(), HttpStatus.OK);
     }
@@ -56,6 +56,7 @@ public class ApplicationResource {
         Application newApplication =
                 Application.builder()
                         .data(applicationRequest.getApplicationData())
+                        .status(applicationRequest.getApplicationStatus())
                         .username(username)
                         .build();
 
@@ -63,7 +64,7 @@ public class ApplicationResource {
 
         return new ResponseEntity<>(
                 SimpleResponse.builder()
-                        .statusCode(200)
+                        .status(200)
                         .message("Application updated successfully for user " + username)
                         .build(), HttpStatus.OK);
     }
@@ -76,7 +77,7 @@ public class ApplicationResource {
 
         return new ResponseEntity<>(
                 SimpleResponse.builder()
-                        .statusCode(200)
+                        .status(200)
                         .message("Application deleted for user " + username)
                         .build(), HttpStatus.OK);
     }

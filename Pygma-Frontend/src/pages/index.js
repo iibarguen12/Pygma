@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useMemo, useState, useCallback } from 're
 import Head from 'next/head';
 import ArrowSmallLeftIcon from '@heroicons/react/24/solid/ArrowSmallLeftIcon';
 import ArrowSmallRightIcon from '@heroicons/react/24/solid/ArrowSmallRightIcon';
+import BookmarkIcon from '@heroicons/react/24/outline/BookmarkIcon';
+import CheckCircleIcon from '@heroicons/react/24/outline/CheckCircleIcon';
 import {
   Box,
   Button,
@@ -29,6 +31,7 @@ import ApplyPage9 from 'src/pages/apply-to-batch/apply-to-batch-page9';
 import * as yup from 'yup';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { JWT } from 'google-auth-library'
+import { sendRequest } from 'src/utils/send-request';
 
 const PADDING_TOP = -10;
 
@@ -49,8 +52,11 @@ const BannerOverlay = styled('div')(({ theme }) => ({
 
 const Page = () => {
   const [modalMessage, setModalMessage] = useState('');
+  const [applicationExists, setApplicationExists] = useState(false);
   const [loadingNext, setLoadingNext] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [loadingSaveProgress, setLoadingSaveProgress] = useState(false);
+  const [applicationCompleted, setApplicationCompleted] = useState(false);
   const [openModalMessage, setOpenModalMessage] = useState(false);  
   const [isSuccessModalMessage, setIsSuccessModalMessage] = useState(false);
   const handleErrorOrSuccess = (message, isValid) => {
@@ -76,6 +82,85 @@ const Page = () => {
   }, []);
 
   const authenticatedUser = useMemo(() => JSON.parse(window.sessionStorage.getItem('user')), []);
+
+  const fetchCurrentApplicationData = async () => {
+    const currentApplicationRequest = await sendRequest(
+      `http://localhost:8080/api/v1/users/${authenticatedUser?.username}/applications`,
+      'GET'
+    );
+
+    if (currentApplicationRequest.status === 200) {
+      setApplicationExists(true);
+      const responseData = await currentApplicationRequest.json();
+
+      if (responseData.status === "COMPLETED") {
+        handleErrorOrSuccess("Application already sent!", true);
+        setApplicationCompleted(true);
+      } else if (responseData.status === "IN_PROGRESS") {
+        handleErrorOrSuccess("Don't Miss Out, Continue Now!", true);
+      }
+      const applicationData = JSON.parse(responseData.data);
+
+      setPage1Values({
+        ...page1Values,
+        ...applicationData,
+      });
+
+      setPage2Values({
+        ...page2Values,
+        ...applicationData,
+        topThreeSkills: applicationData.topThreeSkills || [],
+        topThreeExperiences: applicationData.topThreeExperiences || [],
+      });
+
+      setPage3Values({
+        ...page3Values,
+        ...applicationData,
+      });
+
+      setPage4Values({
+        ...page4Values,
+        ...applicationData,
+        startupNeeds: applicationData.startupNeeds || [],
+      });
+
+      setPage5Values({
+        ...page5Values,
+        ...applicationData,
+      });
+
+      setPage6Values({
+        ...page6Values,
+        ...applicationData,
+        startupCustomerSegment: applicationData.startupCustomerSegment || [],
+      });
+
+      setPage7Values({
+        ...page7Values,
+        ...applicationData,
+      });
+
+      setPage8Values({
+        ...page8Values,
+        ...applicationData,
+        topThreeSkills: applicationData.topThreeSkills || [],
+      });
+
+      setPage9Values({
+        ...page9Values,
+        ...applicationData,
+        howDidYouHearAboutUs: applicationData.howDidYouHearAboutUs || [],
+        confirmForm: applicationData.confirmForm || [],
+      });
+      console.log('currentApplicationData:', applicationData);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrentApplicationData();
+  }, []);
+
+  //TODO the data is being fetched but then the changes are not being recorded
 
   const [page1Values, setPage1Values] = useState({
     firstName: authenticatedUser?.name || '',
@@ -337,6 +422,50 @@ const Page = () => {
     }
   };
 
+  const handleSaveProgress = useCallback(async (event) => {
+    const joinedFormValues = {
+      ...page1Values,
+      ...page2Values,
+      ...page3Values,
+      ...page4Values,
+      ...page5Values,
+      ...page6Values,
+      ...page7Values,
+      ...page8Values,
+      ...page9Values,
+    };
+    console.log(joinedFormValues);
+
+    let requestMethod = '';
+    if (applicationExists){
+      requestMethod = 'PUT';
+    }else{
+      requestMethod = 'POST';
+    }
+
+    try{
+      const saveResponse =
+        await sendRequest(`http://localhost:8080/api/v1/users/${authenticatedUser?.username}/applications`,
+          requestMethod,
+          JSON.stringify({
+            applicationData: JSON.stringify(joinedFormValues),
+            applicationStatus: 'IN_PROGRESS',
+          }),
+        );
+      setLoadingSaveProgress(false);
+      if (saveResponse.status != 200) {
+        const errorResponse = await saveResponse.json();
+        handleErrorOrSuccess("Error: "+errorResponse.message, false);
+      } else {
+        setApplicationExists(true);
+        handleErrorOrSuccess("Progress saved!", true);
+      }
+    } catch (err) {
+       handleErrorOrSuccess("Error: "+err.message, false);
+    }
+
+  }, [applicationExists, page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
+
   const handleFormSubmit = useCallback((event) => {
     const joinedFormValues = {
       ...page1Values,
@@ -363,9 +492,32 @@ const Page = () => {
     const isValid = true;
 
     validationSchema.validate(joinedFormValues, { abortEarly: false })
-      .then((isValid) => {
+      .then(async (isValid) => {
         try{
-          appendToSpreadsheet(mapFormValuesToGoogleSheetValues(joinedFormValues));
+          console.log(joinedFormValues);
+          let requestMethod = '';
+          if (applicationExists){
+            requestMethod = 'PUT';
+          }else{
+            requestMethod = 'POST';
+          }
+
+          const saveResponse =
+            await sendRequest(`http://localhost:8080/api/v1/users/${authenticatedUser?.username}/applications`,
+              requestMethod,
+              JSON.stringify({
+                applicationData: JSON.stringify(joinedFormValues),
+                applicationStatus: 'COMPLETED',
+              }),
+            );
+
+          if (saveResponse.status != 200) {
+            const errorResponse = await saveResponse.json();
+            handleErrorOrSuccess("Error: "+errorResponse.message, false);
+          } else {
+            setApplicationExists(true);
+            //appendToSpreadsheet(mapFormValuesToGoogleSheetValues(joinedFormValues));
+          }
         }catch(error){
           setLoadingSubmit(false);
           handleErrorOrSuccess('Unexpected error happened: '+ error , !isValid);
@@ -373,6 +525,7 @@ const Page = () => {
       })
       .catch((validationErrors) => {
         setLoadingSubmit(false);
+        console.log('validationErrors:',validationErrors.errors);
         handleErrorOrSuccess('Some fields still need to be filled!' , !isValid);
       });
   }, [page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
@@ -442,7 +595,7 @@ const Page = () => {
                   Next
                 </Typography>
                 {loadingNext ?
-                <CircularProgress size={24} color="primary" sx={{ marginLeft: 1 }}/> :
+                <CircularProgress size={24} color="inherit" sx={{ marginLeft: 1 }}/> :
                 <SvgIcon fontSize="small" sx={{ marginLeft: 1 }}>
                   <ArrowSmallRightIcon />
                 </SvgIcon>
@@ -457,9 +610,6 @@ const Page = () => {
                 size="small"
                 disabled={!isCheckboxChecked}
                 onClick={() => setShowForm(false)}
-                sx={{
-                  padding: '2px 0px',
-                }}
               >
                 <SvgIcon fontSize="small" sx={{ marginRight: 1 }}>
                   <ArrowSmallLeftIcon />
@@ -482,30 +632,62 @@ const Page = () => {
               <hr style={{ margin: '2rem 0' }} />
               <ApplyPage8 pageValues={page8Values} onChangePageValues={handleChangePage8Values} performValidation={performPage8Validations}/>
               <ApplyPage9 pageValues={page9Values} onChangePageValues={handleChangePage9Values} performValidation={performPage9Validations}/>
+              <div
+                style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      margin: '1rem',
+                    }}
+              >
+              <Button
+                variant="text"
+                color="primary"
+                size="small"
+                disabled={applicationCompleted}
+                onClick={async (event) => {
+                   event.preventDefault();
+                   setLoadingSaveProgress(true);
+                   await new Promise((resolve) => setTimeout(resolve, 1000));
+                   handleSaveProgress(event);
+                }}
+                sx={{ marginBottom: '3rem' }}
+              >
+                <Typography variant="body1" component="span">
+                  Save progress
+                </Typography>
+                {loadingSaveProgress ?
+                  <CircularProgress size={24} color="inherit" sx={{ marginLeft: 1 }}/> :
+                  <SvgIcon fontSize="small" sx={{ margin: 1 }}>
+                    <BookmarkIcon />
+                  </SvgIcon>
+                }
+              </Button>
+
               <Button
                 variant="text"
                 color="primary"
                 size="small"
                 type="submit"
-                disabled={loadingSubmit}
+                disabled={loadingSubmit || applicationCompleted}
                 onClick={async (event) => {
                    event.preventDefault();
                    setLoadingSubmit(true);
                    await new Promise((resolve) => setTimeout(resolve, 1));
                    handleFormSubmit(event);
                 }}
-                sx={{ marginBottom: '3rem',marginTop: '1rem'  }}
+                sx={{ marginBottom: '3rem', marginLeft: '3rem'  }}
               >
                 <Typography variant="body1" component="span">
-                  Submit
+                  Submit data
                 </Typography>
                 {loadingSubmit ?
-                  <CircularProgress size={24} color="primary" sx={{ marginLeft: 1 }}/> :
+                  <CircularProgress size={24} color="inherit" sx={{ marginLeft: 1 }}/> :
                   <SvgIcon fontSize="small" sx={{ margin: 1 }}>
-                    <ArrowSmallRightIcon />
+                    <CheckCircleIcon />
                   </SvgIcon>
                 }
               </Button>
+              </div>
             </form>
             <ModalMessage
               open={openModalMessage}

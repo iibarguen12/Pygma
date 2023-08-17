@@ -45,7 +45,7 @@ public class JwtFilter extends GenericFilterBean {
         }
         try {
             final String token = authHeader.substring(7);
-            Algorithm algorithm = Algorithm.HMAC256("secret");
+            Algorithm algorithm = Algorithm.HMAC256("P9VsR89@c!b9hSE");
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = verifier.verify(token);
             request.setAttribute("claims", decodedJWT.getClaims());
