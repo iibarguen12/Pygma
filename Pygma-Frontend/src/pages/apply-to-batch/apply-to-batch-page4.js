@@ -122,6 +122,7 @@ const ApplyPage4 = React.memo(({pageValues, onChangePageValues, performValidatio
         <Slider
           onChange={handleSliderStartupCoFounders}
           error={formik.touched.startupCoFounders && formik.errors.startupCoFounders}
+          value={formik.values.startupCoFounders}
           valueLabelDisplay="auto"
           step={1}
           marks={[
@@ -170,6 +171,7 @@ const ApplyPage4 = React.memo(({pageValues, onChangePageValues, performValidatio
         <Slider
           onChange={handleSliderStartupHowBigTeam}
           error={formik.touched.startupHowBigTeam && formik.errors.startupHowBigTeam}
+          value={formik.values.startupHowBigTeam}
           valueLabelDisplay="auto"
           step={1}
           marks={[

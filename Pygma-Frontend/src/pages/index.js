@@ -82,7 +82,8 @@ const Page = () => {
   }, []);
 
   const authenticatedUser = useMemo(() => JSON.parse(window.sessionStorage.getItem('user')), []);
-
+  const [fetchedApplicationData, setFetchedApplicationData] = useState({});
+  const [fetchedApplicationDataLoaded, setFetchedApplicationDataLoaded] = useState(false);
   const fetchCurrentApplicationData = async () => {
     const currentApplicationRequest = await sendRequest(
       `http://localhost:8080/api/v1/users/${authenticatedUser?.username}/applications`,
@@ -100,58 +101,8 @@ const Page = () => {
         handleErrorOrSuccess("Don't Miss Out, Continue Now!", true);
       }
       const applicationData = JSON.parse(responseData.data);
-
-      setPage1Values({
-        ...page1Values,
-        ...applicationData,
-      });
-
-      setPage2Values({
-        ...page2Values,
-        ...applicationData,
-        topThreeSkills: applicationData.topThreeSkills || [],
-        topThreeExperiences: applicationData.topThreeExperiences || [],
-      });
-
-      setPage3Values({
-        ...page3Values,
-        ...applicationData,
-      });
-
-      setPage4Values({
-        ...page4Values,
-        ...applicationData,
-        startupNeeds: applicationData.startupNeeds || [],
-      });
-
-      setPage5Values({
-        ...page5Values,
-        ...applicationData,
-      });
-
-      setPage6Values({
-        ...page6Values,
-        ...applicationData,
-        startupCustomerSegment: applicationData.startupCustomerSegment || [],
-      });
-
-      setPage7Values({
-        ...page7Values,
-        ...applicationData,
-      });
-
-      setPage8Values({
-        ...page8Values,
-        ...applicationData,
-        topThreeSkills: applicationData.topThreeSkills || [],
-      });
-
-      setPage9Values({
-        ...page9Values,
-        ...applicationData,
-        howDidYouHearAboutUs: applicationData.howDidYouHearAboutUs || [],
-        confirmForm: applicationData.confirmForm || [],
-      });
+      setFetchedApplicationData(applicationData)
+      setFetchedApplicationDataLoaded(true);
       console.log('currentApplicationData:', applicationData);
     }
   };
@@ -160,8 +111,7 @@ const Page = () => {
     fetchCurrentApplicationData();
   }, []);
 
-  //TODO the data is being fetched but then the changes are not being recorded
-
+  //Define Page values
   const [page1Values, setPage1Values] = useState({
     firstName: authenticatedUser?.name || '',
     lastName: authenticatedUser?.lastname || '',
@@ -236,41 +186,163 @@ const Page = () => {
     confirmForm: [],
   });
 
- const handleChangePage1Values = useCallback((values) => {
+  //Update page values with fetched data
+  useEffect(() => {
+  	if (fetchedApplicationDataLoaded) {
+  	  setPage1Values({
+  		firstName: fetchedApplicationData.firstName || '',
+  		lastName: fetchedApplicationData.lastName || '',
+  		email: fetchedApplicationData.email || '',
+  		country: fetchedApplicationData.country || '',
+  		linkedIn: fetchedApplicationData.linkedIn || '',
+  		gender: fetchedApplicationData.gender || 'male',
+  		quickBio: fetchedApplicationData.quickBio || '',
+  	  });
+  	}
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  useEffect(() => {
+  	if (fetchedApplicationDataLoaded) {
+  	  setPage2Values({
+  		topThreeSkills: fetchedApplicationData.topThreeSkills || [],
+  		topThreeExperiences: fetchedApplicationData.topThreeExperiences || [],
+  	  });
+  	}
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  useEffect(() => {
+    if (fetchedApplicationDataLoaded) {
+      setPage3Values({
+        startupName: fetchedApplicationData.startupName || '',
+        startupWebsite: fetchedApplicationData.startupWebsite || '',
+        startupDemo: fetchedApplicationData.startupDemo || '',
+        startupTime: fetchedApplicationData.startupTime || '',
+        startupWhy: fetchedApplicationData.startupWhy || '',
+        startupHowFar: fetchedApplicationData.startupHowFar || '',
+        startupHowMuchRaised: fetchedApplicationData.startupHowMuchRaised || '',
+        startupFundraising: fetchedApplicationData.startupFundraising || '',
+      });
+    }
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  const startupHowBigTeamLabelToValueMap = {
+    '1-5': 1,
+    '5-10': 2,
+    'More than 10': 3,
+  };
+
+  useEffect(() => {
+    if (fetchedApplicationDataLoaded) {
+      const mappedStartupHowBigTeamValue =
+          startupHowBigTeamLabelToValueMap[fetchedApplicationData.startupHowBigTeam] || '';
+      console.log('Mapped startupHowBigTeam value:', mappedStartupHowBigTeamValue);
+      console.log('Mapped startupCoFounders value:', mappedStartupHowBigTeamValue);
+      setPage4Values({
+        startupNeeds: fetchedApplicationData.startupNeeds || [],
+        startupExpectations: fetchedApplicationData.startupExpectations || '',
+        startupCoFounders: fetchedApplicationData.startupCoFounders.toString() || '',
+        startupHowMeetCoFounders: fetchedApplicationData.startupHowMeetCoFounders || '',
+        startupHowBigTeam: mappedStartupHowBigTeamValue.toString(),
+      });
+    }
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  useEffect(() => {
+    if (fetchedApplicationDataLoaded) {
+      setPage5Values({
+        startupShortBlurb: fetchedApplicationData.startupShortBlurb || '',
+        startupPurpose: fetchedApplicationData.startupPurpose || '',
+        startupIndustry: fetchedApplicationData.startupIndustry || '',
+        startupHowBigMarket: fetchedApplicationData.startupHowBigMarket || '',
+        startupUniqueMarketInsight: fetchedApplicationData.startupUniqueMarketInsight || '',
+        startupUnfairAdvantage: fetchedApplicationData.startupUnfairAdvantage || '',
+        startupBusinessModel: fetchedApplicationData.startupBusinessModel || '',
+      });
+    }
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  useEffect(() => {
+    if (fetchedApplicationDataLoaded) {
+      setPage6Values({
+        startupCustomerSegment: fetchedApplicationData.startupCustomerSegment || [],
+        startupPeopleUsingProduct: fetchedApplicationData.startupPeopleUsingProduct || '',
+        startupActiveUsers: fetchedApplicationData.startupActiveUsers || '',
+        startupPayingUsers: fetchedApplicationData.startupPayingUsers || '',
+        startupFinanciallySustainable: fetchedApplicationData.startupFinanciallySustainable || '',
+        startupMakeMoneyPerMonth: fetchedApplicationData.startupMakeMoneyPerMonth || '',
+        startupSpendMoneyPerMonth: fetchedApplicationData.startupSpendMoneyPerMonth || '',
+      });
+    }
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  useEffect(() => {
+    if (fetchedApplicationDataLoaded) {
+      setPage7Values({
+        startupBiggestChallenge: fetchedApplicationData.startupBiggestChallenge || '',
+        startupFormAnyLegalCompanyYet: fetchedApplicationData.startupFormAnyLegalCompanyYet || '',
+        startupLegalStructure: fetchedApplicationData.startupLegalStructure || '',
+        startupLegalStructureDescription: fetchedApplicationData.startupLegalStructureDescription || '',
+      });
+    }
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  useEffect(() => {
+    if (fetchedApplicationDataLoaded) {
+      setPage8Values({
+        startupPitchDeck: fetchedApplicationData.startupPitchDeck || '',
+        startupVideo: fetchedApplicationData.startupVideo || '',
+        whatConvincedYouToApply: fetchedApplicationData.whatConvincedYouToApply || '',
+      });
+    }
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  useEffect(() => {
+    if (fetchedApplicationDataLoaded) {
+      setPage9Values({
+        someoneEncourageYouToApply: fetchedApplicationData.someoneEncourageYouToApply || '',
+        referralName: fetchedApplicationData.referralName || '',
+        howDidYouHearAboutUs: fetchedApplicationData.howDidYouHearAboutUs || [],
+        confirmForm: fetchedApplicationData.confirmForm || [],
+      });
+    }
+  }, [fetchedApplicationDataLoaded, fetchedApplicationData]);
+
+  // Defined callback function for page values
+  const handleChangePage1Values = useCallback((values) => {
    setPage1Values(values);
- }, [page1Values]);
+  }, [page1Values]);
 
- const handleChangePage2Values = useCallback((values) => {
+  const handleChangePage2Values = useCallback((values) => {
    setPage2Values(values);
- }, [page2Values]);
+  }, [page2Values]);
 
- const handleChangePage3Values = useCallback((values) => {
+  const handleChangePage3Values = useCallback((values) => {
    setPage3Values(values);
- }, [page3Values]);
+  }, [page3Values]);
 
- const handleChangePage4Values = useCallback((values) => {
+  const handleChangePage4Values = useCallback((values) => {
    setPage4Values(values);
- }, [page4Values]);
+  }, [page4Values]);
 
- const handleChangePage5Values = useCallback((values) => {
+  const handleChangePage5Values = useCallback((values) => {
    setPage5Values(values);
- }, [page5Values]);
+  }, [page5Values]);
 
- const handleChangePage6Values = useCallback((values) => {
+  const handleChangePage6Values = useCallback((values) => {
    setPage6Values(values);
- }, [page6Values]);
+  }, [page6Values]);
 
- const handleChangePage7Values = useCallback((values) => {
+  const handleChangePage7Values = useCallback((values) => {
    setPage7Values(values);
- }, [page7Values]);
+  }, [page7Values]);
 
- const handleChangePage8Values = useCallback((values) => {
+  const handleChangePage8Values = useCallback((values) => {
    setPage8Values(values);
- }, [page8Values]);
+  }, [page8Values]);
 
- const handleChangePage9Values = useCallback((values) => {
+  const handleChangePage9Values = useCallback((values) => {
    setPage9Values(values);
- }, [page9Values]);
+  }, [page9Values]);
 
   const validationSchema = yup.object().shape({
     firstName: yup.string().required('First Name is required'),
@@ -434,7 +506,8 @@ const Page = () => {
       ...page8Values,
       ...page9Values,
     };
-    console.log(joinedFormValues);
+
+    console.log('handleSaveProgress:',joinedFormValues);
 
     let requestMethod = '';
     if (applicationExists){
@@ -479,6 +552,8 @@ const Page = () => {
       ...page9Values,
     };
 
+    console.log('handleFormSubmit:',joinedFormValues);
+
     setPerformPage1Validations(true);
     setPerformPage2Validations(true);
     setPerformPage3Validations(true);
@@ -516,7 +591,7 @@ const Page = () => {
             handleErrorOrSuccess("Error: "+errorResponse.message, false);
           } else {
             setApplicationExists(true);
-            //appendToSpreadsheet(mapFormValuesToGoogleSheetValues(joinedFormValues));
+            appendToSpreadsheet(mapFormValuesToGoogleSheetValues(joinedFormValues));
           }
         }catch(error){
           setLoadingSubmit(false);

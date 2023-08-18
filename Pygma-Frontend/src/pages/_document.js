@@ -9,8 +9,8 @@ const Favicon = () => {
   const theme = isDarkTheme ? 'dark' : 'light';
 
   const logoPath = theme === 'dark' ? '/icon/logo-pygma-p-white.ico' : '/icon/logo-pygma-p-black.ico';
-  const image16 = theme === 'dark' ? '/icon/logo-pygma-p-white-16x16' : '/icon/logo-pygma-p-black-16x16';
-  const image32 = theme === 'dark' ? '/icon/logo-pygma-p-white-32x32' : '/icon/logo-pygma-p-black-32x32';
+  const image16 = theme === 'dark' ? '/icon/logo-pygma-p-white-16x16.png' : '/icon/logo-pygma-p-black-16x16.png';
+  const image32 = theme === 'dark' ? '/icon/logo-pygma-p-white-32x32.png' : '/icon/logo-pygma-p-black-32x32.png';
 
   return (
     <>
