@@ -2,6 +2,7 @@ package com.pygma.userservice.service;
 
 import com.pygma.userservice.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
+
+    @Value("${messages.batchNumber}")
+    private String batchNumber;
 
     @Autowired
     public EmailService(JavaMailSender javaMailSender) {
@@ -53,7 +57,7 @@ public class EmailService {
         String emailText = """
                 Hi %s,
                                                            
-                We successfully received your application to our PY4 Acceleration Program. We are thrilled about the potential of partnering with you to build a better Latin America.
+                We successfully received your application to our %s Acceleration Program. We are thrilled about the potential of partnering with you to build a better Latin America.
                                                                 
                 We strive to reply to every founder within two-weeks of your application.
                                                                 
@@ -66,7 +70,7 @@ public class EmailService {
                 Andrés Campo
                 Co-founder | CPO
                 """;
-        emailText = String.format(emailText, user.getName());
+        emailText = String.format(emailText, user.getName(), batchNumber);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("Confirmation from submission");

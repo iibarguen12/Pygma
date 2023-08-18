@@ -47,3 +47,6 @@ eureka:
 jwt:
   secret: P9VsR89@c!b9hSE
   refreshSecret: ESh9b!c@98RsV9PR
+
+messages:
+  batchNumber: PY5
