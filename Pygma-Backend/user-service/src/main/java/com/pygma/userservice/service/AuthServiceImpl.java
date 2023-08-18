@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService{
         try {
             user = userService.findUserByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail());
         }catch (NotFoundException e){
-            saveAndSendEmail(signupRequest);
+            saveAndSendSignupEmail(signupRequest);
             return SimpleResponse.builder()
                     .status(200)
                     .message("User registered successfully")
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService{
         return null;
     }
 
-    private void saveAndSendEmail(SignupRequest signupRequest) {
+    private void saveAndSendSignupEmail(SignupRequest signupRequest) {
         User newUser = UserMapper.mapSignupRequestToUser(signupRequest);
         String temporalPassword = UserUtils.generateRandomPassword();
         newUser.setPassword(temporalPassword);
@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService{
                 .collect(Collectors.toSet());
         newUser.setRoles(userRole);
         userService.saveUser(newUser);
-        emailService.composeAndSendEmail(newUser);
+        emailService.composeAndSendSignupEmail(newUser);
     }
 
     @Override

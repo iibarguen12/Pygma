@@ -10,6 +10,7 @@ import com.pygma.userservice.model.ApplicationStatus;
 import com.pygma.userservice.repository.ApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,6 @@ import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +28,9 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     private final UserService userService;
     private final ApplicationRepository applicationRepo;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     @Transactional(readOnly = true)
@@ -55,7 +58,7 @@ public class ApplicationServiceImpl implements ApplicationService{
             throw new InvalidDataException(message);
         }catch (NotFoundException e){
 
-            validateApplication(application);
+            validateApplication(application, user);
             return applicationRepo.save(application);
         }
     }
@@ -71,7 +74,7 @@ public class ApplicationServiceImpl implements ApplicationService{
         existentApplication.setUpdated(new Timestamp(System.currentTimeMillis()));
         existentApplication.setData(newApplication.getData());
         existentApplication.setStatus(newApplication.getStatus());
-        validateApplication(existentApplication);
+        validateApplication(existentApplication, user);
         return applicationRepo.save(existentApplication);
     }
 
@@ -92,11 +95,13 @@ public class ApplicationServiceImpl implements ApplicationService{
                 .orElseThrow(() -> new NotFoundException("No application found for user: " + username));
     }
 
-    private void validateApplication(Application application) {
+    private void validateApplication(Application application, User user) {
         ApplicationDetails dataDetails = parseData(application.getData());
         if (application.getStatus().isEmpty()) {
             application.setStatus(isDataFulfilled(dataDetails) ?
                     ApplicationStatus.COMPLETED.name() : ApplicationStatus.IN_PROGRESS.name());
+        } else if (application.getStatus().equalsIgnoreCase(ApplicationStatus.COMPLETED.name())) {
+            emailService.composeAndSendApplicationEmail(user);
         }
         application.setCreated(application.getCreated() == null?
                 new Timestamp(System.currentTimeMillis()) : application.getCreated() );

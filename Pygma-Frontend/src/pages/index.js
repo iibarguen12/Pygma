@@ -234,15 +234,13 @@ const Page = () => {
   useEffect(() => {
     if (fetchedApplicationDataLoaded) {
       const mappedStartupHowBigTeamValue =
-          startupHowBigTeamLabelToValueMap[fetchedApplicationData.startupHowBigTeam] || '';
-      console.log('Mapped startupHowBigTeam value:', mappedStartupHowBigTeamValue);
-      console.log('Mapped startupCoFounders value:', mappedStartupHowBigTeamValue);
+          startupHowBigTeamLabelToValueMap[fetchedApplicationData.startupHowBigTeam] || 0;
       setPage4Values({
         startupNeeds: fetchedApplicationData.startupNeeds || [],
         startupExpectations: fetchedApplicationData.startupExpectations || '',
-        startupCoFounders: fetchedApplicationData.startupCoFounders.toString() || '',
+        startupCoFounders: fetchedApplicationData.startupCoFounders || 0,
         startupHowMeetCoFounders: fetchedApplicationData.startupHowMeetCoFounders || '',
-        startupHowBigTeam: mappedStartupHowBigTeamValue.toString(),
+        startupHowBigTeam: mappedStartupHowBigTeamValue,
       });
     }
   }, [fetchedApplicationDataLoaded, fetchedApplicationData]);

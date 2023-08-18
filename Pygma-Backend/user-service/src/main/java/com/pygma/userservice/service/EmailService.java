@@ -23,7 +23,7 @@ public class EmailService {
     }
 
     @Async
-    public void composeAndSendEmail(User newUser) {
+    public void composeAndSendSignupEmail(User newUser) {
         String emailText = """
                 Welcome aboard %s!
 
@@ -44,6 +44,32 @@ public class EmailService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newUser.getEmail());
         mailMessage.setSubject("Welcome to Pygma!");
+        mailMessage.setText(emailText);
+        sendEmail(mailMessage);
+    }
+
+    @Async
+    public void composeAndSendApplicationEmail(User user) {
+        String emailText = """
+                Hi %s,
+                                                           
+                We successfully received your application to our PY4 Acceleration Program. We are thrilled about the potential of partnering with you to build a better Latin America.
+                                                                
+                We strive to reply to every founder within two-weeks of your application.
+                                                                
+                We will assess your application, and if you are selected, we will invite you to a two-round interview process where you will meet our Partners and Pygma Alumni.
+                                                                
+                Hang in there! We will be back with more updates about your application soon.
+
+                Regards,
+                                                                
+                Andrés Campo
+                Co-founder | CPO
+                """;
+        emailText = String.format(emailText, user.getName());
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("Confirmation from submission");
         mailMessage.setText(emailText);
         sendEmail(mailMessage);
     }
