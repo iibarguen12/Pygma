@@ -231,6 +231,12 @@ const Page = () => {
     'More than 10': 3,
   };
 
+  const startupHowBigTeamValueToLabelMap = {
+    1: '1-5',
+    2: '5-10',
+    3: 'More than 10',
+  };
+
   useEffect(() => {
     if (fetchedApplicationDataLoaded) {
       const mappedStartupHowBigTeamValue =
@@ -523,16 +529,18 @@ const Page = () => {
             applicationStatus: 'IN_PROGRESS',
           }),
         );
-      setLoadingSaveProgress(false);
+
       if (saveResponse.status != 200) {
         const errorResponse = await saveResponse.json();
-        handleErrorOrSuccess("Error: "+errorResponse.message, false);
+        handleErrorOrSuccess(errorResponse.message, false);
       } else {
         setApplicationExists(true);
         handleErrorOrSuccess("Progress saved!", true);
       }
+      setLoadingSaveProgress(false);
     } catch (err) {
-       handleErrorOrSuccess("Error: "+err.message, false);
+       setLoadingSaveProgress(false);
+       handleErrorOrSuccess(err.message, false);
     }
 
   }, [applicationExists, page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
@@ -567,6 +575,7 @@ const Page = () => {
     validationSchema.validate(joinedFormValues, { abortEarly: false })
       .then(async (isValid) => {
         try{
+          joinedFormValues.startupHowBigTeam = startupHowBigTeamValueToLabelMap[joinedFormValues.startupHowBigTeam]
           console.log(joinedFormValues);
           let requestMethod = '';
           if (applicationExists){
@@ -586,14 +595,16 @@ const Page = () => {
 
           if (saveResponse.status != 200) {
             const errorResponse = await saveResponse.json();
-            handleErrorOrSuccess("Error: "+errorResponse.message, false);
+            handleErrorOrSuccess(errorResponse.message, false);
           } else {
             setApplicationExists(true);
             appendToSpreadsheet(mapFormValuesToGoogleSheetValues(joinedFormValues));
+            setApplicationCompleted(true);
           }
+          setLoadingSubmit(false);
         }catch(error){
           setLoadingSubmit(false);
-          handleErrorOrSuccess('Unexpected error happened: '+ error , !isValid);
+          handleErrorOrSuccess('Error: '+ error , !isValid);
         }
       })
       .catch((validationErrors) => {
@@ -601,7 +612,7 @@ const Page = () => {
         console.log('validationErrors:',validationErrors.errors);
         handleErrorOrSuccess('Some fields still need to be filled!' , !isValid);
       });
-  }, [page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
+  }, [applicationCompleted, page1Values, page2Values, page3Values, page4Values, page5Values, page6Values, page8Values, page9Values]);
 
   return (
     <>

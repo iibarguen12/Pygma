@@ -31,15 +31,8 @@ const ApplyPage4 = React.memo(({pageValues, onChangePageValues, performValidatio
     formik.setFieldValue('startupCoFounders', value);
   }, [formik]);
 
-  const startupHowBigTeamValueToLabelMap = {
-    1: '1-5',
-    2: '5-10',
-    3: 'More than 10',
-  };
-
   const handleSliderStartupHowBigTeam = useCallback((event, value) => {
-    const label = startupHowBigTeamValueToLabelMap[value] || '';
-    formik.setFieldValue('startupHowBigTeam', label);
+    formik.setFieldValue('startupHowBigTeam', value);
   }, [formik]);
 
   const handleInputChange = useCallback((event) => {
