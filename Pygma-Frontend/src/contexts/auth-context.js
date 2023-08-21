@@ -117,7 +117,7 @@ export const AuthProvider = (props) => {
   const signIn = async (emailOrUsername, password, isGoogleAuth) => {
   try {
       const loginResponse =
-      await sendRequest('http://localhost:8080/api/v1/auth/login','POST',
+      await sendRequest(`${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/auth/login`,'POST',
         JSON.stringify({
           username: emailOrUsername,
           password: password,
@@ -139,7 +139,7 @@ export const AuthProvider = (props) => {
         window.sessionStorage.setItem('authenticated', 'true');
 
         const userResponse =
-        await sendRequest(`http://localhost:8080/api/v1/users/${username}`,'GET', null);
+        await sendRequest(`${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/users/${username}`,'GET', null);
         const userResponseData = await userResponse.json();
         window.sessionStorage.setItem('user', JSON.stringify(userResponseData));
 
@@ -169,7 +169,7 @@ export const AuthProvider = (props) => {
   const signUp = async (username, name, lastname, email, isGoogleAuth, imageURL) => {
     try {
       const signupResponse =
-      await sendRequest('http://localhost:8080/api/v1/auth/signup','POST',
+      await sendRequest(`${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/auth/signup`,'POST',
           JSON.stringify({
           username: username,
           name: name,

@@ -14,7 +14,7 @@ export const useAuth = () => {
         try {
           const refreshToken = Cookies.get('refreshToken');
 
-          const response = await fetch('http://localhost:8080/api/v1/auth/token', {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/auth/token`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

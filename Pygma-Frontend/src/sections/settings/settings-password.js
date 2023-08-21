@@ -64,7 +64,7 @@ export const SettingsPassword = () => {
         };
 
         const updatePasswordResponse = await sendRequest(
-          `http://localhost:8080/api/v1/users/${authenticatedUser.username}/password`,
+          `${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/users/${authenticatedUser.username}/password`,
           'PUT',
           JSON.stringify(requestBody),
           true

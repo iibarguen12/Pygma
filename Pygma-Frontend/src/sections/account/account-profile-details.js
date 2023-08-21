@@ -60,7 +60,7 @@ export const AccountProfileDetails = ({ user, onUserUpdate }) => {
 
       try {
         const updateUserResponse = await sendRequest(
-          `http://localhost:8080/api/v1/users/${user.username}`,
+          `${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/users/${user.username}`,
           'PUT',
           JSON.stringify({
             username: user.username,

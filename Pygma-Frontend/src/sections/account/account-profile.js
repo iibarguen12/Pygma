@@ -27,7 +27,7 @@ export const AccountProfile = ({ user }) => {
     formData.append('image', file);
     try {
       const updateUserResponse = await sendRequest(
-        `http://localhost:8080/api/v1/users/${user.username}/image`,
+        `${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/users/${user.username}/image`,
         'PUT',
         formData,
         true,

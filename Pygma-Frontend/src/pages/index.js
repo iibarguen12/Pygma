@@ -86,7 +86,7 @@ const Page = () => {
   const [fetchedApplicationDataLoaded, setFetchedApplicationDataLoaded] = useState(false);
   const fetchCurrentApplicationData = async () => {
     const currentApplicationRequest = await sendRequest(
-      `http://localhost:8080/api/v1/users/${authenticatedUser?.username}/applications`,
+      `${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/users/${authenticatedUser?.username}/applications`,
       'GET'
     );
 
@@ -522,7 +522,7 @@ const Page = () => {
 
     try{
       const saveResponse =
-        await sendRequest(`http://localhost:8080/api/v1/users/${authenticatedUser?.username}/applications`,
+        await sendRequest(`${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/users/${authenticatedUser?.username}/applications`,
           requestMethod,
           JSON.stringify({
             applicationData: JSON.stringify(joinedFormValues),
@@ -585,7 +585,7 @@ const Page = () => {
           }
 
           const saveResponse =
-            await sendRequest(`http://localhost:8080/api/v1/users/${authenticatedUser?.username}/applications`,
+            await sendRequest(`${process.env.NEXT_PUBLIC_BE_ENDPOINT}/api/v1/users/${authenticatedUser?.username}/applications`,
               requestMethod,
               JSON.stringify({
                 applicationData: JSON.stringify(joinedFormValues),
