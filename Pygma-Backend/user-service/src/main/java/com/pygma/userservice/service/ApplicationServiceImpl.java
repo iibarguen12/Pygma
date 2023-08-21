@@ -97,7 +97,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     private void validateApplication(Application application, User user) {
         ApplicationDetails dataDetails = parseData(application.getData());
-        if (application.getStatus().isEmpty()) {
+        if (application.getStatus() == null || application.getStatus().isEmpty()) {
             application.setStatus(isDataFulfilled(dataDetails) ?
                     ApplicationStatus.COMPLETED.name() : ApplicationStatus.IN_PROGRESS.name());
         } else if (application.getStatus().equalsIgnoreCase(ApplicationStatus.COMPLETED.name())) {

@@ -1,0 +1,55 @@
+logging.level.root: INFO
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://pygma-frontend:3000/"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+      httpclient:
+        response-timeout: 60s
+      routes:
+        - id: authService
+          uri: lb://user-service
+          predicates:
+            - Path=/api/v1/auth/**, /api/v1/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: hystrixAuth
+                fallbackUri: forward:/user-service/fallback
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://pygma-eureka-server:8761/eureka
+    instance:
+      leaseRenewalIntervalInSeconds: 5
+      lease-expiration-duration-in-seconds: 5
+    preferIpAddress: true
+    registryFetchIntervalSeconds: 5
+    fetchRegistry: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60s
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 60s
