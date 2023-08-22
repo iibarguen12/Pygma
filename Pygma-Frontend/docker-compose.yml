@@ -1,13 +1,16 @@
 version: '3.8'
 services:
   web:
-    build:
-      context: ./
-      target: runner
+    container_name: pygma-frontend
+    build: .
     volumes:
       - .:/app
     command: npm run dev
     ports:
       - "3000:3000"
-    environment:
-      NODE_ENV: development
+    networks:
+      - pygma-network
+
+networks:
+  pygma-network:
+    external: true
