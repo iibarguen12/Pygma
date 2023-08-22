@@ -20,5 +20,5 @@ User service:
 
 Front React:
     cd C:\Users\iries\Documents\workspaces\GitHub\Pygma\Pygma-Frontend
-    docker-compose build
-    docker-compose up
+    docker compose build
+    docker compose up
