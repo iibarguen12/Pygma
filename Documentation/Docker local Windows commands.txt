@@ -1,0 +1,28 @@
+Docker commands:
+Network:
+	docker network create --driver bridge pygma-network
+	docker network inspect pygma-network
+
+Eureka server:
+	cd C:\Users\iries\Documents\workspaces\GitHub\Pygma\Pygma-Backend\eureka-server\
+	mvn clean install -P docker
+	docker build -t pygma-eureka-server .
+	docker run -dp 8761:8761 --network pygma-network --name pygma-eureka-server pygma-eureka-server
+
+
+API Gateway:
+	cd C:\Users\iries\Documents\workspaces\GitHub\Pygma\Pygma-Backend\gateway-service\
+	mvn clean install -P docker
+	docker build -t pygma-gateway-service .
+	docker run -dp 8080:8080 --network pygma-network --name pygma-gateway-service pygma-gateway-service
+
+User service:
+	cd C:\Users\iries\Documents\workspaces\GitHub\Pygma\Pygma-Backend\user-service
+	mvn clean install -P docker
+	docker compose up
+
+Front React:
+    cd C:\Users\iries\Documents\workspaces\GitHub\Pygma\Pygma-Frontend
+    npm run build
+    docker compose build
+    docker compose up
