@@ -1,0 +1,68 @@
+version: '3.8'
+services:
+  frontend:
+    container_name: pygma-frontend
+    build: Pygma-Frontend/.
+    #image: pygma-frontend-web
+    ports:
+      - "3000:3000"
+    networks:
+      - pygma-network
+
+  eureka:
+    container_name: pygma-eureka-server
+    build: Pygma-Backend/eureka-server/.
+    ports:
+      - "8761:8761"
+    networks:
+      - pygma-network
+
+  gateway:
+    container_name: pygma-gateway-service
+    build: Pygma-Backend/gateway-service/.
+    depends_on:
+      - eureka
+    ports:
+      - "8080:8080"
+    networks:
+      - pygma-network
+
+  user-db:
+    container_name: pygma-user-db
+    image: mysql:latest
+    depends_on:
+      - gateway
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: P9VsR89@c!b9hSE
+      MYSQL_DATABASE: pygma_users
+      MYSQL_USER: pygma_admin
+      MYSQL_PASSWORD: P9VsR89@c!b9hSE
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3307:3306"
+    networks:
+      - pygma-network
+
+  user:
+    container_name: pygma-user-service
+    depends_on:
+      - user-db
+    build: Pygma-Backend/user-service/.
+    restart: on-failure
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://user-db:3306/pygma_users?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false&autoReconnect=true&useSSL=false"
+      SPRING_DATASOURCE_USERNAME: "pygma_admin"
+      SPRING_DATASOURCE_PASSWORD: "P9VsR89@c!b9hSE"
+      SPRING_JPA_HIBERNATE_DDL-AUTO: "update"
+      SPRING_JPA_SHOW-SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.MySQL8Dialect"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+    networks:
+      - pygma-network
+
+networks:
+  pygma-network:
+    external: true

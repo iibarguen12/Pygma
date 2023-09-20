@@ -3,9 +3,12 @@ services:
   web:
     container_name: pygma-frontend
     build: .
+    #image: 446970233059.dkr.ecr.us-east-1.amazonaws.com/pygma-applications-ui:latest
+    tty: true               # equivalent for -t
+    stdin_open: true        # equivalent for -i
     volumes:
       - .:/app
-    command: npm run dev
+    #command: npm run start
     ports:
       - "3000:3000"
     networks:

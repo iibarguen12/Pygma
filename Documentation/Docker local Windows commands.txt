@@ -23,6 +23,10 @@ User service:
 
 Front React:
     cd C:\Users\iries\Documents\workspaces\GitHub\Pygma\Pygma-Frontend
-    npm run build
+    npm update --force
+    rm -rf node_modules package-lock.json
+    npm install --cache=false --legacy-peer-deps
+    npm cache clean --force
+    npm run build --cache=false
     docker compose build
     docker compose up

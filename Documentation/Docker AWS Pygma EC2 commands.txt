@@ -1,23 +1,40 @@
-Docker commands:
-Network:
+#Docker commands:
+##Configuration commands
+#Network:
 	docker network create --driver bridge pygma-network
 	docker network inspect pygma-network
 
-Eureka server:
+##Deploy commands
+#Eureka server:
 	cd /home/ec2-user/app/Pygma-Backend/eureka-server/
 	docker build -t pygma-eureka-server .
 	docker run -dp 8761:8761 --network pygma-network --name pygma-eureka-server pygma-eureka-server
 
 
-API Gateway:
+#API Gateway:
 	cd /home/ec2-user/app/Pygma-Backend/gateway-service/
 	docker build -t pygma-gateway-service .
 	docker run -dp 8080:8080 --network pygma-network --name pygma-gateway-service pygma-gateway-service
 
-User service:
+#User service:
 	cd /home/ec2-user/app/Pygma-Backend/user-service/
-	docker compose up
+	docker-compose up -d
 
-Front React:
+#Front React:
     cd /home/ec2-user/app/Pygma-Frontend/
-    docker compose up
+    npm install next@latest react@latest react-dom@latest
+    npm install --legacy-peer-deps
+    npm run build --legacy-peer-deps
+
+    docker-compose build
+    docker-compose up -d
+
+##Status commands
+#View Node version inside docker container:
+	docker exec 96190bebb9b5 node -v
+
+#View React version inside docker container:
+    docker exec 96190bebb9b5 npm view react version
+
+#Execute commands inside docker image
+    docker exec -it pygma-frontend /bin/sh

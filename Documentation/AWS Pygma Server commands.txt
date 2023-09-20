@@ -6,7 +6,8 @@ Install Docker:
     yum update
     yum search docker
     yum info docker
-    yum install docker
+    yum install -y docker
+    yum install -y npm
 
 Create Docker group to don't use sudo:
     usermod -a -G docker ec2-user
@@ -14,15 +15,17 @@ Create Docker group to don't use sudo:
     newgrp docker
 
 Install docker-compose:
-    wget https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)
-    sudo mv docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
-    sudo chmod -v +x /usr/local/bin/docker-compose
+    sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
 
 Enable Docker service:
     systemctl enable docker.service
 
 Start the Docker service
     systemctl start docker.service
+
+Make docker auto-start
+    sudo chkconfig docker on
 
 Copy the respective target folders from backend projects and the .next from the frontend project
 
