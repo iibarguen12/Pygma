@@ -6,10 +6,10 @@ services:
     restart: always
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: P9VsR89@c!b9hSE
+      MYSQL_ROOT_PASSWORD: save-me-in-vault
       MYSQL_DATABASE: auth
-      MYSQL_USER: pygma_admin
-      MYSQL_PASSWORD: P9VsR89@c!b9hSE
+      MYSQL_USER: save-me-in-vault
+      MYSQL_PASSWORD: save-me-in-vault
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
