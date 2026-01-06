@@ -9,8 +9,8 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/auth
-    username: pygma_admin
-    password: P9VsR89@c!b9hSE
+    username: save-me-in-vault
+    password: save-me-in-vault
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate.ddl-auto: update
@@ -27,8 +27,8 @@ spring:
             enable: 'true'
           auth: 'true'
     host: smtp.gmail.com
-    username: iries.ibarguen@gmail.com
-    password: krqnibovqbdfrvzr
+    username: save-me-in-vault
+    password: save-me-in-vault
     port: '587'
 
 eureka:
